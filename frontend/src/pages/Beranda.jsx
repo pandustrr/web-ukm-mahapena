@@ -1,14 +1,13 @@
 // File: src/pages/Beranda.jsx
 import { useState, useEffect } from "react";
-import heroBg from "../assets/hero-bg.jpg"; // ganti dengan nama file gambarmu
+import heroBg from "../assets/hero-bg.jpg";
 
-const Beranda = () => {
+const Beranda = ({ setCurrentPage }) => {  // Terima prop setCurrentPage
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
         setIsVisible(true);
 
-        // Scroll animation
         const handleScroll = () => {
             const elements = document.querySelectorAll(".fade-in");
             elements.forEach((el) => {
@@ -53,7 +52,13 @@ const Beranda = () => {
                         mengeksplorasi potensi diri.
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-4">
-                        <button className="bg-transparent hover:bg-white/10 text-white font-semibold py-3 px-8 rounded-lg border border-white transition-all duration-300 hover:scale-105">
+                        <button
+                            onClick={() => {
+                                setCurrentPage("Profil"); // Pindah ke halaman Profil
+                                window.scrollTo(0, 0); // Scroll ke atas
+                            }}
+                            className="bg-transparent hover:bg-white/10 text-white font-semibold py-3 px-8 rounded-lg border border-white transition-all duration-300 hover:scale-105"
+                        >
                             Profil
                         </button>
                     </div>
@@ -71,7 +76,8 @@ const Beranda = () => {
                 </div>
             </section>
 
-            {/* Bagian lain tetap sama */}
+            {/* Bagian lain dari Beranda.jsx */}
+            {/* ... */}
 
             <style jsx>{`
         .fade-in {
