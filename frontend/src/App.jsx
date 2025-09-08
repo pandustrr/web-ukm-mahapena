@@ -5,11 +5,12 @@ import Beranda from "./pages/Beranda";
 import Profil from "./pages/Profil";
 import Proker from "./pages/Proker";
 import Blog from "./pages/Blog";
-import Store from "./pages/Store";
+import Merchandise from "./pages/Merchandise";
 import Footer from "./components/Footer";
 
 function App() {
   const [currentPage, setCurrentPage] = useState("Beranda");
+  const [isDarkMode, setIsDarkMode] = useState(false); // state dark mode
 
   const renderPage = () => {
     switch (currentPage) {
@@ -21,20 +22,20 @@ function App() {
         return <Proker />;
       case "Blog":
         return <Blog />;
-      case "Store":
-        return <Store />;
+      case "Merchandise":
+        return <Merchandise />;
       default:
-        return <Beranda setCurrentPage={setCurrentPage} />;
+        return <Beranda setCurrentPage={setCurrentPage} />; 
     }
   };
 
   return (
-    <div className="App min-h-screen flex flex-col">
-      <Navbar currentPage={currentPage} setCurrentPage={setCurrentPage} />
+    <div className={`App min-h-screen flex flex-col ${isDarkMode ? "dark" : ""}`}>
+      <Navbar currentPage={currentPage} setCurrentPage={setCurrentPage} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
       <main className="flex-grow">
         {renderPage()}
       </main>
-      <Footer />
+      <Footer setCurrentPage={setCurrentPage} />
     </div>
   );
 }

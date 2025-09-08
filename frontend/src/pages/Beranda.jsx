@@ -1,6 +1,6 @@
 // File: src/pages/Beranda.jsx
 import { useState, useEffect } from "react";
-import heroBg from "../assets/hero-bg.jpg";
+
 
 const Beranda = ({ setCurrentPage }) => {  // Terima prop setCurrentPage
     const [isVisible, setIsVisible] = useState(false);
@@ -31,9 +31,10 @@ const Beranda = ({ setCurrentPage }) => {  // Terima prop setCurrentPage
                 {/* Background Image */}
                 <div
                     className="absolute inset-0 bg-cover bg-center"
-                    style={{ backgroundImage: `url(${heroBg})` }}
+                    style={{
+                        backgroundImage: "url('https://i.pinimg.com/1200x/a6/bd/4d/a6bd4db7ee7053689bd971b36cbcd1ef.jpg')",
+                    }}
                 ></div>
-
                 {/* Overlay supaya teks tetap jelas */}
                 <div className="absolute inset-0 bg-black/50"></div>
 
