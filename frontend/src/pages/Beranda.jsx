@@ -27,7 +27,7 @@ const Beranda = ({ setCurrentPage }) => {  // Terima prop setCurrentPage
     return (
         <div className="overflow-hidden">
             {/* Hero Section */}
-            <section className="pt-28 pb-20 md:pt-36 md:pb-28 relative text-white overflow-hidden">
+            <section className="pt-28 pb-20 md:pt-36 md:pb-28 relative text-white dark:text-[#A1E3F9] overflow-hidden">
                 {/* Background Image */}
                 <div
                     className="absolute inset-0 bg-cover bg-center"
@@ -36,7 +36,7 @@ const Beranda = ({ setCurrentPage }) => {  // Terima prop setCurrentPage
                     }}
                 ></div>
                 {/* Overlay supaya teks tetap jelas */}
-                <div className="absolute inset-0 bg-black/50"></div>
+                <div className="absolute inset-0 bg-black/50 dark:bg-black/70"></div>
 
                 <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
                     <h1
@@ -44,11 +44,11 @@ const Beranda = ({ setCurrentPage }) => {  // Terima prop setCurrentPage
                             }`}
                     >
                         Selamat Datang di{" "}
-                        <span className="bg-gradient-to-r from-[#A1E3F9] via-white to-[#A1E3F9] bg-clip-text text-transparent">
+                        <span className="bg-gradient-to-r from-[#A1E3F9] via-white to-[#A1E3F9] bg-clip-text text-transparent dark:from-[#3674B5] dark:to-[#5682B1]">
                             UKM MAHAPENA
                         </span>
                     </h1>
-                    <p className="text-lg md:text-xl text-gray-200 mb-10 max-w-3xl mx-auto leading-relaxed">
+                    <p className="text-lg md:text-xl text-gray-200 dark:text-gray-300 mb-10 max-w-3xl mx-auto leading-relaxed">
                         Wadah pengembangan kreativitas dan inovasi mahasiswa untuk
                         mengeksplorasi potensi diri.
                     </p>
@@ -58,7 +58,7 @@ const Beranda = ({ setCurrentPage }) => {  // Terima prop setCurrentPage
                                 setCurrentPage("Profil"); // Pindah ke halaman Profil
                                 window.scrollTo(0, 0); // Scroll ke atas
                             }}
-                            className="bg-transparent hover:bg-white/10 text-white font-semibold py-3 px-8 rounded-lg border border-white transition-all duration-300 hover:scale-105"
+                            className="bg-transparent hover:bg-white/10 dark:hover:bg-[#3674B5]/20 text-white dark:text-[#A1E3F9] font-semibold py-3 px-8 rounded-lg border border-white dark:border-[#A1E3F9] transition-all duration-300 hover:scale-105"
                         >
                             Profil
                         </button>

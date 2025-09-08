@@ -48,7 +48,7 @@ const Footer = ({ setCurrentPage }) => {
                     <div>
                         <h3 className="text-lg font-semibold mb-4 text-[#A1E3F9]">Navigasi</h3>
                         <ul className="space-y-2">
-                            {["Beranda", "Profil", "Proker", "Blog", "Store"].map((item) => (
+                            {["Beranda", "Profil", "Proker", "Blog", "Merchandise"].map((item) => (
                                 <li key={item}>
                                     <button
                                         onClick={() => handleNavigation(item)}

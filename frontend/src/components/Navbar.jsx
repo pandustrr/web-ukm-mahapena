@@ -6,7 +6,7 @@ const Navbar = ({ currentPage, setCurrentPage, isDarkMode, setIsDarkMode }) => {
     const [isScrolled, setIsScrolled] = useState(false)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-    const navItems = ["Beranda", "Profil", "Proker", "Blog", "Merchadise"]
+    const navItems = ["Beranda", "Profil", "Proker", "Blog", "Merchandise"]
 
     // Scroll effect
     useEffect(() => {
