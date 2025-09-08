@@ -5,7 +5,7 @@ import './App.css'
 import { useState } from 'react'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
-import Home from './pages/Home'
+import Home from './pages/Beranda'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('Beranda')
