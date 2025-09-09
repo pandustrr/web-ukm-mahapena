@@ -140,9 +140,9 @@ const Merchandise = () => {
     return (
         <div className="relative">
             {/* Floating decorative elements */}
-            <div className="fixed top-20 left-10 w-16 h-16 rounded-full bg-[#A1E3F9]/20 blur-xl z-0 animate-pulse-slow"></div>
-            <div className="fixed top-1/3 right-16 w-20 h-20 rounded-full bg-[#3674B5]/20 blur-xl z-0 animate-pulse-medium"></div>
-            <div className="fixed bottom-40 left-1/4 w-24 h-24 rounded-full bg-[#113F67]/10 blur-xl z-0 animate-pulse-slow"></div>
+            <div className="fixed top-20 left-10 w-16 h-16 rounded-full bg-[#A1E3F9]/20 blur-xl z-0 animate-pulse-slow dark:bg-[#113F67]/30"></div>
+            <div className="fixed top-1/3 right-16 w-20 h-20 rounded-full bg-[#3674B5]/20 blur-xl z-0 animate-pulse-medium dark:bg-[#5682B1]/30"></div>
+            <div className="fixed bottom-40 left-1/4 w-24 h-24 rounded-full bg-[#113F67]/10 blur-xl z-0 animate-pulse-slow dark:bg-[#3674B5]/20"></div>
 
             {/* Header bg */}
             <section className="pt-28 pb-20 md:pt-36 md:pb-28 relative text-white overflow-hidden">
@@ -152,27 +152,23 @@ const Merchandise = () => {
                         backgroundImage: `url(https://images.pexels.com/photos/1884583/pexels-photo-1884583.jpeg)`
                     }}
                 >
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50"></div>
-                    <div className="absolute inset-0 bg-noise opacity-10"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#000000]/80 to-[#000000]/60 dark:from-[#000000]/90 dark:to-[#113F67]/70"></div>
+                    <div className="absolute inset-0 bg-noise opacity-10 dark:opacity-20"></div>
                 </div>
 
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <div className="slide-in-left mb-6">
-                        <div className="inline-flex items-center justify-center mb-4">
-                            <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#A1E3F9] to-white">Mahapena Merchandise</h1>
-                        </div>
-                    </div>
-                    <div className="slide-in-right">
-                        <p className="text-xl md:text-2xl max-w-3xl mx-auto text-gray-100 drop-shadow-md">
-                            Dukung kreativitas mahasiswa dengan merchandise eksklusif karya anggota UKM Mahapena
-                        </p>
-                    </div>
+                    <h1 className="text-4xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#A1E3F9] to-[#FFFFFF] dark:from-[#A1E3F9] dark:to-[#5682B1]">
+                        Mahapena Merchandise
+                    </h1>
+                    <p className="mt-6 text-xl md:text-2xl max-w-3xl mx-auto text-[#A1E3F9]/90 dark:text-[#A1E3F9] drop-shadow-sm">
+                        Dukung kreativitas mahasiswa dengan merchandise eksklusif karya anggota UKM Mahapena
+                    </p>
 
                     {/* Animated scroll indicator */}
                     <div className="mt-16 animate-bounce">
                         <div className="flex flex-col items-center">
-                            <span className="text-sm mb-2">Scroll untuk melihat</span>
-                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <span className="text-sm mb-2 text-[#A1E3F9]/80 dark:text-[#A1E3F9]">Scroll untuk melihat</span>
+                            <svg className="w-6 h-6 text-[#FFFFFF] dark:text-[#A1E3F9]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
                             </svg>
                         </div>
@@ -184,7 +180,7 @@ const Merchandise = () => {
                     <svg
                         viewBox="0 0 1200 120"
                         preserveAspectRatio="none"
-                        className="w-full h-16 text-white fill-current"
+                        className="w-full h-16 fill-current text-[#FFFFFF] dark:text-slate-800"
                     >
                         <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V56.44Z"></path>
                     </svg>
@@ -192,49 +188,51 @@ const Merchandise = () => {
             </section>
 
             {/* Kategori Produk */}
-            <section className="py-2 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
-                {/* Background pattern */}
-                <div className="absolute inset-0 opacity-5">
-                    <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-gray-100 to-transparent"></div>
-                    <div className="absolute inset-0 pattern-dots pattern-blue-500 pattern-opacity-20 pattern-size-4"></div>
+            <section className="py-10 bg-gradient-to-b from-gray-50 to-[#FFFFFF] dark:from-slate-800 dark:to-slate-800 relative overflow-hidden">
+                {/* Background dots */}
+                <div className="absolute inset-0 opacity-5 dark:opacity-15">
+                    <div className="absolute inset-0 pattern-dots pattern-[#3674B5] dark:pattern-[#A1E3F9] pattern-opacity-20 dark:pattern-opacity-25 pattern-size-4"></div>
                 </div>
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    {/* Judul */}
                     <div className="text-center mb-12">
-                        <div className="inline-block relative">
-                            <h2 className="text-3xl font-bold text-[#3674B5] relative z-10">Kategori Produk</h2>
-                            <div className="absolute -bottom-2 left-0 right-0 h-2 bg-[#A1E3F9]/40 rounded-full"></div>
-                            <div className="w-20 h-1 bg-[#A1E3F9] mx-auto mt-4"></div>
-                        </div>
-                        <p className="text-gray-600 mt-6 max-w-2xl mx-auto">
+                        <h2 className="text-3xl font-extrabold text-[#3674B5] dark:text-[#A1E3F9] relative inline-block">
+                            Kategori Produk
+                            <span className="block w-16 h-1 bg-[#A1E3F9] dark:bg-[#3674B5] mx-auto mt-3 rounded-full"></span>
+                        </h2>
+                        <p className="text-[#113F67] dark:text-[#5682B1] mt-6 max-w-2xl mx-auto">
                             Jelajahi berbagai kategori merchandise eksklusif kami
                         </p>
                     </div>
 
-                    <div className="flex flex-wrap justify-center gap-4 mb-12">
-                        {categories.map((category) => (
-                            <button
-                                key={category}
-                                onClick={() => setSelectedCategory(category)}
-                                className={`px-6 py-3 rounded-full font-medium transition-all duration-300 relative overflow-hidden group ${selectedCategory === category
-                                        ? "bg-[#3674B5] text-white shadow-lg transform hover:scale-105"
-                                        : "bg-white text-[#113F67] hover:bg-[#A1E3F9] hover:text-[#113F67] shadow-md hover:shadow-lg dark:bg-[#000000] dark:text-[#A1E3F9] dark:hover:bg-[#113F67] dark:hover:text-[#FFFFFF]"
-                                    }`}
-                            >
-                                <span className="relative z-10">{category}</span>
-                                {selectedCategory === category && (
-                                    <span className="absolute inset-0 bg-gradient-to-r from-[#3674B5] to-[#2c6099]"></span>
-                                )}
-                                <span className="absolute inset-0 bg-gradient-to-r from-[#3674B5] to-[#2c6099] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                            </button>
-                        ))}
+                    {/* Tombol kategori */}
+                    <div className="flex justify-center mb-12">
+                        <div className="inline-flex rounded-md shadow-sm overflow-hidden border border-[#A1E3F9]/30 dark:border-[#3674B5]/30">
+                            {categories.map((category, idx) => (
+                                <button
+                                    key={category}
+                                    onClick={() => setSelectedCategory(category)}
+                                    className={`px-4 py-3 font-medium transition-all duration-300
+                            ${selectedCategory === category
+                                            ? "bg-[#3674B5] text-[#FFFFFF] shadow-md scale-105 dark:bg-[#3674B5] dark:text-[#FFFFFF]"
+                                            : "bg-[#FFFFFF] dark:bg-[#113F67] text-[#113F67] dark:text-[#A1E3F9] hover:bg-[#A1E3F9]/80 dark:hover:bg-[#3674B5] hover:text-[#113F67] dark:hover:text-[#FFFFFF]"
+                                        }
+                            ${idx === 0 ? "rounded-l-md" : ""}
+                            ${idx === categories.length - 1 ? "rounded-r-md" : ""}
+                        `}
+                                >
+                                    {category}
+                                </button>
+                            ))}
+                        </div>
                     </div>
 
-                    {/* Category indicator animation */}
-                    <div className="flex justify-center mb-8">
-                        <div className="w-24 h-1 bg-gray-200 rounded-full overflow-hidden">
+                    {/* Category indicator */}
+                    <div className="flex justify-center">
+                        <div className="w-24 h-1 bg-[#A1E3F9]/30 dark:bg-[#113F67] rounded-full overflow-hidden">
                             <div
-                                className="h-full bg-[#3674B5] transition-all duration-500 ease-out"
+                                className="h-full bg-[#3674B5] dark:bg-[#A1E3F9] transition-all duration-500 ease-out"
                                 style={{
                                     width: `${(categories.findIndex(cat => cat === selectedCategory) + 1) * (100 / categories.length)}%`
                                 }}
@@ -244,11 +242,12 @@ const Merchandise = () => {
                 </div>
             </section>
 
+
             {/* Products */}
-            <section className="py-12 bg-white relative overflow-hidden">
+            <section className="py-17 bg-white dark:bg-slate-800 relative overflow-hidden">
                 {/* Subtle background elements */}
-                <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#A1E3F9]/10 blur-3xl"></div>
-                <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-[#3674B5]/10 blur-3xl"></div>
+                <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#A1E3F9]/10 dark:bg-[#A1E3F9]/20 blur-3xl"></div>
+                <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-[#3674B5]/10 dark:bg-[#3674B5]/20 blur-3xl"></div>
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
@@ -256,11 +255,11 @@ const Merchandise = () => {
                         {filteredProducts.map((product, index) => (
                             <div
                                 key={index}
-                                className="zoom-in bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group border border-gray-100 relative"
+                                className="zoom-in bg-white dark:bg-[#113F67] rounded-lg shadow-md dark:shadow-xl hover:shadow-xl dark:hover:shadow-2xl transition-all duration-300 overflow-hidden group border border-gray-100 dark:border-[#3674B5]/30 relative"
                                 style={{ transitionDelay: `${index * 100}ms` }}
                             >
                                 {/* Hover effect overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50 dark:to-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
 
                                 <div className="relative overflow-hidden">
                                     <div className="relative h-48 overflow-hidden">
@@ -269,7 +268,7 @@ const Merchandise = () => {
                                             alt={product.name}
                                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                         />
-                                        <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                        <div className="absolute inset-0 bg-black/10 dark:bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                     </div>
 
                                     <div className="absolute top-2 right-2 bg-[#113F67] text-white px-2 py-1 rounded-full text-xs font-medium z-20 shadow-md">
@@ -285,8 +284,8 @@ const Merchandise = () => {
                                             onClick={() => handlePesan(product)}
                                             disabled={product.stok === 0}
                                             className={`py-1.5 px-4 rounded-full font-medium text-sm ${product.stok === 0
-                                                    ? "bg-gray-400 text-gray-200 cursor-not-allowed"
-                                                    : "bg-white text-[#113F67] hover:bg-[#113F67] hover:text-white"
+                                                ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+                                                : "bg-white dark:bg-[#A1E3F9] text-[#113F67] hover:bg-[#113F67] dark:hover:bg-[#3674B5] hover:text-white"
                                                 } transition-colors duration-300 shadow-lg`}
                                         >
                                             Lihat Detail
@@ -294,16 +293,16 @@ const Merchandise = () => {
                                     </div>
                                 </div>
 
-                                <div className="p-4 relative z-20 bg-white">
-                                    <h3 className="text-lg font-semibold text-[#3674B5] mb-1 group-hover:text-[#113F67] transition-colors duration-300 truncate">{product.name}</h3>
-                                    <p className="text-xl font-bold text-[#113F67] mb-1">{product.price}</p>
-                                    <p className="text-xs text-gray-600 mb-3">Stok: {product.stok}</p>
+                                <div className="p-4 relative z-20 bg-white dark:bg-[#113F67]">
+                                    <h3 className="text-lg font-semibold text-[#3674B5] dark:text-[#A1E3F9] mb-1 group-hover:text-[#113F67] dark:group-hover:text-[#5682B1] transition-colors duration-300 truncate">{product.name}</h3>
+                                    <p className="text-xl font-bold text-[#113F67] dark:text-white mb-1">{product.price}</p>
+                                    <p className="text-xs text-gray-600 dark:text-[#5682B1] mb-3">Stok: {product.stok}</p>
                                     <button
                                         onClick={() => handlePesan(product)}
                                         disabled={product.stok === 0}
                                         className={`w-full font-medium py-2 px-3 rounded-md transition-all duration-300 flex items-center justify-center relative overflow-hidden group text-sm ${product.stok === 0
-                                                ? "bg-gray-400 text-gray-200 cursor-not-allowed"
-                                                : "bg-[#3674B5] hover:bg-[#2c6099] text-white hover:shadow-md"
+                                            ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+                                            : "bg-[#3674B5] hover:bg-[#113F67] text-white hover:shadow-md"
                                             }`}
                                     >
                                         <span className="relative z-10 flex items-center">
@@ -319,7 +318,7 @@ const Merchandise = () => {
                                             )}
                                         </span>
                                         {product.stok > 0 && (
-                                            <span className="absolute inset-0 bg-gradient-to-r from-[#3674B5] to-[#2c6099] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                                            <span className="absolute inset-0 bg-gradient-to-r from-[#3674B5] to-[#113F67] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                                         )}
                                     </button>
                                 </div>
@@ -329,13 +328,13 @@ const Merchandise = () => {
 
                     {filteredProducts.length === 0 && (
                         <div className="text-center py-12 fade-in">
-                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100">
-                                <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-[#113F67]">
+                                <svg className="w-8 h-8 text-gray-400 dark:text-[#5682B1]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
-                            <h3 className="text-xl font-medium text-gray-600">Tidak ada produk dalam kategori ini</h3>
-                            <p className="text-gray-500 mt-2">Coba kategori lain untuk melihat lebih banyak pilihan</p>
+                            <h3 className="text-xl font-medium text-gray-600 dark:text-[#A1E3F9]">Tidak ada produk dalam kategori ini</h3>
+                            <p className="text-gray-500 dark:text-[#5682B1] mt-2">Coba kategori lain untuk melihat lebih banyak pilihan</p>
                         </div>
                     )}
                 </div>
