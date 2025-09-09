@@ -1,12 +1,21 @@
 // File: src/components/Navbar.jsx
 import { useState, useEffect } from "react"
+import { Link, useLocation } from "react-router-dom"
 import logo from "../assets/logo.png"
 
-const Navbar = ({ currentPage, setCurrentPage, isDarkMode, setIsDarkMode }) => {
+const Navbar = ({ isDarkMode, setIsDarkMode }) => {
     const [isScrolled, setIsScrolled] = useState(false)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const location = useLocation()
 
-    const navItems = ["Beranda", "Profil", "Proker", "Blog", "Merchandise"]
+    // Daftar menu dengan path router
+    const navItems = [
+        { name: "Beranda", path: "/" },
+        { name: "Profil", path: "/profil" },
+        { name: "Proker", path: "/proker" },
+        { name: "Blog", path: "/blog" },
+        { name: "Merchandise", path: "/merchandise" },
+    ]
 
     // Scroll effect
     useEffect(() => {
@@ -19,8 +28,8 @@ const Navbar = ({ currentPage, setCurrentPage, isDarkMode, setIsDarkMode }) => {
         <nav
             className={`fixed top-4 left-1/2 transform -translate-x-1/2 w-[90%] max-w-6xl z-50 transition-all duration-500
             ${isScrolled
-                ? "shadow-lg bg-white/95 dark:bg-[#113F67]/95"
-                : "shadow-md bg-white/70 dark:bg-[#113F67]/70"} 
+                    ? "shadow-lg bg-white/95 dark:bg-[#113F67]/95"
+                    : "shadow-md bg-white/70 dark:bg-[#113F67]/70"} 
             backdrop-blur-md rounded-xl px-6 py-2`}
         >
             <div className="flex items-center justify-between">
@@ -35,17 +44,17 @@ const Navbar = ({ currentPage, setCurrentPage, isDarkMode, setIsDarkMode }) => {
                 {/* Navigation (Desktop) */}
                 <div className="hidden md:flex items-center space-x-6 mx-auto">
                     {navItems.map((item) => (
-                        <button
-                            key={item}
-                            onClick={() => setCurrentPage(item)}
+                        <Link
+                            key={item.name}
+                            to={item.path}
                             className={`px-2 py-1 text-sm font-medium transition 
-                                ${currentPage === item
+                                ${location.pathname === item.path
                                     ? "text-[#3674B5] dark:text-[#A1E3F9] border-b-2 border-[#3674B5]"
                                     : "text-gray-700 dark:text-[#A1E3F9]/80 hover:text-[#113F67] dark:hover:text-[#A1E3F9]"
                                 }`}
                         >
-                            {item}
-                        </button>
+                            {item.name}
+                        </Link>
                     ))}
                 </div>
 
@@ -71,25 +80,23 @@ const Navbar = ({ currentPage, setCurrentPage, isDarkMode, setIsDarkMode }) => {
             {isMenuOpen && (
                 <div className="md:hidden mt-2 flex flex-col space-y-2">
                     {navItems.map((item) => (
-                        <button
-                            key={item}
-                            onClick={() => {
-                                setCurrentPage(item)
-                                setIsMenuOpen(false)
-                            }}
+                        <Link
+                            key={item.name}
+                            to={item.path}
+                            onClick={() => setIsMenuOpen(false)}
                             className={`px-4 py-2 rounded-lg text-sm font-medium 
-                                ${currentPage === item
+                                ${location.pathname === item.path
                                     ? "bg-[#3674B5] text-white dark:bg-[#5682B1]"
                                     : "text-gray-700 dark:text-[#A1E3F9]/80 hover:bg-[#A1E3F9]/80 dark:hover:bg-[#3674B5]"
                                 }`}
                         >
-                            {item}
-                        </button>
+                            {item.name}
+                        </Link>
                     ))}
                 </div>
             )}
         </nav>
-            )
+    )
 }
 
 export default Navbar

@@ -1,4 +1,5 @@
 // File: src/App.jsx
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import Navbar from "./components/Navbar";
 import Beranda from "./pages/Beranda";
@@ -9,34 +10,27 @@ import Merchandise from "./pages/Merchandise";
 import Footer from "./components/Footer";
 
 function App() {
-    const [currentPage, setCurrentPage] = useState("Beranda");
-    const [isDarkMode, setIsDarkMode] = useState(false); 
-
-    const renderPage = () => {
-        switch (currentPage) {
-            case "Beranda":
-                return <Beranda setCurrentPage={setCurrentPage} />;
-            case "Profil":
-                return <Profil />;
-            case "Proker":
-                return <Proker />;
-            case "Blog":
-                return <Blog />;
-            case "Merchandise":
-                return <Merchandise />;
-            default:
-                return <Beranda setCurrentPage={setCurrentPage} />;
-        }
-    };
+    const [isDarkMode, setIsDarkMode] = useState(false);
 
     return (
-        <div className={`App min-h-screen flex flex-col ${isDarkMode ? "dark" : ""}`}>
-            <Navbar currentPage={currentPage} setCurrentPage={setCurrentPage} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
-            <main className="flex-grow">
-                {renderPage()}
-            </main>
-            <Footer setCurrentPage={setCurrentPage} />
-        </div>
+        <Router>
+            <div className={`App min-h-screen flex flex-col ${isDarkMode ? "dark" : ""}`}>
+                {/* Navbar dikasih props supaya bisa toggle dark mode */}
+                <Navbar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+                
+                <main className="flex-grow">
+                    <Routes>
+                        <Route path="/" element={<Beranda />} />
+                        <Route path="/profil" element={<Profil />} />
+                        <Route path="/proker" element={<Proker />} />
+                        <Route path="/blog" element={<Blog />} />
+                        <Route path="/merchandise" element={<Merchandise />} />
+                    </Routes>
+                </main>
+
+                <Footer />
+            </div>
+        </Router>
     );
 }
 

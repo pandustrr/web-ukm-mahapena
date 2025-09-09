@@ -1,11 +1,15 @@
 // File: src/components/Footer.jsx
-import logo from "../assets/logo.png";
+import { Link } from "react-router-dom"
+import logo from "../assets/logo.png"
 
-const Footer = ({ setCurrentPage }) => {
-    const handleNavigation = (page) => {
-        setCurrentPage(page);
-        window.scrollTo(0, 0);
-    };
+const Footer = () => {
+    const navItems = [
+        { name: "Beranda", path: "/" },
+        { name: "Profil", path: "/profil" },
+        { name: "Proker", path: "/proker" },
+        { name: "Blog", path: "/blog" },
+        { name: "Merchandise", path: "/merchandise" },
+    ]
 
     return (
         <footer className="bg-[#113F67] dark:bg-[#000000] text-white pt-8 pb-6 relative">
@@ -23,6 +27,7 @@ const Footer = ({ setCurrentPage }) => {
                             inovasi, dan entrepreneurship di kalangan mahasiswa.
                         </p>
                         <div className="flex space-x-4">
+                            {/* Sosial Media */}
                             <a href="#" className="text-[#5682B1] hover:text-[#A1E3F9] transition-colors duration-300">
                                 <span className="sr-only">Facebook</span>
                                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -48,14 +53,14 @@ const Footer = ({ setCurrentPage }) => {
                     <div>
                         <h3 className="text-lg font-semibold mb-4 text-[#A1E3F9]">Navigasi</h3>
                         <ul className="space-y-2">
-                            {["Beranda", "Profil", "Proker", "Blog", "Merchandise"].map((item) => (
-                                <li key={item}>
-                                    <button
-                                        onClick={() => handleNavigation(item)}
-                                        className="text-[#5682B1] hover:text-[#FFFFFF] transition-colors duration-300 text-sm block w-full text-left"
+                            {navItems.map((item) => (
+                                <li key={item.name}>
+                                    <Link
+                                        to={item.path}
+                                        className="text-[#5682B1] hover:text-[#FFFFFF] transition-colors duration-300 text-sm block w-full"
                                     >
-                                        {item}
-                                    </button>
+                                        {item.name}
+                                    </Link>
                                 </li>
                             ))}
                         </ul>
@@ -117,7 +122,7 @@ const Footer = ({ setCurrentPage }) => {
                 </svg>
             </div>
         </footer>
-    );
-};
+    )
+}
 
-export default Footer;
+export default Footer
