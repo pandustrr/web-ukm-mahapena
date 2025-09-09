@@ -104,7 +104,6 @@ const Merchandise = () => {
                 kondisi: "Baru",
                 minPemesanan: "1 Buah",
                 material: "Dibuat dari Cotton Combed 24s, bahan lembut, adem, dan nyaman dipakai sepanjang hari.",
-                fit: "Dengan regular cutting size chart, kaos ini cocok digunakan oleh pria maupun wanita, memberikan tampilan casual yang effortless.",
                 ukuran: [
                     "S – Panjang 63 cm | Lebar 43 cm | Lengan 20 cm",
                     "M – Panjang 68 cm | Lebar 46 cm | Lengan 20 cm",
@@ -115,13 +114,6 @@ const Merchandise = () => {
                     "Hitam – Bold & timeless",
                     "Putih – Simpel & clean"
                 ],
-                design: {
-                    nama: "T-Shirt Metaverse",
-                    detail: [
-                        "Depan – Bentuk love dengan tulisan 'JavaScript, Metaverse, HTML'",
-                        "Belakang – Tulisan 'Metaverse', menambah sentuhan futuristik pada tampilan Anda"
-                    ]
-                }
             }
         },
         {
@@ -133,21 +125,12 @@ const Merchandise = () => {
             description: {
                 kondisi: "Baru",
                 minPemesanan: "1 Buah",
-                etalase: "Aksesoris",
                 material: "Terbuat dari kanvas tebal yang tahan lama dan mudah dibersihkan.",
-                fit: "Desain yang stylish dengan tali yang nyaman digantung di bahu.",
                 ukuran: "Dimensi: 40cm x 35cm x 10cm",
                 warna: [
                     "Abu-abu – Modern dan elegan",
                     "Coklat – Klasik dan timeless"
                 ],
-                design: {
-                    nama: "Desain Eksklusif Mahapena",
-                    detail: [
-                        "Logo Mahapena yang terlihat jelas di bagian depan",
-                        "Saku dalam untuk menyimpan barang-barang kecil"
-                    ]
-                }
             }
         }
     ];
@@ -446,10 +429,6 @@ const Merchandise = () => {
                                                 <strong>Material Berkualitas:</strong> {selectedProduct.description.material}
                                             </p>
 
-                                            <p className="text-gray-700 dark:text-gray-300 mb-4">
-                                                <strong>Fit:</strong> {selectedProduct.description.fit}
-                                            </p>
-
                                             <h6 className="font-semibold text-[#113F67] dark:text-[#A1E3F9] mt-4 mb-2">Pilihan Ukuran</h6>
                                             {Array.isArray(selectedProduct.description.ukuran) ? (
                                                 <ul className="text-gray-700 dark:text-gray-300 list-disc pl-5 mb-4">
@@ -472,13 +451,6 @@ const Merchandise = () => {
                                                 <p className="text-gray-700 dark:text-gray-300 mb-4">{selectedProduct.description.warna}</p>
                                             )}
 
-                                            <h6 className="font-semibold text-[#113F67] dark:text-[#A1E3F9] mt-4 mb-2">Desain Eksklusif</h6>
-                                            <p className="text-gray-700 dark:text-gray-300 mb-2">{selectedProduct.description.design.nama}</p>
-                                            <ul className="text-gray-700 dark:text-gray-300 list-disc pl-5">
-                                                {selectedProduct.description.design.detail.map((detail, index) => (
-                                                    <li key={index}>{detail}</li>
-                                                ))}
-                                            </ul>
                                         </div>
 
                                         {/* Tombol untuk beralih ke pemesanan */}
