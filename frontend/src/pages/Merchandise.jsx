@@ -1,17 +1,20 @@
-// File: src/pages/Merchandise.jsx
 import { useState, useEffect } from "react";
 
 const Merchandise = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [activeTab, setActiveTab] = useState("detail");
     const [formData, setFormData] = useState({
         nama: "",
         noWa: "",
         alamat: "",
         catatan: "",
-        jumlah: 1
+        jumlah: 1,
+        ukuran: "",
+        warna: ""
     });
+    const [selectedCategory, setSelectedCategory] = useState("Semua");
 
     useEffect(() => {
         setIsVisible(true);
@@ -19,7 +22,6 @@ const Merchandise = () => {
         const handleScroll = () => {
             const elements = document.querySelectorAll('.slide-in-left, .slide-in-right, .zoom-in');
             elements.forEach(el => {
-                // pastikan elemen bukan modal
                 if (!el.closest('.modal')) {
                     const elementTop = el.getBoundingClientRect().top;
                     if (elementTop < window.innerHeight - 100) {
@@ -35,7 +37,6 @@ const Merchandise = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-
     const handlePesan = (product) => {
         setSelectedProduct(product);
         setFormData({
@@ -43,8 +44,11 @@ const Merchandise = () => {
             noWa: "",
             alamat: "",
             catatan: "",
-            jumlah: 1
+            jumlah: 1,
+            ukuran: "",
+            warna: ""
         });
+        setActiveTab("detail");
         setShowModal(true);
     };
 
@@ -71,6 +75,8 @@ const Merchandise = () => {
         const message = `Halo, saya ingin memesan merchandise Mahapena:\n\n` +
             `*Produk:* ${selectedProduct.name}\n` +
             `*Harga:* ${selectedProduct.price} x ${formData.jumlah} = Rp ${totalHarga.toLocaleString('id-ID')}\n` +
+            `*Ukuran:* ${formData.ukuran || '-'}\n` +
+            `*Warna:* ${formData.warna || '-'}\n` +
             `*Nama:* ${formData.nama}\n` +
             `*No. WhatsApp:* ${formData.noWa}\n` +
             `*Alamat:* ${formData.alamat}\n` +
@@ -82,11 +88,10 @@ const Merchandise = () => {
 
     const handleWhatsAppOrder = () => {
         const message = generateWhatsAppMessage();
-        window.open(`https://wa.me/6281234567890?text=${message}`, '_blank');
+        window.open(`https://wa.me/6281230487469?text=${message}`, '_blank');
     };
 
-    const categories = ["Semua", "Baju", "Aksesoris", "Stationery", "Lainnya"];
-    const [selectedCategory, setSelectedCategory] = useState("Semua");
+    const categories = ["Semua", "Baju", "Aksesoris"];
 
     const products = [
         {
@@ -94,42 +99,56 @@ const Merchandise = () => {
             price: 'Rp 120.000',
             category: 'Baju',
             stok: 15,
-            image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
+            image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+            description: {
+                kondisi: "Baru",
+                minPemesanan: "1 Buah",
+                material: "Dibuat dari Cotton Combed 24s, bahan lembut, adem, dan nyaman dipakai sepanjang hari.",
+                fit: "Dengan regular cutting size chart, kaos ini cocok digunakan oleh pria maupun wanita, memberikan tampilan casual yang effortless.",
+                ukuran: [
+                    "S – Panjang 63 cm | Lebar 43 cm | Lengan 20 cm",
+                    "M – Panjang 68 cm | Lebar 46 cm | Lengan 20 cm",
+                    "L – Panjang 71 cm | Lebar 50 cm | Lengan 20 cm",
+                    "XL – Panjang 73 cm | Lebar 53 cm | Lengan 23 cm"
+                ],
+                warna: [
+                    "Hitam – Bold & timeless",
+                    "Putih – Simpel & clean"
+                ],
+                design: {
+                    nama: "T-Shirt Metaverse",
+                    detail: [
+                        "Depan – Bentuk love dengan tulisan 'JavaScript, Metaverse, HTML'",
+                        "Belakang – Tulisan 'Metaverse', menambah sentuhan futuristik pada tampilan Anda"
+                    ]
+                }
+            }
         },
         {
             name: 'Totebag Kreatif',
             price: 'Rp 75.000',
             category: 'Aksesoris',
             stok: 25,
-            image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
-        },
-        {
-            name: 'Notebook Eksklusif',
-            price: 'Rp 45.000',
-            category: 'Stationery',
-            stok: 30,
-            image: 'https://images.unsplash.com/photo-1531346680769-a1d79b57de5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
-        },
-        {
-            name: 'Sticker Pack',
-            price: 'Rp 25.000',
-            category: 'Stationery',
-            stok: 100,
-            image: 'https://images.unsplash.com/photo-1584824486539-53bb4646bdbc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
-        },
-        {
-            name: 'Mousepad Design',
-            price: 'Rp 65.000',
-            category: 'Lainnya',
-            stok: 20,
-            image: 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
-        },
-        {
-            name: 'Pin Collection',
-            price: 'Rp 15.000',
-            category: 'Aksesoris',
-            stok: 50,
-            image: 'https://images.unsplash.com/photo-1589782182703-2aaa690365b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
+            image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+            description: {
+                kondisi: "Baru",
+                minPemesanan: "1 Buah",
+                etalase: "Aksesoris",
+                material: "Terbuat dari kanvas tebal yang tahan lama dan mudah dibersihkan.",
+                fit: "Desain yang stylish dengan tali yang nyaman digantung di bahu.",
+                ukuran: "Dimensi: 40cm x 35cm x 10cm",
+                warna: [
+                    "Abu-abu – Modern dan elegan",
+                    "Coklat – Klasik dan timeless"
+                ],
+                design: {
+                    nama: "Desain Eksklusif Mahapena",
+                    detail: [
+                        "Logo Mahapena yang terlihat jelas di bagian depan",
+                        "Saku dalam untuk menyimpan barang-barang kecil"
+                    ]
+                }
+            }
         }
     ];
 
@@ -242,27 +261,26 @@ const Merchandise = () => {
                 </div>
             </section>
 
-
             {/* Products */}
-            <section className="py-17 bg-white dark:bg-slate-800 relative overflow-hidden">
+            <section className="py-12 bg-white dark:bg-slate-800 relative overflow-hidden">
+
                 {/* Subtle background elements */}
                 <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#A1E3F9]/10 dark:bg-[#A1E3F9]/20 blur-3xl"></div>
                 <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-[#3674B5]/10 dark:bg-[#3674B5]/20 blur-3xl"></div>
 
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    {/* Container produk dengan lebar penuh */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                         {filteredProducts.map((product, index) => (
                             <div
                                 key={index}
-                                className="zoom-in bg-white dark:bg-[#113F67] rounded-lg shadow-md dark:shadow-xl hover:shadow-xl dark:hover:shadow-2xl transition-all duration-300 overflow-hidden group border border-gray-100 dark:border-[#3674B5]/30 relative"
-                                style={{ transitionDelay: `${index * 100}ms` }}
+                                className="zoom-in bg-white dark:bg-[#113F67] rounded-lg shadow-md dark:shadow-xl hover:shadow-xl dark:hover:shadow-2xl transition-all duration-300 overflow-hidden group border border-gray-100 dark:border-[#3674B5]/30 relative" style={{ transitionDelay: `${index * 100}ms` }}
                             >
                                 {/* Hover effect overlay */}
                                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50 dark:to-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
 
                                 <div className="relative overflow-hidden">
-                                    <div className="relative h-48 overflow-hidden">
+                                    <div className="relative h-60 overflow-hidden">
                                         <img
                                             src={product.image}
                                             alt={product.name}
@@ -271,10 +289,10 @@ const Merchandise = () => {
                                         <div className="absolute inset-0 bg-black/10 dark:bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                     </div>
 
-                                    <div className="absolute top-2 right-2 bg-[#113F67] text-white px-2 py-1 rounded-full text-xs font-medium z-20 shadow-md">
+                                    <div className="absolute top-3 right-3 bg-[#113F67] text-white px-3 py-1 rounded-full text-sm font-medium z-20 shadow-md">
                                         {product.category}
                                     </div>
-                                    <div className="absolute top-2 left-2 bg-[#3674B5] text-white px-1.5 py-0.5 rounded text-xs font-medium z-20 shadow-md">
+                                    <div className="absolute top-3 left-3 bg-[#3674B5] text-white px-2 py-1 rounded text-sm font-medium z-20 shadow-md">
                                         Stok: {product.stok}
                                     </div>
 
@@ -283,7 +301,7 @@ const Merchandise = () => {
                                         <button
                                             onClick={() => handlePesan(product)}
                                             disabled={product.stok === 0}
-                                            className={`py-1.5 px-4 rounded-full font-medium text-sm ${product.stok === 0
+                                            className={`py-2 px-5 rounded-full font-medium ${product.stok === 0
                                                 ? "bg-gray-400 text-gray-200 cursor-not-allowed"
                                                 : "bg-white dark:bg-[#A1E3F9] text-[#113F67] hover:bg-[#113F67] dark:hover:bg-[#3674B5] hover:text-white"
                                                 } transition-colors duration-300 shadow-lg`}
@@ -293,14 +311,14 @@ const Merchandise = () => {
                                     </div>
                                 </div>
 
-                                <div className="p-4 relative z-20 bg-white dark:bg-[#113F67]">
-                                    <h3 className="text-lg font-semibold text-[#3674B5] dark:text-[#A1E3F9] mb-1 group-hover:text-[#113F67] dark:group-hover:text-[#5682B1] transition-colors duration-300 truncate">{product.name}</h3>
-                                    <p className="text-xl font-bold text-[#113F67] dark:text-white mb-1">{product.price}</p>
-                                    <p className="text-xs text-gray-600 dark:text-[#5682B1] mb-3">Stok: {product.stok}</p>
+                                <div className="p-5 relative z-20 bg-white dark:bg-slate-800">
+                                    <h3 className="text-xl font-semibold text-[#3674B5] dark:text-[#A1E3F9] mb-2 group-hover:text-[#113F67] dark:group-hover:text-[#5682B1] transition-colors duration-300">{product.name}</h3>
+                                    <p className="text-2xl font-bold text-[#113F67] dark:text-white mb-2">{product.price}</p>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Stok: {product.stok}</p>
                                     <button
                                         onClick={() => handlePesan(product)}
                                         disabled={product.stok === 0}
-                                        className={`w-full font-medium py-2 px-3 rounded-md transition-all duration-300 flex items-center justify-center relative overflow-hidden group text-sm ${product.stok === 0
+                                        className={`w-full font-medium py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center relative overflow-hidden group ${product.stok === 0
                                             ? "bg-gray-400 text-gray-200 cursor-not-allowed"
                                             : "bg-[#3674B5] hover:bg-[#113F67] text-white hover:shadow-md"
                                             }`}
@@ -310,7 +328,7 @@ const Merchandise = () => {
                                                 "Stok Habis"
                                             ) : (
                                                 <>
-                                                    <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                                    <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                                                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.016a9.97 9.97 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.936 9.936 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.864 3.488" />
                                                     </svg>
                                                     Pesan Via WA
@@ -328,13 +346,13 @@ const Merchandise = () => {
 
                     {filteredProducts.length === 0 && (
                         <div className="text-center py-12 fade-in">
-                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-[#113F67]">
-                                <svg className="w-8 h-8 text-gray-400 dark:text-[#5682B1]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-slate-700">
+                                <svg className="w-8 h-8 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
-                            <h3 className="text-xl font-medium text-gray-600 dark:text-[#A1E3F9]">Tidak ada produk dalam kategori ini</h3>
-                            <p className="text-gray-500 dark:text-[#5682B1] mt-2">Coba kategori lain untuk melihat lebih banyak pilihan</p>
+                            <h3 className="text-xl font-medium text-gray-600 dark:text-gray-300">Tidak ada produk dalam kategori ini</h3>
+                            <p className="text-gray-500 dark:text-gray-400 mt-2">Coba kategori lain untuk melihat lebih banyak pilihan</p>
                         </div>
                     )}
                 </div>
@@ -342,14 +360,14 @@ const Merchandise = () => {
 
             {/* Modal Pesanan */}
             {showModal && selectedProduct && (
-                <div className="modal fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+                <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
                     <div
-                        className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+                        className="bg-white dark:bg-slate-800 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-[#3674B5] to-[#2c6099] text-white">
+                        <div className="p-6 border-b border-gray-200 dark:border-slate-700 bg-gradient-to-r from-[#3674B5] to-[#2c6099] text-white">
                             <div className="flex justify-between items-center">
-                                <h3 className="text-2xl font-bold">Pesan {selectedProduct.name}</h3>
+                                <h3 className="text-2xl font-bold">Detail {selectedProduct.name}</h3>
                                 <button
                                     onClick={() => setShowModal(false)}
                                     className="text-white hover:text-gray-200 transition-colors duration-200"
@@ -359,131 +377,352 @@ const Merchandise = () => {
                                     </svg>
                                 </button>
                             </div>
+
+                            {/* Tab Navigation */}
+                            <div className="mt-4 flex border-b border-[#5682B1]">
+                                <button
+                                    onClick={() => setActiveTab("detail")}
+                                    className={`py-2 px-4 font-medium ${activeTab === "detail" ? "text-white border-b-2 border-white" : "text-[#A1E3F9]"}`}
+                                >
+                                    Detail Produk
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab("pemesanan")}
+                                    className={`py-2 px-4 font-medium ${activeTab === "pemesanan" ? "text-white border-b-2 border-white" : "text-[#A1E3F9]"}`}
+                                >
+                                    Pemesanan
+                                </button>
+                            </div>
                         </div>
 
-                        <div className="p-6">
-                            {/* Info Produk */}
-                            <div className="flex items-center mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200 shadow-sm">
-                                <div className="relative">
-                                    <img src={selectedProduct.image} alt={selectedProduct.name} className="w-16 h-16 object-cover rounded-md mr-4" />
-                                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#3674B5] rounded-full flex items-center justify-center text-white text-xs">
-                                        {selectedProduct.stok}
-                                    </div>
-                                </div>
-                                <div>
-                                    <h4 className="font-semibold text-[#3674B5]">{selectedProduct.name}</h4>
-                                    <p className="text-lg font-bold text-[#113F67]">{selectedProduct.price}</p>
-                                    <p className="text-sm text-gray-600">Kategori: {selectedProduct.category}</p>
-                                </div>
-                            </div>
-
-                            {/* Form Pemesanan */}
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Jumlah</label>
-                                    <div className="flex items-center max-w-xs">
-                                        <button
-                                            onClick={() => handleJumlahChange(-1)}
-                                            disabled={formData.jumlah <= 1}
-                                            className="w-10 h-10 rounded-l bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed border border-gray-300 transition-colors duration-200"
-                                        >
-                                            -
-                                        </button>
-                                        <input
-                                            type="number"
-                                            value={formData.jumlah}
-                                            readOnly
-                                            className="w-16 h-10 text-center border-t border-b border-gray-300 font-medium"
+                        {/* Konten berdasarkan tab aktif */}
+                        {activeTab === "detail" ? (
+                            <div className="p-6 dark:bg-slate-800 dark:text-white">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {/* Gambar Produk */}
+                                    <div className="rounded-lg overflow-hidden">
+                                        <img
+                                            src={selectedProduct.image}
+                                            alt={selectedProduct.name}
+                                            className="w-full h-auto object-cover rounded-lg shadow-md"
                                         />
+                                    </div>
+
+                                    {/* Detail Produk */}
+                                    <div>
+                                        <h4 className="text-2xl font-bold text-[#3674B5] dark:text-[#A1E3F9] mb-2">{selectedProduct.name}</h4>
+                                        <p className="text-3xl font-bold text-[#113F67] dark:text-white mb-4">{selectedProduct.price}</p>
+
+                                        <div className="mb-6">
+                                            <div className="flex items-center mb-2">
+                                                <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                                                    Stok: {selectedProduct.stok}
+                                                </span>
+                                                <span className="ml-3 bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+                                                    Kategori: {selectedProduct.category}
+                                                </span>
+                                            </div>
+
+                                            <div className="mt-4 space-y-3">
+                                                <div className="flex">
+                                                    <svg className="w-5 h-5 text-[#3674B5] dark:text-[#A1E3F9] mt-0.5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+                                                    </svg>
+                                                    <span>Kondisi: <strong>{selectedProduct.description.kondisi}</strong></span>
+                                                </div>
+                                                <div className="flex">
+                                                    <svg className="w-5 h-5 text-[#3674B5] dark:text-[#A1E3F9] mt-0.5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+                                                    </svg>
+                                                    <span>Min. Pemesanan: <strong>{selectedProduct.description.minPemesanan}</strong></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Deskripsi Produk */}
+                                        <div className="prose max-w-none dark:prose-invert">
+                                            <h5 className="text-lg font-semibold text-[#3674B5] dark:text-[#A1E3F9] mb-2">Deskripsi Produk</h5>
+                                            <p className="text-gray-700 dark:text-gray-300 mb-4">
+                                                <strong>Material Berkualitas:</strong> {selectedProduct.description.material}
+                                            </p>
+
+                                            <p className="text-gray-700 dark:text-gray-300 mb-4">
+                                                <strong>Fit:</strong> {selectedProduct.description.fit}
+                                            </p>
+
+                                            <h6 className="font-semibold text-[#113F67] dark:text-[#A1E3F9] mt-4 mb-2">Pilihan Ukuran</h6>
+                                            {Array.isArray(selectedProduct.description.ukuran) ? (
+                                                <ul className="text-gray-700 dark:text-gray-300 list-disc pl-5 mb-4">
+                                                    {selectedProduct.description.ukuran.map((size, index) => (
+                                                        <li key={index}>{size}</li>
+                                                    ))}
+                                                </ul>
+                                            ) : (
+                                                <p className="text-gray-700 dark:text-gray-300 mb-4">{selectedProduct.description.ukuran}</p>
+                                            )}
+
+                                            <h6 className="font-semibold text-[#113F67] dark:text-[#A1E3F9] mt-4 mb-2">Pilihan Warna</h6>
+                                            {Array.isArray(selectedProduct.description.warna) ? (
+                                                <ul className="text-gray-700 dark:text-gray-300 list-disc pl-5 mb-4">
+                                                    {selectedProduct.description.warna.map((color, index) => (
+                                                        <li key={index}>{color}</li>
+                                                    ))}
+                                                </ul>
+                                            ) : (
+                                                <p className="text-gray-700 dark:text-gray-300 mb-4">{selectedProduct.description.warna}</p>
+                                            )}
+
+                                            <h6 className="font-semibold text-[#113F67] dark:text-[#A1E3F9] mt-4 mb-2">Desain Eksklusif</h6>
+                                            <p className="text-gray-700 dark:text-gray-300 mb-2">{selectedProduct.description.design.nama}</p>
+                                            <ul className="text-gray-700 dark:text-gray-300 list-disc pl-5">
+                                                {selectedProduct.description.design.detail.map((detail, index) => (
+                                                    <li key={index}>{detail}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
+
+                                        {/* Tombol untuk beralih ke pemesanan */}
+                                        <div className="mt-8">
+                                            <button
+                                                onClick={() => setActiveTab("pemesanan")}
+                                                className="w-full py-3 bg-[#3674B5] hover:bg-[#113F67] text-white rounded-lg transition-colors duration-300 font-medium"
+                                            >
+                                                Pesan Sekarang
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="dark:bg-slate-800">
+                                <div className="p-6">
+                                    {/* Info Produk */}
+                                    <div className="flex items-center mb-6 p-4 bg-gray-50 dark:bg-slate-700 rounded-lg border border-gray-200 dark:border-slate-600 shadow-sm">
+                                        <div className="relative">
+                                            <img src={selectedProduct.image} alt={selectedProduct.name} className="w-16 h-16 object-cover rounded-md mr-4" />
+                                            <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#3674B5] rounded-full flex items-center justify-center text-white text-xs">
+                                                {selectedProduct.stok}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h4 className="font-semibold text-[#3674B5] dark:text-[#A1E3F9]">{selectedProduct.name}</h4>
+                                            <p className="text-lg font-bold text-[#113F67] dark:text-white">{selectedProduct.price}</p>
+                                            <p className="text-sm text-gray-600 dark:text-gray-400">Kategori: {selectedProduct.category}</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Form Pemesanan */}
+                                    <div className="space-y-4">
+                                        <div>
+                                            {/* Jumlah + Ukuran + Warna sejajar */}
+                                            <div className="flex items-start gap-6 flex-wrap">
+
+                                                {/* Input Jumlah */}
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                        Jumlah
+                                                    </label>
+                                                    <div className="flex items-center max-w-xs">
+                                                        <button
+                                                            onClick={() => handleJumlahChange(-1)}
+                                                            disabled={formData.jumlah <= 1}
+                                                            className="w-10 h-10 rounded-l bg-gray-100 dark:bg-slate-700 flex items-center justify-center 
+                                                                    text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 
+                                                                    disabled:opacity-50 disabled:cursor-not-allowed border border-gray-300 dark:border-slate-600 
+                                                                    transition-colors duration-200"
+                                                        >
+                                                            -
+                                                        </button>
+                                                        <input
+                                                            type="number"
+                                                            value={formData.jumlah}
+                                                            readOnly
+                                                            className="w-16 h-10 text-center border-t border-b border-gray-300 
+                                                            dark:border-slate-600 font-medium bg-white dark:bg-slate-800 dark:text-white"
+                                                        />
+                                                        <button
+                                                            onClick={() => handleJumlahChange(1)}
+                                                            disabled={formData.jumlah >= selectedProduct.stok}
+                                                            className="w-10 h-10 rounded-r bg-gray-100 dark:bg-slate-700 flex items-center justify-center 
+                                                                text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 
+                                                                disabled:opacity-50 disabled:cursor-not-allowed border border-gray-300 dark:border-slate-600 
+                                                                transition-colors duration-200"
+                                                        >
+                                                            +
+                                                        </button>
+                                                    </div>
+                                                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                                        Maksimal: {selectedProduct.stok} pcs
+                                                    </p>
+                                                </div>
+
+                                                {/* Pilih Ukuran */}
+                                                {selectedProduct.description.ukuran && (
+                                                    <div>
+                                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                            Pilih Ukuran
+                                                        </label>
+                                                        <div className="flex gap-2 flex-wrap">
+                                                            {Array.isArray(selectedProduct.description.ukuran) ? (
+                                                                selectedProduct.description.ukuran.map((size, index) => (
+                                                                    <button
+                                                                        key={index}
+                                                                        type="button"
+                                                                        onClick={() => handleInputChange({ target: { name: "ukuran", value: size } })}
+                                                                        className={`px-4 py-2 rounded-lg border transition-colors duration-200 
+                                                                                ${formData.ukuran === size
+                                                                                ? "bg-[#3674B5] text-white border-[#3674B5]"
+                                                                                : "bg-white dark:bg-slate-800 dark:text-white border-gray-300 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700"
+                                                                            }`}
+                                                                    >
+                                                                        {size}
+                                                                    </button>
+                                                                ))
+                                                            ) : (
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() =>
+                                                                        handleInputChange({
+                                                                            target: { name: "ukuran", value: selectedProduct.description.ukuran },
+                                                                        })
+                                                                    }
+                                                                    className={`px-4 py-2 rounded-lg border transition-colors duration-200 
+                ${formData.ukuran === selectedProduct.description.ukuran
+                                                                            ? "bg-[#3674B5] text-white border-[#3674B5]"
+                                                                            : "bg-white dark:bg-slate-800 dark:text-white border-gray-300 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700"
+                                                                        }`}
+                                                                >
+                                                                    {selectedProduct.description.ukuran}
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {/* Pilih Warna */}
+                                                {selectedProduct.description.warna && (
+                                                    <div>
+                                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                            Pilih Warna
+                                                        </label>
+                                                        <div className="flex gap-2 flex-wrap">
+                                                            {Array.isArray(selectedProduct.description.warna) ? (
+                                                                selectedProduct.description.warna.map((color, index) => (
+                                                                    <button
+                                                                        key={index}
+                                                                        type="button"
+                                                                        onClick={() => handleInputChange({ target: { name: "warna", value: color } })}
+                                                                        className={`px-4 py-2 rounded-lg border transition-colors duration-200 
+                                                                                ${formData.warna === color
+                                                                                ? "bg-[#3674B5] text-white border-[#3674B5]"
+                                                                                : "bg-white dark:bg-slate-800 dark:text-white border-gray-300 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700"
+                                                                            }`}
+                                                                    >
+                                                                        {color}
+                                                                    </button>
+                                                                ))
+                                                            ) : (
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() =>
+                                                                        handleInputChange({
+                                                                            target: { name: "warna", value: selectedProduct.description.warna },
+                                                                        })
+                                                                    }
+                                                                    className={`px-4 py-2 rounded-lg border transition-colors duration-200 
+                                                                    ${formData.warna === selectedProduct.description.warna
+                                                                            ? "bg-[#3674B5] text-white border-[#3674B5]"
+                                                                            : "bg-white dark:bg-slate-800 dark:text-white border-gray-300 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700"
+                                                                        }`}
+                                                                >
+                                                                    {selectedProduct.description.warna}
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Lengkap</label>
+                                            <input
+                                                type="text"
+                                                name="nama"
+                                                value={formData.nama}
+                                                onChange={handleInputChange}
+                                                className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-[#3674B5] focus:border-transparent transition-colors duration-200 bg-white dark:bg-slate-800 dark:text-white"
+                                                placeholder="Masukkan nama lengkap"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nomor WhatsApp</label>
+                                            <input
+                                                type="tel"
+                                                name="noWa"
+                                                value={formData.noWa}
+                                                onChange={handleInputChange}
+                                                className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-[#3674B5] focus:border-transparent transition-colors duration-200 bg-white dark:bg-slate-800 dark:text-white"
+                                                placeholder="Contoh: 081234567890"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Alamat Pengiriman</label>
+                                            <textarea
+                                                name="alamat"
+                                                value={formData.alamat}
+                                                onChange={handleInputChange}
+                                                rows="3"
+                                                className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-[#3674B5] focus:border-transparent transition-colors duration-200 bg-white dark:bg-slate-800 dark:text-white"
+                                                placeholder="Masukkan alamat lengkap untuk pengiriman"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Catatan (Opsional)</label>
+                                            <textarea
+                                                name="catatan"
+                                                value={formData.catatan}
+                                                onChange={handleInputChange}
+                                                rows="2"
+                                                className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-[#3674B5] focus:border-transparent transition-colors duration-200 bg-white dark:bg-slate-800 dark:text-white"
+                                                placeholder="Catatan tambahan untuk pesanan"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="p-6 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-700 rounded-b-xl">
+                                    <div className="flex flex-col sm:flex-row gap-4">
                                         <button
-                                            onClick={() => handleJumlahChange(1)}
-                                            disabled={formData.jumlah >= selectedProduct.stok}
-                                            className="w-10 h-10 rounded-r bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed border border-gray-300 transition-colors duration-200"
+                                            onClick={() => setShowModal(false)}
+                                            className="px-6 py-3 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-600 transition-all font-medium"
                                         >
-                                            +
+                                            Batal
+                                        </button>
+                                        <button
+                                            onClick={handleWhatsAppOrder}
+                                            disabled={!formData.nama || !formData.noWa || !formData.alamat}
+                                            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center font-medium relative overflow-hidden group"
+                                        >
+                                            <span className="relative z-10 flex items-center">
+                                                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.016a9.97 9.97 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.936 9.936 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.864 3.488" />
+                                                </svg>
+                                                Pesan Sekarang via WhatsApp
+                                            </span>
+                                            <span className="absolute inset-0 bg-green-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                                         </button>
                                     </div>
-                                    <p className="text-xs text-gray-500 mt-1">
-                                        Maksimal: {selectedProduct.stok} pcs
-                                    </p>
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
-                                    <input
-                                        type="text"
-                                        name="nama"
-                                        value={formData.nama}
-                                        onChange={handleInputChange}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3674B5] focus:border-transparent transition-colors duration-200"
-                                        placeholder="Masukkan nama lengkap"
-                                        required
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Nomor WhatsApp</label>
-                                    <input
-                                        type="tel"
-                                        name="noWa"
-                                        value={formData.noWa}
-                                        onChange={handleInputChange}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3674B5] focus:border-transparent transition-colors duration-200"
-                                        placeholder="Contoh: 081234567890"
-                                        required
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Alamat Pengiriman</label>
-                                    <textarea
-                                        name="alamat"
-                                        value={formData.alamat}
-                                        onChange={handleInputChange}
-                                        rows="3"
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3674B5] focus:border-transparent transition-colors duration-200"
-                                        placeholder="Masukkan alamat lengkap untuk pengiriman"
-                                        required
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Catatan (Opsional)</label>
-                                    <textarea
-                                        name="catatan"
-                                        value={formData.catatan}
-                                        onChange={handleInputChange}
-                                        rows="2"
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3674B5] focus:border-transparent transition-colors duration-200"
-                                        placeholder="Catatan tambahan untuk pesanan"
-                                    />
                                 </div>
                             </div>
-                        </div>
-
-                        <div className="p-6 border-t border-gray-200 bg-gray-50 rounded-b-xl">
-                            <div className="flex flex-col sm:flex-row gap-4">
-                                <button
-                                    onClick={() => setShowModal(false)}
-                                    className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-all font-medium"
-                                >
-                                    Batal
-                                </button>
-                                <button
-                                    onClick={handleWhatsAppOrder}
-                                    disabled={!formData.nama || !formData.noWa || !formData.alamat}
-                                    className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center font-medium relative overflow-hidden group"
-                                >
-                                    <span className="relative z-10 flex items-center">
-                                        <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.016a9.97 9.97 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.936 9.936 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.864 3.488" />
-                                        </svg>
-                                        Pesan Sekarang via WhatsApp
-                                    </span>
-                                    <span className="absolute inset-0 bg-green-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                                </button>
-                            </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             )}
