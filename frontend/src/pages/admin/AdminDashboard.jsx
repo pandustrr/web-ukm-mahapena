@@ -1,7 +1,7 @@
-import { BarChart3, FileText, ShoppingBag, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import ManajemenBlog from "./ManajemenBlog";
 import ManajemenPengurus from "./ManajemenPengurus";
+import SidebarAdmin from "./SidebarAdmin";
 
 export default function AdminDashboard() {
   const [activePage, setActivePage] = useState("dashboard");
@@ -41,46 +41,7 @@ export default function AdminDashboard() {
           Admin Panel
         </div>
 
-        <nav className="p-4">
-          <ul className="space-y-2">
-            {[
-              {
-                id: "dashboard",
-                label: "Dashboard",
-                icon: <BarChart3 size={20} />,
-              },
-              {
-                id: "pengurus",
-                label: "Pengurus",
-                icon: <Users size={20} />,
-              },
-              {
-                id: "marchandise",
-                label: "Marchandise",
-                icon: <ShoppingBag size={20} />,
-              },
-              {
-                id: "blog",
-                label: "Blog",
-                icon: <FileText size={20} />,
-              },
-            ].map((item) => (
-              <li key={item.id}>
-                <button
-                  onClick={() => setActivePage(item.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
-                    activePage === item.id
-                      ? "bg-blue-700 text-white"
-                      : "text-blue-100 hover:bg-blue-700"
-                  }`}
-                >
-                  {item.icon}
-                  <span>{item.label}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <SidebarAdmin activePage={activePage} setActivePage={setActivePage} />
 
         <div className="p-4 border-t border-[#3674B5]">
           <button
@@ -94,12 +55,6 @@ export default function AdminDashboard() {
 
       {/* Konten Dashboard */}
       <main className="flex-1 p-6 overflow-y-auto bg-[#F5F5F5]">
-        {/* <h1 className="text-[#3674B5] text-2xl font-semibold">
-          Selamat datang, Admin!
-        </h1>
-        <p className="mt-2 text-black">
-          Pilih menu di sidebar untuk mengelola konten.
-        </p> */}
         {renderPageContent()}
       </main>
     </div>
