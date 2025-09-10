@@ -1,31 +1,22 @@
-import { BarChart3, FileText, ShoppingBag, Users } from "lucide-react";
-import { useState } from "react";
+// File: src/pages/admin/SidebarAdmin.jsx
+import { BarChart3, FileText, ShoppingBag, Users, LogOut } from "lucide-react";
 
 function SidebarAdmin({ activePage, setActivePage }) {
+  const handleLogout = () => {
+    if (confirm("Apakah Anda yakin ingin logout?")) {
+      localStorage.removeItem("admin_token"); // hapus token
+      window.location.href = "/admin/login"; // redirect login
+    }
+  };
+
   return (
-    <nav className="p-4">
+    <nav className="p-4 flex flex-col h-full justify-between">
       <ul className="space-y-2">
         {[
-          {
-            id: "dashboard",
-            label: "Dashboard",
-            icon: <BarChart3 size={20} />,
-          },
-          {
-            id: "pengurus",
-            label: "Pengurus",
-            icon: <Users size={20} />,
-          },
-          {
-            id: "marchandise",
-            label: "Marchandise",
-            icon: <ShoppingBag size={20} />,
-          },
-          {
-            id: "blog",
-            label: "Blog",
-            icon: <FileText size={20} />,
-          },
+          { id: "dashboard", label: "Dashboard", icon: <BarChart3 size={20} /> },
+          { id: "pengurus", label: "Pengurus", icon: <Users size={20} /> },
+          { id: "merchandise", label: "Merchandise", icon: <ShoppingBag size={20} /> },
+          { id: "blog", label: "Blog", icon: <FileText size={20} /> },
         ].map((item) => (
           <li key={item.id}>
             <button
@@ -42,6 +33,15 @@ function SidebarAdmin({ activePage, setActivePage }) {
           </li>
         ))}
       </ul>
+
+      {/* Logout */}
+      <button
+        onClick={handleLogout}
+        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-red-500 hover:bg-red-600 hover:text-white"
+      >
+        <LogOut size={20} />
+        <span>Logout</span>
+      </button>
     </nav>
   );
 }

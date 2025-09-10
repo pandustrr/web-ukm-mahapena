@@ -1,4 +1,3 @@
-// File: src/App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 
@@ -21,13 +20,13 @@ function App() {
     return (
         <Router>
             <div className={`App min-h-screen flex flex-col ${isDarkMode ? "dark" : ""}`}>
-                
-                {/* Hanya tampilkan Navbar & Footer untuk halaman user biasa */}
+                {/* Navbar hanya untuk user biasa */}
                 <Routes>
                     <Route path="/admin/*" element={null} />
                     <Route path="/*" element={<Navbar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />} />
                 </Routes>
 
+                {/* Main content */}
                 <main className="flex-grow">
                     <Routes>
                         {/* Halaman user biasa */}
@@ -43,7 +42,7 @@ function App() {
                     </Routes>
                 </main>
 
-                {/* Footer hanya tampil untuk halaman user biasa */}
+                {/* Footer hanya untuk user biasa */}
                 <Routes>
                     <Route path="/admin/*" element={null} />
                     <Route path="/*" element={<Footer />} />

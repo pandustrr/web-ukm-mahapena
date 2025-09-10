@@ -103,7 +103,6 @@ const Merchandise = () => {
             description: {
                 kondisi: "Baru",
                 minPemesanan: "1 Buah",
-                material: "Dibuat dari Cotton Combed 24s, bahan lembut, adem, dan nyaman dipakai sepanjang hari.",
                 ukuran: [
                     "S – Panjang 63 cm | Lebar 43 cm | Lengan 20 cm",
                     "M – Panjang 68 cm | Lebar 46 cm | Lengan 20 cm",
@@ -125,7 +124,6 @@ const Merchandise = () => {
             description: {
                 kondisi: "Baru",
                 minPemesanan: "1 Buah",
-                material: "Terbuat dari kanvas tebal yang tahan lama dan mudah dibersihkan.",
                 ukuran: "Dimensi: 40cm x 35cm x 10cm",
                 warna: [
                     "Abu-abu – Modern dan elegan",
@@ -352,7 +350,7 @@ const Merchandise = () => {
                             <div className="flex justify-between items-center">
                                 <h3 className="text-2xl font-bold">Detail {selectedProduct.name}</h3>
                                 <button
-                                    onClick={() => setShowModal(false)}
+                                    onClick={() => setShowModal(falsFe)}
                                     className="text-white hover:text-gray-200 transition-colors duration-200"
                                 >
                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -425,9 +423,6 @@ const Merchandise = () => {
                                         {/* Deskripsi Produk */}
                                         <div className="prose max-w-none dark:prose-invert">
                                             <h5 className="text-lg font-semibold text-[#3674B5] dark:text-[#A1E3F9] mb-2">Deskripsi Produk</h5>
-                                            <p className="text-gray-700 dark:text-gray-300 mb-4">
-                                                <strong>Material Berkualitas:</strong> {selectedProduct.description.material}
-                                            </p>
 
                                             <h6 className="font-semibold text-[#113F67] dark:text-[#A1E3F9] mt-4 mb-2">Pilihan Ukuran</h6>
                                             {Array.isArray(selectedProduct.description.ukuran) ? (
