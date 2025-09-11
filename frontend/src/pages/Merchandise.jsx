@@ -4,12 +4,14 @@ import axios from "axios";
 const Merchandise = () => {
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState("all");
+    // const [selectedCategory, setSelectedCategory] = useState("all");
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
     const [isVisible, setIsVisible] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [activeTab, setActiveTab] = useState("detail");
+
     const [formData, setFormData] = useState({
         nama: "",
         noWa: "",
@@ -20,13 +22,70 @@ const Merchandise = () => {
         warna: ""
     });
 
+    const handlePesan = (product) => {
+        setSelectedProduct(product);
+
+        setFormData({
+            nama: "",
+            noWa: "",
+            alamat: "",
+            catatan: "",
+            jumlah: 1,
+            ukuran: product.sizes && product.sizes.length > 0 ? product.sizes[0] : "",
+            warna: product.colors && product.colors.length > 0 ? product.colors[0] : "",
+        });
+
+        setActiveTab("detail");
+        setShowModal(true);
+    };
+
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleJumlahChange = (change) => {
+        setFormData(prev => {
+            const newJumlah = prev.jumlah + change;
+            if (newJumlah < 1) return { ...prev, jumlah: 1 };
+            if (selectedProduct && newJumlah > selectedProduct.stock) return { ...prev, jumlah: selectedProduct.stock };
+            return { ...prev, jumlah: newJumlah };
+        });
+    };
+
+    const handleWhatsAppOrder = () => {
+        if (!selectedProduct) return;
+
+        const message = `Halo, saya ingin memesan merchandise:\n\n` +
+            `*Nama Produk:* ${selectedProduct.name}\n` +
+            `*Harga:* ${selectedProduct.price}\n` +
+            `*Jumlah:* ${formData.jumlah}\n` +
+            (formData.ukuran ? `*Ukuran:* ${formData.ukuran}\n` : '') +
+            (formData.warna ? `*Warna:* ${formData.warna}\n` : '') +
+            `*Total:* ${formData.jumlah * parseFloat(selectedProduct.price)}\n\n` +
+            `*Data Pemesan:*\n` +
+            `Nama: ${formData.nama}\n` +
+            `No. WhatsApp: ${formData.noWa}\n` +
+            `Alamat: ${formData.alamat}\n` +
+            (formData.catatan ? `Catatan: ${formData.catatan}\n` : '');
+
+        const encodedMessage = encodeURIComponent(message);
+
+        // Nomor harus pakai format internasional tanpa 0, contoh: 081556509656 -> 6281556509656
+        const phoneNumber = "6281556509656";
+
+        window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+    };
+
     useEffect(() => {
         const fetchCategories = async () => {
             try {
                 const res = await axios.get("http://localhost:8000/api/categories");
                 const categoriesFromApi = res.data;
-
-                // Tambahkan kategori default "Semua"
                 setCategories([{ id: "all", name: "Semua" }, ...categoriesFromApi]);
             } catch (err) {
                 console.error("Gagal ambil data kategori:", err);
@@ -36,24 +95,6 @@ const Merchandise = () => {
         fetchCategories();
     }, []);
 
-    // Ambil kategori
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const res = await axios.get("http://localhost:8000/api/categories");
-                const categoriesFromApi = res.data;
-
-                // Tambahkan kategori default "Semua"
-                setCategories([{ id: "all", name: "Semua" }, ...categoriesFromApi]);
-            } catch (err) {
-                console.error("Gagal ambil data kategori:", err);
-            }
-        };
-
-        fetchCategories();
-    }, []);
-
-    // Ambil produk
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -66,12 +107,12 @@ const Merchandise = () => {
         fetchProducts();
     }, []);
 
-    // Produk terfilter
-    const filteredProducts = selectedCategory
-        ? products.filter(product => product.category_id === selectedCategory)
-        : products; // jika selectedCategory null, munculkan semua
+    // Filter produk berdasarkan kategori
+    const filteredProducts = selectedCategory === null
+        ? products
+        : products.filter(product => product.category_id === Number(selectedCategory));
 
-    // Animasi scroll (kode lama kamu)
+
     useEffect(() => {
         setIsVisible(true);
         const handleScroll = () => {
@@ -161,15 +202,14 @@ const Merchandise = () => {
 
                     {/* Tombol kategori */}
                     <div className="flex justify-center mb-12">
-                        <div className="inline-flex rounded-md shadow-sm overflow-hidden border border-[#A1E3F9]/30 dark:border-[#3674B5]/30">
-
+                        <div className="inline-flex rounded-md shadow-sm overflow-hidden border border-[#A1E3F9]/40 dark:border-[#3674B5]/40 bg-white dark:bg-slate-800 transition-colors duration-500">
                             {/* Tombol Semua */}
                             <button
                                 onClick={() => setSelectedCategory(null)}
                                 className={`px-4 py-3 font-medium transition-all duration-300
-                ${selectedCategory === null
-                                        ? "bg-[#3674B5] text-white shadow-md scale-105"
-                                        : "bg-white text-[#113F67] hover:bg-[#A1E3F9]/80 hover:text-[#113F67]"
+            ${selectedCategory === null
+                                        ? "bg-[#3674B5] text-white dark:bg-[#A1E3F9] dark:text-slate-900 shadow-md scale-105"
+                                        : "bg-white dark:bg-slate-800 text-[#113F67] dark:text-gray-300 hover:bg-[#A1E3F9]/30 dark:hover:bg-[#3674B5]/40 hover:text-[#113F67] dark:hover:text-white"
                                     } rounded-l-md`}
                             >
                                 Semua
@@ -184,8 +224,8 @@ const Merchandise = () => {
                                         onClick={() => setSelectedCategory(category.id)}
                                         className={`px-4 py-3 font-medium transition-all duration-300
                 ${selectedCategory === category.id
-                                                ? "bg-[#3674B5] text-white shadow-md scale-105"
-                                                : "bg-white text-[#113F67] hover:bg-[#A1E3F9]/80 hover:text-[#113F67]"
+                                                ? "bg-[#3674B5] text-white dark:bg-[#A1E3F9] dark:text-slate-900 shadow-md scale-105"
+                                                : "bg-white dark:bg-slate-800 text-[#113F67] dark:text-gray-300 hover:bg-[#A1E3F9]/30 dark:hover:bg-[#3674B5]/40 hover:text-[#113F67] dark:hover:text-white"
                                             }
                 ${idx === categories.length - 1 ? "rounded-r-md" : ""}`}
                                     >
@@ -194,7 +234,6 @@ const Merchandise = () => {
                                 ))}
                         </div>
                     </div>
-
                     {/* Category indicator */}
                     <div className="flex justify-center mt-2">
                         <div className="w-24 h-1 bg-[#A1E3F9]/30 dark:bg-[#113F67] rounded-full overflow-hidden">
@@ -202,9 +241,9 @@ const Merchandise = () => {
                                 className="h-full bg-[#3674B5] dark:bg-[#A1E3F9] transition-all duration-500 ease-out"
                                 style={{
                                     width: `${selectedCategory === null
-                                            ? 100
-                                            : ((categories.findIndex(cat => cat.id === selectedCategory) + 1) *
-                                                (100 / (categories.length + 1)))
+                                        ? 100 // Semua kategori aktif
+                                        : ((categories.findIndex(cat => cat.id === selectedCategory) + 1) *
+                                            (100 / (categories.length))) // indikator per kategori
                                         }%`
                                 }}
                             ></div>
@@ -235,7 +274,7 @@ const Merchandise = () => {
                                 <div className="relative overflow-hidden">
                                     <div className="relative h-60 overflow-hidden">
                                         <img
-                                            src={product.image}
+                                            src={`http://localhost:8000/storage/${product.image}`}
                                             alt={product.name}
                                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                         />
@@ -329,15 +368,26 @@ const Merchandise = () => {
                         className="bg-white dark:bg-slate-800 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
                         onClick={(e) => e.stopPropagation()}
                     >
+                        {/* Header Modal */}
                         <div className="p-6 border-b border-gray-200 dark:border-slate-700 bg-gradient-to-r from-[#3674B5] to-[#2c6099] text-white">
                             <div className="flex justify-between items-center">
                                 <h3 className="text-2xl font-bold">Detail {selectedProduct.name}</h3>
                                 <button
-                                    onClick={() => setShowModal(falsFe)}
+                                    onClick={() => setShowModal(false)}
                                     className="text-white hover:text-gray-200 transition-colors duration-200"
                                 >
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                    <svg
+                                        className="w-6 h-6"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M6 18L18 6M6 6l12 12"
+                                        />
                                     </svg>
                                 </button>
                             </div>
@@ -346,13 +396,19 @@ const Merchandise = () => {
                             <div className="mt-4 flex border-b border-[#5682B1]">
                                 <button
                                     onClick={() => setActiveTab("detail")}
-                                    className={`py-2 px-4 font-medium ${activeTab === "detail" ? "text-white border-b-2 border-white" : "text-[#A1E3F9]"}`}
+                                    className={`py-2 px-4 font-medium ${activeTab === "detail"
+                                        ? "text-white border-b-2 border-white"
+                                        : "text-[#A1E3F9]"
+                                        }`}
                                 >
                                     Detail Produk
                                 </button>
                                 <button
                                     onClick={() => setActiveTab("pemesanan")}
-                                    className={`py-2 px-4 font-medium ${activeTab === "pemesanan" ? "text-white border-b-2 border-white" : "text-[#A1E3F9]"}`}
+                                    className={`py-2 px-4 font-medium ${activeTab === "pemesanan"
+                                        ? "text-white border-b-2 border-white"
+                                        : "text-[#A1E3F9]"
+                                        }`}
                                 >
                                     Pemesanan
                                 </button>
@@ -366,98 +422,130 @@ const Merchandise = () => {
                                     {/* Gambar Produk */}
                                     <div className="rounded-lg overflow-hidden">
                                         <img
-                                            src={selectedProduct.image}
+                                            src={`http://localhost:8000/storage/${selectedProduct.image}`}
                                             alt={selectedProduct.name}
                                             className="w-full h-auto object-cover rounded-lg shadow-md"
+                                            onError={(e) => {
+                                                e.target.src = "https://via.placeholder.com/300?text=No+Image";
+                                            }}
                                         />
                                     </div>
-
                                     {/* Detail Produk */}
                                     <div>
-                                        <h4 className="text-2xl font-bold text-[#3674B5] dark:text-[#A1E3F9] mb-2">{selectedProduct.name}</h4>
-                                        <p className="text-3xl font-bold text-[#113F67] dark:text-white mb-4">{selectedProduct.price}</p>
+                                        <h4 className="text-2xl font-bold text-[#3674B5] dark:text-[#A1E3F9] mb-2">
+                                            {selectedProduct.name}
+                                        </h4>
+                                        <p className="text-3xl font-bold text-[#113F67] dark:text-white mb-4">
+                                            {selectedProduct.price}
+                                        </p>
 
                                         <div className="mb-6">
                                             <div className="flex items-center mb-2">
                                                 <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
-                                                    Stok: {selectedProduct.stok}
+                                                    Stok: {selectedProduct.stock}
                                                 </span>
                                                 <span className="ml-3 bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
-                                                    Kategori: {selectedProduct.category}
+                                                    Kategori: {selectedProduct.category?.name}
                                                 </span>
                                             </div>
 
                                             <div className="mt-4 space-y-3">
-                                                <div className="flex">
-                                                    <svg className="w-5 h-5 text-[#3674B5] dark:text-[#A1E3F9] mt-0.5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+
+                                                <div className="flex items-center">
+                                                    <svg
+                                                        className="w-5 h-5 text-[#3674B5] dark:text-[#A1E3F9] mt-0.5 mr-2"
+                                                        fill="currentColor"
+                                                        viewBox="0 0 20 20"
+                                                    >
+                                                        <path
+                                                            fillRule="evenodd"
+                                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                            clipRule="evenodd"
+                                                        ></path>
                                                     </svg>
-                                                    <span>Kondisi: <strong>{selectedProduct.description.kondisi}</strong></span>
-                                                </div>
-                                                <div className="flex">
-                                                    <svg className="w-5 h-5 text-[#3674B5] dark:text-[#A1E3F9] mt-0.5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                                                    </svg>
-                                                    <span>Min. Pemesanan: <strong>{selectedProduct.description.minPemesanan}</strong></span>
+                                                    <span>
+                                                        Min. Pemesanan: 1
+
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
 
                                         {/* Deskripsi Produk */}
                                         <div className="prose max-w-none dark:prose-invert">
-                                            <h5 className="text-lg font-semibold text-[#3674B5] dark:text-[#A1E3F9] mb-2">Deskripsi Produk</h5>
+                                            <h5 className="text-lg font-semibold text-[#3674B5] dark:text-[#A1E3F9] mb-2">
+                                                Deskripsi Produk
+                                            </h5>
 
-                                            <h6 className="font-semibold text-[#113F67] dark:text-[#A1E3F9] mt-4 mb-2">Pilihan Ukuran</h6>
-                                            {Array.isArray(selectedProduct.description.ukuran) ? (
+                                            {/* Teks Deskripsi */}
+                                            <p className="text-gray-700 dark:text-gray-300 mb-4">
+                                                {selectedProduct.description || "-"}
+                                            </p>
+
+                                            {/* Pilihan Ukuran */}
+                                            <h6 className="font-semibold text-[#113F67] dark:text-[#A1E3F9] mt-4 mb-2">
+                                                Pilihan Ukuran
+                                            </h6>
+                                            {Array.isArray(selectedProduct.sizes) && selectedProduct.sizes.length > 0 ? (
                                                 <ul className="text-gray-700 dark:text-gray-300 list-disc pl-5 mb-4">
-                                                    {selectedProduct.description.ukuran.map((size, index) => (
+                                                    {selectedProduct.sizes.map((size, index) => (
                                                         <li key={index}>{size}</li>
                                                     ))}
                                                 </ul>
                                             ) : (
-                                                <p className="text-gray-700 dark:text-gray-300 mb-4">{selectedProduct.description.ukuran}</p>
+                                                <p className="text-gray-700 dark:text-gray-300 mb-4">-</p>
                                             )}
 
-                                            <h6 className="font-semibold text-[#113F67] dark:text-[#A1E3F9] mt-4 mb-2">Pilihan Warna</h6>
-                                            {Array.isArray(selectedProduct.description.warna) ? (
+                                            {/* Pilihan Warna */}
+                                            <h6 className="font-semibold text-[#113F67] dark:text-[#A1E3F9] mt-4 mb-2">
+                                                Pilihan Warna
+                                            </h6>
+                                            {Array.isArray(selectedProduct.colors) && selectedProduct.colors.length > 0 ? (
                                                 <ul className="text-gray-700 dark:text-gray-300 list-disc pl-5 mb-4">
-                                                    {selectedProduct.description.warna.map((color, index) => (
+                                                    {selectedProduct.colors.map((color, index) => (
                                                         <li key={index}>{color}</li>
                                                     ))}
                                                 </ul>
                                             ) : (
-                                                <p className="text-gray-700 dark:text-gray-300 mb-4">{selectedProduct.description.warna}</p>
+                                                <p className="text-gray-700 dark:text-gray-300 mb-4">-</p>
                                             )}
-
                                         </div>
+
 
                                         {/* Tombol untuk beralih ke pemesanan */}
                                         <div className="mt-8">
                                             <button
+                                                type="button"
                                                 onClick={() => setActiveTab("pemesanan")}
                                                 className="w-full py-3 bg-[#3674B5] hover:bg-[#113F67] text-white rounded-lg transition-colors duration-300 font-medium"
                                             >
                                                 Pesan Sekarang
                                             </button>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
                         ) : (
                             <div className="dark:bg-slate-800">
                                 <div className="p-6">
+
                                     {/* Info Produk */}
                                     <div className="flex items-center mb-6 p-4 bg-gray-50 dark:bg-slate-700 rounded-lg border border-gray-200 dark:border-slate-600 shadow-sm">
                                         <div className="relative">
-                                            <img src={selectedProduct.image} alt={selectedProduct.name} className="w-16 h-16 object-cover rounded-md mr-4" />
+                                            <img
+                                                src={`http://localhost:8000/storage/${selectedProduct.image}`}
+                                                alt={selectedProduct.name}
+                                                className="w-16 h-16 object-cover rounded-md mr-4"
+                                            />
                                             <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#3674B5] rounded-full flex items-center justify-center text-white text-xs">
-                                                {selectedProduct.stok}
+                                                {selectedProduct.stock}
                                             </div>
                                         </div>
                                         <div>
                                             <h4 className="font-semibold text-[#3674B5] dark:text-[#A1E3F9]">{selectedProduct.name}</h4>
                                             <p className="text-lg font-bold text-[#113F67] dark:text-white">{selectedProduct.price}</p>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400">Kategori: {selectedProduct.category}</p>
+                                            <p className="text-sm text-gray-600 dark:text-gray-400">Kategori: {selectedProduct.category?.name}</p>
                                         </div>
                                     </div>
 
@@ -472,125 +560,98 @@ const Merchandise = () => {
                                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                                         Jumlah
                                                     </label>
-                                                    <div className="flex items-center max-w-xs">
+                                                    <div className="flex items-center max-w-xs rounded-lg overflow-hidden border border-gray-300 dark:border-slate-600 shadow-sm">
+                                                        {/* Tombol - */}
                                                         <button
                                                             onClick={() => handleJumlahChange(-1)}
                                                             disabled={formData.jumlah <= 1}
-                                                            className="w-10 h-10 rounded-l bg-gray-100 dark:bg-slate-700 flex items-center justify-center 
-                                                                    text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 
-                                                                    disabled:opacity-50 disabled:cursor-not-allowed border border-gray-300 dark:border-slate-600 
-                                                                    transition-colors duration-200"
+                                                            className={`w-10 h-10 flex items-center justify-center font-bold 
+        transition-colors duration-200
+        ${formData.jumlah <= 1
+                                                                    ? "bg-gray-200 text-gray-400 dark:bg-slate-700 dark:text-gray-500 cursor-not-allowed"
+                                                                    : "bg-red-500 hover:bg-red-600 text-white dark:bg-red-600 dark:hover:bg-red-700"}`}
                                                         >
-                                                            -
+                                                            −
                                                         </button>
+
+                                                        {/* Input Jumlah */}
                                                         <input
                                                             type="number"
                                                             value={formData.jumlah}
                                                             readOnly
-                                                            className="w-16 h-10 text-center border-t border-b border-gray-300 
-                                                            dark:border-slate-600 font-medium bg-white dark:bg-slate-800 dark:text-white"
+                                                            className="w-16 h-10 text-center font-semibold 
+        bg-white dark:bg-slate-800 text-gray-800 dark:text-white
+        border-x border-gray-300 dark:border-slate-600"
                                                         />
+
+                                                        {/* Tombol + */}
                                                         <button
                                                             onClick={() => handleJumlahChange(1)}
-                                                            disabled={formData.jumlah >= selectedProduct.stok}
-                                                            className="w-10 h-10 rounded-r bg-gray-100 dark:bg-slate-700 flex items-center justify-center 
-                                                                text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 
-                                                                disabled:opacity-50 disabled:cursor-not-allowed border border-gray-300 dark:border-slate-600 
-                                                                transition-colors duration-200"
+                                                            disabled={formData.jumlah >= selectedProduct.stock}
+                                                            className={`w-10 h-10 flex items-center justify-center font-bold 
+        transition-colors duration-200
+        ${formData.jumlah >= selectedProduct.stock
+                                                                    ? "bg-gray-200 text-gray-400 dark:bg-slate-700 dark:text-gray-500 cursor-not-allowed"
+                                                                    : "bg-green-500 hover:bg-green-600 text-white dark:bg-green-600 dark:hover:bg-green-700"}`}
                                                         >
                                                             +
                                                         </button>
                                                     </div>
                                                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                                        Maksimal: {selectedProduct.stok} pcs
+                                                        Maksimal: {selectedProduct.stock} pcs
                                                     </p>
                                                 </div>
 
                                                 {/* Pilih Ukuran */}
-                                                {selectedProduct.description.ukuran && (
+                                                {selectedProduct.sizes && selectedProduct.sizes.length > 0 && (
                                                     <div>
                                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                                             Pilih Ukuran
                                                         </label>
                                                         <div className="flex gap-2 flex-wrap">
-                                                            {Array.isArray(selectedProduct.description.ukuran) ? (
-                                                                selectedProduct.description.ukuran.map((size, index) => (
-                                                                    <button
-                                                                        key={index}
-                                                                        type="button"
-                                                                        onClick={() => handleInputChange({ target: { name: "ukuran", value: size } })}
-                                                                        className={`px-4 py-2 rounded-lg border transition-colors duration-200 
-                                                                                ${formData.ukuran === size
-                                                                                ? "bg-[#3674B5] text-white border-[#3674B5]"
-                                                                                : "bg-white dark:bg-slate-800 dark:text-white border-gray-300 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700"
-                                                                            }`}
-                                                                    >
-                                                                        {size}
-                                                                    </button>
-                                                                ))
-                                                            ) : (
+                                                            {selectedProduct.sizes.map((size, index) => (
                                                                 <button
+                                                                    key={index}
                                                                     type="button"
-                                                                    onClick={() =>
-                                                                        handleInputChange({
-                                                                            target: { name: "ukuran", value: selectedProduct.description.ukuran },
-                                                                        })
-                                                                    }
+                                                                    onClick={() => setFormData({ ...formData, ukuran: size })}
                                                                     className={`px-4 py-2 rounded-lg border transition-colors duration-200 
-                ${formData.ukuran === selectedProduct.description.ukuran
+                                ${formData.ukuran === size
                                                                             ? "bg-[#3674B5] text-white border-[#3674B5]"
                                                                             : "bg-white dark:bg-slate-800 dark:text-white border-gray-300 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700"
                                                                         }`}
                                                                 >
-                                                                    {selectedProduct.description.ukuran}
+                                                                    {size}
                                                                 </button>
-                                                            )}
+                                                            ))}
                                                         </div>
                                                     </div>
                                                 )}
 
                                                 {/* Pilih Warna */}
-                                                {selectedProduct.description.warna && (
+                                                {selectedProduct.colors && selectedProduct.colors.length > 0 && (
                                                     <div>
                                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                                             Pilih Warna
                                                         </label>
                                                         <div className="flex gap-2 flex-wrap">
-                                                            {Array.isArray(selectedProduct.description.warna) ? (
-                                                                selectedProduct.description.warna.map((color, index) => (
-                                                                    <button
-                                                                        key={index}
-                                                                        type="button"
-                                                                        onClick={() => handleInputChange({ target: { name: "warna", value: color } })}
-                                                                        className={`px-4 py-2 rounded-lg border transition-colors duration-200 
-                                                                                ${formData.warna === color
-                                                                                ? "bg-[#3674B5] text-white border-[#3674B5]"
-                                                                                : "bg-white dark:bg-slate-800 dark:text-white border-gray-300 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700"
-                                                                            }`}
-                                                                    >
-                                                                        {color}
-                                                                    </button>
-                                                                ))
-                                                            ) : (
+                                                            {selectedProduct.colors.map((color, index) => (
                                                                 <button
+                                                                    key={index}
                                                                     type="button"
-                                                                    onClick={() =>
-                                                                        handleInputChange({
-                                                                            target: { name: "warna", value: selectedProduct.description.warna },
-                                                                        })
-                                                                    }
+                                                                    onClick={() => setFormData({ ...formData, warna: color })}
                                                                     className={`px-4 py-2 rounded-lg border transition-colors duration-200 
-                                                                    ${formData.warna === selectedProduct.description.warna
+                                ${formData.warna === color
                                                                             ? "bg-[#3674B5] text-white border-[#3674B5]"
                                                                             : "bg-white dark:bg-slate-800 dark:text-white border-gray-300 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700"
                                                                         }`}
                                                                 >
-                                                                    {selectedProduct.description.warna}
+                                                                    {color}
                                                                 </button>
-                                                            )}
+                                                            ))}
                                                         </div>
                                                     </div>
                                                 )}
+
                                             </div>
                                         </div>
 
@@ -650,12 +711,15 @@ const Merchandise = () => {
 
                                 <div className="p-6 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-700 rounded-b-xl">
                                     <div className="flex flex-col sm:flex-row gap-4">
+                                        {/* Tombol Batal */}
                                         <button
                                             onClick={() => setShowModal(false)}
                                             className="px-6 py-3 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-600 transition-all font-medium"
                                         >
                                             Batal
                                         </button>
+
+                                        {/* Tombol Pesan via WhatsApp */}
                                         <button
                                             onClick={handleWhatsAppOrder}
                                             disabled={!formData.nama || !formData.noWa || !formData.alamat}

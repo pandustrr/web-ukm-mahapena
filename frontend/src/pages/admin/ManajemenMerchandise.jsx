@@ -138,7 +138,7 @@ export default function ManajemenMerchandise() {
 
             const formData = new FormData();
             formData.append("name", merchName);
-            formData.append("category_id", selectedCategory);
+            formData.append("category_id", parseInt(selectedCategory));
             formData.append("price", parseFloat(merchPrice));
             formData.append("stock", parseInt(merchStock));
             formData.append("description", description);
