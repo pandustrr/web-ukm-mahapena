@@ -89,9 +89,6 @@ class CategoryMerchandiseController extends Controller
         $category = CategoryMerchandise::find($id);
         if (!$category) return response()->json(['message' => 'Not Found'], 404);
 
-        // Optional: hapus semua merchandise di kategori ini
-        // $category->merchandises()->delete();
-
         $category->delete();
         return response()->json(['message' => 'Deleted successfully']);
     }

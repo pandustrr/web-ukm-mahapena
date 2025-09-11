@@ -1,6 +1,5 @@
 <?php
 
-// app/Models/Merchandise.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,10 +23,13 @@ class Merchandise extends Model
     protected $casts = [
         'sizes' => 'array',
         'colors' => 'array',
+        'price' => 'decimal:2',
+        'stock' => 'integer'
     ];
 
     public function category()
     {
         return $this->belongsTo(CategoryMerchandise::class, 'category_id');
     }
+
 }

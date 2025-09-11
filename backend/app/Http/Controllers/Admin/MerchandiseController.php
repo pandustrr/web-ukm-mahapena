@@ -8,6 +8,8 @@ use App\Models\Merchandise;
 use App\Models\CategoryMerchandise;
 use App\Models\Admin;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class MerchandiseController extends Controller
 {
@@ -59,7 +61,7 @@ class MerchandiseController extends Controller
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'category_id' => 'required|integer|exists:category_merchandises,id',
             'price' => 'required|numeric',
@@ -69,6 +71,10 @@ class MerchandiseController extends Controller
             'colors' => 'nullable|array',
             'image' => 'nullable|image|max:2048',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
 
         $merch = new Merchandise();
         $merch->name = $request->name;
@@ -90,7 +96,7 @@ class MerchandiseController extends Controller
     }
 
     // ==============================
-    // Update merchandise
+    // Update merchandise + image (jadi satu)
     // ==============================
     public function update(Request $request, $id)
     {
@@ -99,9 +105,11 @@ class MerchandiseController extends Controller
         }
 
         $merch = Merchandise::find($id);
-        if (!$merch) return response()->json(['message' => 'Not Found'], 404);
+        if (!$merch) {
+            return response()->json(['message' => 'Merchandise not found'], 404);
+        }
 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'sometimes|string',
             'category_id' => 'sometimes|integer|exists:category_merchandises,id',
             'price' => 'sometimes|numeric',
@@ -109,26 +117,41 @@ class MerchandiseController extends Controller
             'description' => 'nullable|string',
             'sizes' => 'nullable|array',
             'colors' => 'nullable|array',
-            'image' => 'nullable|image|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Update data biasa
         if ($request->has('name')) $merch->name = $request->name;
         if ($request->has('category_id')) $merch->category_id = $request->category_id;
         if ($request->has('price')) $merch->price = $request->price;
         if ($request->has('stock')) $merch->stock = $request->stock;
         if ($request->has('description')) $merch->description = $request->description;
-        if ($request->has('sizes')) $merch->sizes = $request->sizes;
-        if ($request->has('colors')) $merch->colors = $request->colors;
 
+        // Update sizes & colors, tetap ditimpa walau kosong
+        $merch->sizes = $request->input('sizes', []);
+        $merch->colors = $request->input('colors', []);
+
+        // Update image jika ada file
         if ($request->hasFile('image')) {
-            if ($merch->image) Storage::disk('public')->delete($merch->image);
+            if ($merch->image && Storage::disk('public')->exists($merch->image)) {
+                Storage::disk('public')->delete($merch->image);
+            }
+
             $path = $request->file('image')->store('merchandise', 'public');
             $merch->image = $path;
         }
 
         $merch->save();
+        $merch->refresh();
 
-        return response()->json($merch);
+        return response()->json([
+            'message' => 'Merchandise updated successfully',
+            'data' => $merch
+        ]);
     }
 
     // ==============================
@@ -143,7 +166,9 @@ class MerchandiseController extends Controller
         $merch = Merchandise::find($id);
         if (!$merch) return response()->json(['message' => 'Not Found'], 404);
 
-        if ($merch->image) Storage::disk('public')->delete($merch->image);
+        if ($merch->image && Storage::disk('public')->exists($merch->image)) {
+            Storage::disk('public')->delete($merch->image);
+        }
 
         $merch->delete();
 

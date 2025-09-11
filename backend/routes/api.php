@@ -6,7 +6,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Admin\MerchandiseController;
-use App\Http\Controllers\Admin\CategoryMerchandiseController; // pastikan namespace benar
+use App\Http\Controllers\Admin\CategoryMerchandiseController;
+use App\Http\Controllers\PublicMerchandiseController;
+
 
 // =====================
 // POST Routes
@@ -31,20 +33,25 @@ Route::get('/user', function (Request $request) {
 // Admin Routes (auth required)
 // =====================
 Route::prefix('admin')->group(function () {
-
     // Merchandise CRUD manual
     Route::get('merchandises', [MerchandiseController::class, 'index']);
     Route::post('merchandises', [MerchandiseController::class, 'store']);
-    Route::patch('merchandises/{id}', [MerchandiseController::class, 'update']);
+    Route::put('merchandises/{id}', [MerchandiseController::class, 'update']);
     Route::delete('merchandises/{id}', [MerchandiseController::class, 'destroy']);
+    Route::post('merchandises/{id}/image', [MerchandiseController::class, 'updateImage']);
 
     // Category Merchandise CRUD manual
     Route::get('categories', [CategoryMerchandiseController::class, 'index']);
     Route::post('categories', [CategoryMerchandiseController::class, 'store']);
-    Route::patch('categories/{id}', [CategoryMerchandiseController::class, 'update']); // update kategori
-    Route::delete('categories/{id}', [CategoryMerchandiseController::class, 'destroy']); // delete kategori
+    Route::put('categories/{id}', [CategoryMerchandiseController::class, 'update']);
+    Route::delete('categories/{id}', [CategoryMerchandiseController::class, 'destroy']);
 });
 
+// =====================
+// Public Merchandise Routes
+// =====================
+Route::get('/merchandises', [PublicMerchandiseController::class, 'index']);
+Route::get('/categories', [PublicMerchandiseController::class, 'categories']);
 
 // =====================
 // Public Blog Routes
@@ -53,7 +60,7 @@ Route::get('public/blogs', [BlogController::class, 'indexPublic']);
 Route::get('public/blogs/{slug}', [BlogController::class, 'showPublic']);
 
 // =====================
-// Admin Auth Routes (login/logout)
+// Admin (login/logout)
 // =====================
 Route::prefix('admin')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);

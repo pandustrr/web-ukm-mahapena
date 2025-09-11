@@ -1,6 +1,11 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const Merchandise = () => {
+    const [categories, setCategories] = useState([]);
+    const [products, setProducts] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("all");
+
     const [isVisible, setIsVisible] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [showModal, setShowModal] = useState(false);
@@ -14,11 +19,61 @@ const Merchandise = () => {
         ukuran: "",
         warna: ""
     });
-    const [selectedCategory, setSelectedCategory] = useState("Semua");
 
     useEffect(() => {
-        setIsVisible(true);
+        const fetchCategories = async () => {
+            try {
+                const res = await axios.get("http://localhost:8000/api/categories");
+                const categoriesFromApi = res.data;
 
+                // Tambahkan kategori default "Semua"
+                setCategories([{ id: "all", name: "Semua" }, ...categoriesFromApi]);
+            } catch (err) {
+                console.error("Gagal ambil data kategori:", err);
+            }
+        };
+
+        fetchCategories();
+    }, []);
+
+    // Ambil kategori
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await axios.get("http://localhost:8000/api/categories");
+                const categoriesFromApi = res.data;
+
+                // Tambahkan kategori default "Semua"
+                setCategories([{ id: "all", name: "Semua" }, ...categoriesFromApi]);
+            } catch (err) {
+                console.error("Gagal ambil data kategori:", err);
+            }
+        };
+
+        fetchCategories();
+    }, []);
+
+    // Ambil produk
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const res = await axios.get("http://localhost:8000/api/merchandises");
+                setProducts(res.data);
+            } catch (err) {
+                console.error("Gagal ambil produk:", err);
+            }
+        };
+        fetchProducts();
+    }, []);
+
+    // Produk terfilter
+    const filteredProducts = selectedCategory
+        ? products.filter(product => product.category_id === selectedCategory)
+        : products; // jika selectedCategory null, munculkan semua
+
+    // Animasi scroll (kode lama kamu)
+    useEffect(() => {
+        setIsVisible(true);
         const handleScroll = () => {
             const elements = document.querySelectorAll('.slide-in-left, .slide-in-right, .zoom-in');
             elements.forEach(el => {
@@ -30,112 +85,10 @@ const Merchandise = () => {
                 }
             });
         };
-
         window.addEventListener('scroll', handleScroll);
         handleScroll();
-
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
-
-    const handlePesan = (product) => {
-        setSelectedProduct(product);
-        setFormData({
-            nama: "",
-            noWa: "",
-            alamat: "",
-            catatan: "",
-            jumlah: 1,
-            ukuran: "",
-            warna: ""
-        });
-        setActiveTab("detail");
-        setShowModal(true);
-    };
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    const handleJumlahChange = (change) => {
-        const newJumlah = Math.max(1, formData.jumlah + change);
-        if (selectedProduct && newJumlah <= selectedProduct.stok) {
-            setFormData(prev => ({
-                ...prev,
-                jumlah: newJumlah
-            }));
-        }
-    };
-
-    const generateWhatsAppMessage = () => {
-        const totalHarga = parseInt(selectedProduct.price.replace(/\D/g, '')) * formData.jumlah;
-        const message = `Halo, saya ingin memesan merchandise Mahapena:\n\n` +
-            `*Produk:* ${selectedProduct.name}\n` +
-            `*Harga:* ${selectedProduct.price} x ${formData.jumlah} = Rp ${totalHarga.toLocaleString('id-ID')}\n` +
-            `*Ukuran:* ${formData.ukuran || '-'}\n` +
-            `*Warna:* ${formData.warna || '-'}\n` +
-            `*Nama:* ${formData.nama}\n` +
-            `*No. WhatsApp:* ${formData.noWa}\n` +
-            `*Alamat:* ${formData.alamat}\n` +
-            `*Catatan:* ${formData.catatan || '-'}\n\n` +
-            `Terima kasih!`;
-
-        return encodeURIComponent(message);
-    };
-
-    const handleWhatsAppOrder = () => {
-        const message = generateWhatsAppMessage();
-        window.open(`https://wa.me/6281230487469?text=${message}`, '_blank');
-    };
-
-    const categories = ["Semua", "Baju", "Aksesoris"];
-
-    const products = [
-        {
-            name: 'Kaos Mahapena',
-            price: 'Rp 120.000',
-            category: 'Baju',
-            stok: 15,
-            image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-            description: {
-                kondisi: "Baru",
-                minPemesanan: "1 Buah",
-                ukuran: [
-                    "S – Panjang 63 cm | Lebar 43 cm | Lengan 20 cm",
-                    "M – Panjang 68 cm | Lebar 46 cm | Lengan 20 cm",
-                    "L – Panjang 71 cm | Lebar 50 cm | Lengan 20 cm",
-                    "XL – Panjang 73 cm | Lebar 53 cm | Lengan 23 cm"
-                ],
-                warna: [
-                    "Hitam – Bold & timeless",
-                    "Putih – Simpel & clean"
-                ],
-            }
-        },
-        {
-            name: 'Totebag Kreatif',
-            price: 'Rp 75.000',
-            category: 'Aksesoris',
-            stok: 25,
-            image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-            description: {
-                kondisi: "Baru",
-                minPemesanan: "1 Buah",
-                ukuran: "Dimensi: 40cm x 35cm x 10cm",
-                warna: [
-                    "Abu-abu – Modern dan elegan",
-                    "Coklat – Klasik dan timeless"
-                ],
-            }
-        }
-    ];
-
-    const filteredProducts = selectedCategory === "Semua"
-        ? products
-        : products.filter(product => product.category === selectedCategory);
 
     return (
         <div className="relative">
@@ -209,32 +162,50 @@ const Merchandise = () => {
                     {/* Tombol kategori */}
                     <div className="flex justify-center mb-12">
                         <div className="inline-flex rounded-md shadow-sm overflow-hidden border border-[#A1E3F9]/30 dark:border-[#3674B5]/30">
-                            {categories.map((category, idx) => (
-                                <button
-                                    key={category}
-                                    onClick={() => setSelectedCategory(category)}
-                                    className={`px-4 py-3 font-medium transition-all duration-300
-                            ${selectedCategory === category
-                                            ? "bg-[#3674B5] text-[#FFFFFF] shadow-md scale-105 dark:bg-[#3674B5] dark:text-[#FFFFFF]"
-                                            : "bg-[#FFFFFF] dark:bg-[#113F67] text-[#113F67] dark:text-[#A1E3F9] hover:bg-[#A1E3F9]/80 dark:hover:bg-[#3674B5] hover:text-[#113F67] dark:hover:text-[#FFFFFF]"
-                                        }
-                            ${idx === 0 ? "rounded-l-md" : ""}
-                            ${idx === categories.length - 1 ? "rounded-r-md" : ""}
-                        `}
-                                >
-                                    {category}
-                                </button>
-                            ))}
+
+                            {/* Tombol Semua */}
+                            <button
+                                onClick={() => setSelectedCategory(null)}
+                                className={`px-4 py-3 font-medium transition-all duration-300
+                ${selectedCategory === null
+                                        ? "bg-[#3674B5] text-white shadow-md scale-105"
+                                        : "bg-white text-[#113F67] hover:bg-[#A1E3F9]/80 hover:text-[#113F67]"
+                                    } rounded-l-md`}
+                            >
+                                Semua
+                            </button>
+
+                            {/* Tombol kategori lain */}
+                            {categories
+                                .filter(category => category.name.toLowerCase() !== "semua")
+                                .map((category, idx) => (
+                                    <button
+                                        key={category.id}
+                                        onClick={() => setSelectedCategory(category.id)}
+                                        className={`px-4 py-3 font-medium transition-all duration-300
+                ${selectedCategory === category.id
+                                                ? "bg-[#3674B5] text-white shadow-md scale-105"
+                                                : "bg-white text-[#113F67] hover:bg-[#A1E3F9]/80 hover:text-[#113F67]"
+                                            }
+                ${idx === categories.length - 1 ? "rounded-r-md" : ""}`}
+                                    >
+                                        {category.name}
+                                    </button>
+                                ))}
                         </div>
                     </div>
 
                     {/* Category indicator */}
-                    <div className="flex justify-center">
+                    <div className="flex justify-center mt-2">
                         <div className="w-24 h-1 bg-[#A1E3F9]/30 dark:bg-[#113F67] rounded-full overflow-hidden">
                             <div
                                 className="h-full bg-[#3674B5] dark:bg-[#A1E3F9] transition-all duration-500 ease-out"
                                 style={{
-                                    width: `${(categories.findIndex(cat => cat === selectedCategory) + 1) * (100 / categories.length)}%`
+                                    width: `${selectedCategory === null
+                                            ? 100
+                                            : ((categories.findIndex(cat => cat.id === selectedCategory) + 1) *
+                                                (100 / (categories.length + 1)))
+                                        }%`
                                 }}
                             ></div>
                         </div>
@@ -250,14 +221,15 @@ const Merchandise = () => {
                 <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-[#3674B5]/10 dark:bg-[#3674B5]/20 blur-3xl"></div>
 
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    {/* Container produk dengan lebar penuh */}
+                    {/* Container produk */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                         {filteredProducts.map((product, index) => (
                             <div
-                                key={index}
-                                className="zoom-in bg-white dark:bg-[#113F67] rounded-lg shadow-md dark:shadow-xl hover:shadow-xl dark:hover:shadow-2xl transition-all duration-300 overflow-hidden group border border-gray-100 dark:border-[#3674B5]/30 relative" style={{ transitionDelay: `${index * 100}ms` }}
+                                key={product.id}
+                                className="zoom-in bg-white dark:bg-[#113F67] rounded-lg shadow-md dark:shadow-xl hover:shadow-xl dark:hover:shadow-2xl transition-all duration-300 overflow-hidden group border border-gray-100 dark:border-[#3674B5]/30 relative"
+                                style={{ transitionDelay: `${index * 100}ms` }}
                             >
-                                {/* Hover effect overlay */}
+                                {/* Hover overlay */}
                                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50 dark:to-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
 
                                 <div className="relative overflow-hidden">
@@ -271,18 +243,18 @@ const Merchandise = () => {
                                     </div>
 
                                     <div className="absolute top-3 right-3 bg-[#113F67] text-white px-3 py-1 rounded-full text-sm font-medium z-20 shadow-md">
-                                        {product.category}
+                                        {product.category?.name}
                                     </div>
                                     <div className="absolute top-3 left-3 bg-[#3674B5] text-white px-2 py-1 rounded text-sm font-medium z-20 shadow-md">
-                                        Stok: {product.stok}
+                                        Stok: {product.stock}
                                     </div>
 
-                                    {/* Quick view button that appears on hover */}
+                                    {/* Tombol Quick view */}
                                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
                                         <button
                                             onClick={() => handlePesan(product)}
-                                            disabled={product.stok === 0}
-                                            className={`py-2 px-5 rounded-full font-medium ${product.stok === 0
+                                            disabled={product.stock === 0}
+                                            className={`py-2 px-5 rounded-full font-medium ${product.stock === 0
                                                 ? "bg-gray-400 text-gray-200 cursor-not-allowed"
                                                 : "bg-white dark:bg-[#A1E3F9] text-[#113F67] hover:bg-[#113F67] dark:hover:bg-[#3674B5] hover:text-white"
                                                 } transition-colors duration-300 shadow-lg`}
@@ -293,19 +265,25 @@ const Merchandise = () => {
                                 </div>
 
                                 <div className="p-5 relative z-20 bg-white dark:bg-slate-800">
-                                    <h3 className="text-xl font-semibold text-[#3674B5] dark:text-[#A1E3F9] mb-2 group-hover:text-[#113F67] dark:group-hover:text-[#5682B1] transition-colors duration-300">{product.name}</h3>
-                                    <p className="text-2xl font-bold text-[#113F67] dark:text-white mb-2">{product.price}</p>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Stok: {product.stok}</p>
+                                    <h3 className="text-xl font-semibold text-[#3674B5] dark:text-[#A1E3F9] mb-2 group-hover:text-[#113F67] dark:group-hover:text-[#5682B1] transition-colors duration-300">
+                                        {product.name}
+                                    </h3>
+                                    <p className="text-2xl font-bold text-[#113F67] dark:text-white mb-2">
+                                        {product.price}
+                                    </p>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                        Stok: {product.stock}
+                                    </p>
                                     <button
                                         onClick={() => handlePesan(product)}
-                                        disabled={product.stok === 0}
-                                        className={`w-full font-medium py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center relative overflow-hidden group ${product.stok === 0
+                                        disabled={product.stock === 0}
+                                        className={`w-full font-medium py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center relative overflow-hidden group ${product.stock === 0
                                             ? "bg-gray-400 text-gray-200 cursor-not-allowed"
                                             : "bg-[#3674B5] hover:bg-[#113F67] text-white hover:shadow-md"
                                             }`}
                                     >
                                         <span className="relative z-10 flex items-center">
-                                            {product.stok === 0 ? (
+                                            {product.stock === 0 ? (
                                                 "Stok Habis"
                                             ) : (
                                                 <>
@@ -316,7 +294,7 @@ const Merchandise = () => {
                                                 </>
                                             )}
                                         </span>
-                                        {product.stok > 0 && (
+                                        {product.stock > 0 && (
                                             <span className="absolute inset-0 bg-gradient-to-r from-[#3674B5] to-[#113F67] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                                         )}
                                     </button>
@@ -325,6 +303,7 @@ const Merchandise = () => {
                         ))}
                     </div>
 
+                    {/* Kalau kosong */}
                     {filteredProducts.length === 0 && (
                         <div className="text-center py-12 fade-in">
                             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-slate-700">
@@ -332,8 +311,12 @@ const Merchandise = () => {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
-                            <h3 className="text-xl font-medium text-gray-600 dark:text-gray-300">Tidak ada produk dalam kategori ini</h3>
-                            <p className="text-gray-500 dark:text-gray-400 mt-2">Coba kategori lain untuk melihat lebih banyak pilihan</p>
+                            <h3 className="text-xl font-medium text-gray-600 dark:text-gray-300">
+                                Tidak ada produk dalam kategori ini
+                            </h3>
+                            <p className="text-gray-500 dark:text-gray-400 mt-2">
+                                Coba kategori lain untuk melihat lebih banyak pilihan
+                            </p>
                         </div>
                     )}
                 </div>
