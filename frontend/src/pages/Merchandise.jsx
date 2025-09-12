@@ -1,16 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const Merchandise = () => {
+    // const tokenAdmin = localStorage.getItem('tokenAdmin');
+
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
-    // const [selectedCategory, setSelectedCategory] = useState("all");
     const [selectedCategory, setSelectedCategory] = useState(null);
+    // const [selectedCategory, setSelectedCategory] = useState("all");
+
 
     const [isVisible, setIsVisible] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [activeTab, setActiveTab] = useState("detail");
+
+    const [showModalTerimakasih, setShowModalTerimakasih] = useState(false);
+
+    const [PenguranganStok, setPenguranganStok] = useState(products); // isi awal dari products
 
     const [formData, setFormData] = useState({
         nama: "",
@@ -59,26 +66,63 @@ const Merchandise = () => {
 
     const handleWhatsAppOrder = () => {
         if (!selectedProduct) return;
+        setShowModalTerimakasih(true);
+    };
 
-        const message = `Halo, saya ingin memesan merchandise:\n\n` +
-            `*Nama Produk:* ${selectedProduct.name}\n` +
-            `*Harga:* ${selectedProduct.price}\n` +
-            `*Jumlah:* ${formData.jumlah}\n` +
-            (formData.ukuran ? `*Ukuran:* ${formData.ukuran}\n` : '') +
-            (formData.warna ? `*Warna:* ${formData.warna}\n` : '') +
-            `*Total:* ${formData.jumlah * parseFloat(selectedProduct.price)}\n\n` +
-            `*Data Pemesan:*\n` +
-            `Nama: ${formData.nama}\n` +
-            `No. WhatsApp: ${formData.noWa}\n` +
-            `Alamat: ${formData.alamat}\n` +
-            (formData.catatan ? `Catatan: ${formData.catatan}\n` : '');
+    // Fungsi ketika klik OK di modal
+    const confirmOrderAndGoWhatsApp = async () => {
+        try {
+            // 1. Kurangi stok di backend
+            const response = await fetch(
+                `http://localhost:8000/api/merchandise/${selectedProduct.id}/decrease-stock-public`,
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ jumlah: formData.jumlah })
+                }
+            );
 
-        const encodedMessage = encodeURIComponent(message);
+            const data = await response.json();
 
-        // Nomor harus pakai format internasional tanpa 0, contoh: 081556509656 -> 6281556509656
-        const phoneNumber = "6281556509656";
+            if (!response.ok) {
+                alert(data.message);
+                setShowModalTerimakasih(false);
+                return;
+            }
 
-        window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+            // 2. Update stok di frontend
+            setPenguranganStok(prev =>
+                prev.map(p =>
+                    p.id === selectedProduct.id ? { ...p, stock: data.stock } : p
+                )
+            );
+
+            // 3. Tutup modal
+            setShowModalTerimakasih(false);
+
+            // 4. Redirect ke WhatsApp
+            const message = `Halo, saya ingin memesan merchandise:\n\n` +
+                `*Nama Produk:* ${selectedProduct.name}\n` +
+                `*Harga:* ${selectedProduct.price}\n` +
+                `*Jumlah:* ${formData.jumlah}\n` +
+                (formData.ukuran ? `*Ukuran:* ${formData.ukuran}\n` : '') +
+                (formData.warna ? `*Warna:* ${formData.warna}\n` : '') +
+                `*Total:* ${formData.jumlah * parseFloat(selectedProduct.price)}\n\n` +
+                `*Data Pemesan:*\n` +
+                `Nama: ${formData.nama}\n` +
+                `No. WhatsApp: ${formData.noWa}\n` +
+                `Alamat: ${formData.alamat}\n` +
+                (formData.catatan ? `Catatan: ${formData.catatan}\n` : '');
+
+            const encodedMessage = encodeURIComponent(message);
+            const phoneNumber = "6281556509656";
+            window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+
+        } catch (err) {
+            console.error(err);
+            alert("Terjadi kesalahan saat memesan.");
+            setShowModalTerimakasih(false);
+        }
     };
 
     useEffect(() => {
@@ -253,15 +297,15 @@ const Merchandise = () => {
             </section>
 
             {/* Products */}
-            <section className="py-12 bg-white dark:bg-slate-800 relative overflow-hidden">
+            <section className="pt-16 pb-50 bg-white dark:bg-slate-800 relative overflow-hidden">
 
                 {/* Subtle background elements */}
-                <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#A1E3F9]/10 dark:bg-[#A1E3F9]/20 blur-3xl"></div>
+                {/* <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#A1E3F9]/10 dark:bg-[#A1E3F9]/20 blur-3xl"></div> */}
                 <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-[#3674B5]/10 dark:bg-[#3674B5]/20 blur-3xl"></div>
 
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     {/* Container produk */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {filteredProducts.map((product, index) => (
                             <div
                                 key={product.id}
@@ -272,7 +316,7 @@ const Merchandise = () => {
                                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50 dark:to-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
 
                                 <div className="relative overflow-hidden">
-                                    <div className="relative h-60 overflow-hidden">
+                                    <div className="relative h-48 sm:h-56 md:h-60 overflow-hidden">
                                         <img
                                             src={`http://localhost:8000/storage/${product.image}`}
                                             alt={product.name}
@@ -307,7 +351,7 @@ const Merchandise = () => {
                                     <h3 className="text-xl font-semibold text-[#3674B5] dark:text-[#A1E3F9] mb-2 group-hover:text-[#113F67] dark:group-hover:text-[#5682B1] transition-colors duration-300">
                                         {product.name}
                                     </h3>
-                                    <p className="text-2xl font-bold text-[#113F67] dark:text-white mb-2">
+                                    <p className="text-xl font-bold text-[#113F67] dark:text-white mb-2">
                                         {product.price}
                                     </p>
                                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
@@ -344,7 +388,7 @@ const Merchandise = () => {
 
                     {/* Kalau kosong */}
                     {filteredProducts.length === 0 && (
-                        <div className="text-center py-12 fade-in">
+                        <div className="text-center py-16 fade-in">
                             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-slate-700">
                                 <svg className="w-8 h-8 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -414,6 +458,30 @@ const Merchandise = () => {
                                 </button>
                             </div>
                         </div>
+
+                        {showModalTerimakasih && (
+                            <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                                <div className="bg-white p-6 rounded-lg shadow-lg w-80 text-center">
+                                    <h2 className="text-lg font-semibold mb-4">Terima Kasih 🎉</h2>
+                                    <p className="text-gray-600 mb-6">Pesanan kamu berhasil, klik OK untuk melanjutkan ke WhatsApp.</p>
+                                    <div className="flex justify-center gap-3">
+                                        <button
+                                            onClick={() => setShowModalTerimakasih(false)}
+                                            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                                        >
+                                            Batal
+                                        </button>
+                                        <button
+                                            onClick={confirmOrderAndGoWhatsApp}
+                                            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                                        >
+                                            OK
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
 
                         {/* Konten berdasarkan tab aktif */}
                         {activeTab === "detail" ? (
@@ -722,8 +790,13 @@ const Merchandise = () => {
                                         {/* Tombol Pesan via WhatsApp */}
                                         <button
                                             onClick={handleWhatsAppOrder}
-                                            disabled={!formData.nama || !formData.noWa || !formData.alamat}
-                                            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center font-medium relative overflow-hidden group"
+                                            disabled={
+                                                !formData.nama ||
+                                                !formData.noWa ||
+                                                !formData.alamat ||
+                                                formData.jumlah < 1 ||
+                                                formData.jumlah > selectedProduct.stock
+                                            } className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center font-medium relative overflow-hidden group"
                                         >
                                             <span className="relative z-10 flex items-center">
                                                 <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">

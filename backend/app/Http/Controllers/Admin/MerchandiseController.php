@@ -174,4 +174,26 @@ class MerchandiseController extends Controller
 
         return response()->json(['message' => 'Deleted successfully']);
     }
+
+    public function decreaseStockPublic(Request $request, $id)
+    {
+        $merch = Merchandise::find($id);
+        if (!$merch) {
+            return response()->json(['message' => 'Merchandise not found'], 404);
+        }
+
+        $jumlah = $request->input('jumlah', 1);
+
+        if ($merch->stock < $jumlah) {
+            return response()->json(['message' => 'Stok tidak cukup'], 400);
+        }
+
+        $merch->stock -= $jumlah;
+        $merch->save();
+
+        return response()->json([
+            'message' => 'Stok berhasil diperbarui',
+            'stock' => $merch->stock
+        ]);
+    }
 }

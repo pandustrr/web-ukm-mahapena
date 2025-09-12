@@ -39,6 +39,7 @@ Route::prefix('admin')->group(function () {
     Route::put('merchandises/{id}', [MerchandiseController::class, 'update']);
     Route::delete('merchandises/{id}', [MerchandiseController::class, 'destroy']);
     Route::post('merchandises/{id}/image', [MerchandiseController::class, 'updateImage']);
+    // Route::post('/admin/merchandise/{id}/decrease-stock', [MerchandiseController::class, 'decreaseStock']);
 
     // Category Merchandise CRUD manual
     Route::get('categories', [CategoryMerchandiseController::class, 'index']);
@@ -58,6 +59,7 @@ Route::get('/categories', [PublicMerchandiseController::class, 'categories']);
 // =====================
 Route::get('public/blogs', [BlogController::class, 'indexPublic']);
 Route::get('public/blogs/{slug}', [BlogController::class, 'showPublic']);
+Route::post('/merchandise/{id}/decrease-stock-public', [App\Http\Controllers\Admin\MerchandiseController::class, 'decreaseStockPublic']);
 
 // =====================
 // Admin (login/logout)
