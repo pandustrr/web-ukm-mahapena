@@ -11,7 +11,7 @@ return new class extends Migration
     {
         Schema::table('admins', function (Blueprint $table) {
             if (!Schema::hasColumn('admins', 'api_token')) {
-                $table->string('api_token', 100)->nullable();
+                $table->string('api_token', 80)->unique()->nullable()->after('password');
             }
         });
     }
