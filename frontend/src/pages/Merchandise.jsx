@@ -160,7 +160,7 @@ const Merchandise = () => {
     useEffect(() => {
         setIsVisible(true);
         const handleScroll = () => {
-            const elements = document.querySelectorAll('.slide-in-left, .slide-in-right, .zoom-in');
+            const elements = document.querySelectorAll('.slide-in-left, .slide-in-right, .zoom-in, zoom-out');
             elements.forEach(el => {
                 if (!el.closest('.modal')) {
                     const elementTop = el.getBoundingClientRect().top;
@@ -171,7 +171,12 @@ const Merchandise = () => {
             });
         };
         window.addEventListener('scroll', handleScroll);
-        handleScroll();
+
+        // Gunakan setTimeout untuk memastikan DOM sudah ter-render
+        setTimeout(() => {
+            handleScroll();
+        }, 50);
+
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
@@ -204,12 +209,7 @@ const Merchandise = () => {
 
                     {/* Animated scroll indicator */}
                     <div className="mt-16 animate-bounce">
-                        <div className="flex flex-col items-center">
-                            <span className="text-sm mb-2 text-[#A1E3F9]/80 dark:text-[#A1E3F9]">Scroll untuk melihat</span>
-                            <svg className="w-6 h-6 text-[#FFFFFF] dark:text-[#A1E3F9]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                            </svg>
-                        </div>
+
                     </div>
                 </div>
 
@@ -225,181 +225,295 @@ const Merchandise = () => {
                 </div>
             </section>
 
-            {/* Kategori Produk */}
-            <section className="py-10 bg-gradient-to-b from-gray-50 to-[#FFFFFF] dark:from-slate-800 dark:to-slate-800 relative overflow-hidden">
-                {/* Background dots */}
-                <div className="absolute inset-0 opacity-5 dark:opacity-15">
-                    <div className="absolute inset-0 pattern-dots pattern-[#3674B5] dark:pattern-[#A1E3F9] pattern-opacity-20 dark:pattern-opacity-25 pattern-size-4"></div>
+            {/* Kategori & Produk  */}
+            <section className="py-20 bg-gradient-to-br from-slate-50 via-white to-blue-50/20 dark:from-slate-900 dark:via-slate-800 dark:to-slate-800 relative overflow-hidden">
+                {/* Modern background elements */}
+                <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#3674B5]/10 to-[#A1E3F9]/15 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
+                <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-tl from-[#5682B1]/10 to-[#3674B5]/10 rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2"></div>
+
+                {/* Floating decorative elements */}
+                <div className="absolute top-20 left-20 w-4 h-4 bg-[#3674B5]/30 rounded-full animate-pulse"></div>
+                <div className="absolute bottom-20 right-20 w-6 h-6 bg-[#A1E3F9]/40 rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
+
+                {/* Subtle pattern overlay */}
+                <div className="absolute inset-0">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_#3674B5_1px,_transparent_0)] dark:bg-[radial-gradient(circle_at_1px_1px,_#A1E3F9_1px,_transparent_0)] opacity-[0.04] dark:opacity-[0.02]" style={{ backgroundSize: '80px 80px' }}></div>
                 </div>
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    {/* Judul */}
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl font-extrabold text-[#3674B5] dark:text-[#A1E3F9] relative inline-block">
+                    {/* Section Header */}
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#3674B5] to-[#5682B1] bg-clip-text text-transparent mb-4 leading-[1.3]">
                             Kategori Produk
-                            <span className="block w-16 h-1 bg-[#A1E3F9] dark:bg-[#3674B5] mx-auto mt-3 rounded-full"></span>
                         </h2>
-                        <p className="text-[#113F67] dark:text-[#5682B1] mt-6 max-w-2xl mx-auto">
-                            Jelajahi berbagai kategori merchandise eksklusif kami
+                        <div className="w-20 h-1 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] mx-auto rounded-full mb-6"></div>
+                        <p className="text-gray-600 dark:text-gray-300 text-lg max-w-3xl mx-auto leading-relaxed">
+                            Jelajahi berbagai kategori merchandise eksklusif kami yang dirancang khusus untuk komunitas Mahapena
                         </p>
                     </div>
 
-                    {/* Tombol kategori */}
-                    <div className="flex justify-center mb-12">
-                        <div className="inline-flex rounded-md shadow-sm overflow-hidden border border-[#A1E3F9]/40 dark:border-[#3674B5]/40 bg-white dark:bg-slate-800 transition-colors duration-500">
-                            {/* Tombol Semua */}
-                            <button
-                                onClick={() => setSelectedCategory(null)}
-                                className={`px-4 py-3 font-medium transition-all duration-300
-            ${selectedCategory === null
-                                        ? "bg-[#3674B5] text-white dark:bg-[#A1E3F9] dark:text-slate-900 shadow-md scale-105"
-                                        : "bg-white dark:bg-slate-800 text-[#113F67] dark:text-gray-300 hover:bg-[#A1E3F9]/30 dark:hover:bg-[#3674B5]/40 hover:text-[#113F67] dark:hover:text-white"
-                                    } rounded-l-md`}
-                            >
-                                Semua
-                            </button>
+                    {/*  Category Filter */}
+                    <div className="flex flex-col items-center space-y-8 mb-16">
+                        {/* Category Pills Container */}
+                        <div className="relative">
+                            {/* Background glow effect */}
+                            <div className="absolute -inset-2 bg-gradient-to-r from-[#3674B5]/20 to-[#A1E3F9]/20 rounded-2xl blur-xl opacity-60"></div>
 
-                            {/* Tombol kategori lain */}
-                            {categories
-                                .filter(category => category.name.toLowerCase() !== "semua")
-                                .map((category, idx) => (
+                            <div className="relative bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl p-2 border border-gray-200/50 dark:border-slate-600/50 shadow-xl">
+                                <div className="flex flex-wrap justify-center gap-2">
+                                    {/* Semua Button */}
                                     <button
-                                        key={category.id}
-                                        onClick={() => setSelectedCategory(category.id)}
-                                        className={`px-4 py-3 font-medium transition-all duration-300
-                ${selectedCategory === category.id
-                                                ? "bg-[#3674B5] text-white dark:bg-[#A1E3F9] dark:text-slate-900 shadow-md scale-105"
-                                                : "bg-white dark:bg-slate-800 text-[#113F67] dark:text-gray-300 hover:bg-[#A1E3F9]/30 dark:hover:bg-[#3674B5]/40 hover:text-[#113F67] dark:hover:text-white"
-                                            }
-                ${idx === categories.length - 1 ? "rounded-r-md" : ""}`}
+                                        onClick={() => setSelectedCategory(null)}
+                                        className={`relative px-5 py-3 rounded-lg font-medium text-xs transition-all duration-300 transform hover:scale-105
+                                            ${selectedCategory === null
+                                                ? "bg-gradient-to-r from-[#3674B5] to-[#5682B1] text-white shadow-md scale-105"
+                                                : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 hover:text-[#3674B5] dark:hover:text-[#A1E3F9]"
+                                            }`}
                                     >
-                                        {category.name}
+                                        {selectedCategory === null && (
+                                            <div className="absolute inset-0 bg-gradient-to-r from-[#3674B5] to-[#5682B1] rounded-lg blur-sm opacity-50"></div>
+                                        )}
+                                        <span className="relative flex items-center space-x-1">
+                                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14-4l-4 4m0 0v6m0-6H7"></path>
+                                            </svg>
+                                            <span>Semua</span>
+                                        </span>
                                     </button>
-                                ))}
+
+                                    {/* Category Buttons */}
+                                    {categories
+                                        .filter(category => category.name.toLowerCase() !== "semua")
+                                        .map((category) => (
+                                            <button
+                                                key={category.id}
+                                                onClick={() => setSelectedCategory(category.id)}
+                                                className={`relative px-4 py-2 rounded-lg font-medium text-xs transition-all duration-300 transform hover:scale-105
+          ${selectedCategory === category.id
+                                                        ? "bg-gradient-to-r from-[#3674B5] to-[#5682B1] text-white shadow-md scale-105"
+                                                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 hover:text-[#3674B5] dark:hover:text-[#A1E3F9]"
+                                                    }`}
+                                            >
+                                                {selectedCategory === category.id && (
+                                                    <div className="absolute inset-0 bg-gradient-to-r from-[#3674B5] to-[#5682B1] rounded-lg blur-sm opacity-50"></div>
+                                                )}
+                                                <span className="relative">{category.name}</span>
+                                            </button>
+                                        ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Modern Progress Indicator */}
+                        <div className="flex flex-col items-center space-y-3">
+                            <div className="flex items-center space-x-2">
+                                <div className="w-2 h-2 rounded-full bg-[#3674B5] dark:bg-[#A1E3F9] animate-pulse"></div>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                                    {selectedCategory === null
+                                        ? "Menampilkan semua kategori"
+                                        : `Kategori: ${categories.find(cat => cat.id === selectedCategory)?.name}`
+                                    }
+                                </p>
+                                <div className="w-2 h-2 rounded-full bg-[#3674B5] dark:bg-[#A1E3F9] animate-pulse" style={{ animationDelay: '1s' }}></div>
+                            </div>
+
+                            {/* Enhanced Progress Bar */}
+                            <div className="relative w-40 h-2 bg-gray-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                                {/* Background gradient */}
+                                <div className="absolute inset-0 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-slate-700 dark:to-slate-600"></div>
+
+                                {/* Progress fill */}
+                                <div
+                                    className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] transition-all duration-700 ease-out rounded-full shadow-lg"
+                                    style={{
+                                        width: `${selectedCategory === null
+                                            ? 100
+                                            : ((categories.findIndex(cat => cat.id === selectedCategory) + 1) *
+                                                (100 / (categories.filter(cat => cat.name.toLowerCase() !== "semua").length + 1)))
+                                            }%`
+                                    }}
+                                >
+                                    {/* Shimmer effect */}
+                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse"></div>
+                                </div>
+
+                                {/* Progress indicator dot */}
+                                <div
+                                    className="absolute top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white border-2 border-[#3674B5] rounded-full shadow-lg transition-all duration-700 ease-out"
+                                    style={{
+                                        left: `${selectedCategory === null
+                                            ? 92
+                                            : ((categories.findIndex(cat => cat.id === selectedCategory) + 1) *
+                                                (100 / (categories.filter(cat => cat.name.toLowerCase() !== "semua").length + 1))) - 8
+                                            }%`
+                                    }}
+                                ></div>
+                            </div>
                         </div>
                     </div>
-                    {/* Category indicator */}
-                    <div className="flex justify-center mt-2">
-                        <div className="w-24 h-1 bg-[#A1E3F9]/30 dark:bg-[#113F67] rounded-full overflow-hidden">
-                            <div
-                                className="h-full bg-[#3674B5] dark:bg-[#A1E3F9] transition-all duration-500 ease-out"
-                                style={{
-                                    width: `${selectedCategory === null
-                                        ? 100 // Semua kategori aktif
-                                        : ((categories.findIndex(cat => cat.id === selectedCategory) + 1) *
-                                            (100 / (categories.length))) // indikator per kategori
-                                        }%`
-                                }}
-                            ></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
-            {/* Products */}
-            <section className="pt-16 pb-50 bg-white dark:bg-slate-800 relative overflow-hidden">
-
-                {/* Subtle background elements */}
-                {/* <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#A1E3F9]/10 dark:bg-[#A1E3F9]/20 blur-3xl"></div> */}
-                <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-[#3674B5]/10 dark:bg-[#3674B5]/20 blur-3xl"></div>
-
-                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    {/* Container produk */}
-                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {/* Products Grid */}
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
                         {filteredProducts.map((product, index) => (
                             <div
                                 key={product.id}
-                                className="zoom-in bg-white dark:bg-[#113F67] rounded-lg shadow-md dark:shadow-xl hover:shadow-xl dark:hover:shadow-2xl transition-all duration-300 overflow-hidden group border border-gray-100 dark:border-[#3674B5]/30 relative"
-                                style={{ transitionDelay: `${index * 100}ms` }}
+                                className="zoom-in group relative"
+                                style={{ transitionDelay: `${index * 50}ms` }}
                             >
-                                {/* Hover overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50 dark:to-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                                {/* Product Card */}
+                                <div className="relative bg-white dark:bg-slate-800 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-slate-700 group-hover:scale-105">
+                                    {/* Background glow effect */}
+                                    <div className="absolute -inset-1 bg-gradient-to-r from-[#3674B5]/20 to-[#A1E3F9]/20 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-                                <div className="relative overflow-hidden">
-                                    <div className="relative h-48 sm:h-56 md:h-60 overflow-hidden">
+                                    {/* Image Container */}
+                                    <div className="relative h-32 md:h-48 overflow-hidden rounded-t-2xl">
                                         <img
                                             src={`http://localhost:8000/storage/${product.image}`}
                                             alt={product.name}
                                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                         />
-                                        <div className="absolute inset-0 bg-black/10 dark:bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                                        {/* Gradient overlay */}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                                        {/* Category Badge */}
+                                        <div className="absolute top-2 right-2 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm text-[#3674B5] dark:text-[#A1E3F9] px-2 py-1 rounded-lg text-xs font-medium border border-white/20 shadow-sm">
+                                            {product.category?.name}
+                                        </div>
+
+                                        {/* Stock Badge */}
+                                        <div className={`absolute top-2 left-2 px-2 py-1 rounded-lg text-xs font-medium shadow-sm backdrop-blur-sm border border-white/20
+                                ${product.stock > 0
+                                                ? 'bg-green-500/90 text-white'
+                                                : 'bg-red-500/90 text-white'
+                                            }`}>
+                                            {product.stock > 0 ? `${product.stock}` : 'Habis'}
+                                        </div>
+
+                                        {/* Quick Action Overlay */}
+                                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                                            <button
+                                                onClick={() => handlePesan(product)}
+                                                disabled={product.stock === 0}
+                                                className={`px-6 py-3 rounded-2xl font-semibold text-sm backdrop-blur-sm border shadow-xl transform scale-90 group-hover:scale-100 transition-all duration-300
+                                        ${product.stock === 0
+                                                        ? "bg-gray-500/80 text-white border-gray-400/50 cursor-not-allowed"
+                                                        : "bg-white/95 dark:bg-slate-800/95 text-[#3674B5] dark:text-[#A1E3F9] border-white/50 hover:bg-[#3674B5] hover:text-white hover:border-[#3674B5]/50"
+                                                    }`}
+                                            >
+                                                {product.stock === 0 ? 'Stok Habis' : 'Lihat Detail'}
+                                            </button>
+                                        </div>
                                     </div>
 
-                                    <div className="absolute top-3 right-3 bg-[#113F67] text-white px-3 py-1 rounded-full text-sm font-medium z-20 shadow-md">
-                                        {product.category?.name}
-                                    </div>
-                                    <div className="absolute top-3 left-3 bg-[#3674B5] text-white px-2 py-1 rounded text-sm font-medium z-20 shadow-md">
-                                        Stok: {product.stock}
-                                    </div>
+                                    {/* Content Area */}
+                                    <div className="p-3 md:p-4 relative">
+                                        {/* Product Name */}
+                                        <h3 className="text-sm md:text-lg font-bold text-gray-800 dark:text-white mb-2 group-hover:text-[#3674B5] dark:group-hover:text-[#A1E3F9] transition-colors duration-300 line-clamp-2">
+                                            {product.name}
+                                        </h3>
 
-                                    {/* Tombol Quick view */}
-                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+                                        {/* Price */}
+                                        <div className="flex items-center justify-between mb-3">
+                                            <p className="text-lg md:text-xl font-bold bg-gradient-to-r from-[#3674B5] to-[#5682B1] bg-clip-text text-transparent">
+                                                {product.price}
+                                            </p>
+                                            {product.stock > 0 && (
+                                                <div className="flex items-center text-green-600 dark:text-green-400 text-xs font-medium">
+                                                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full mr-1 animate-pulse"></div>
+                                                    <span className="hidden md:inline">Tersedia</span>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Stock Progress Bar */}
+                                        <div className="mb-4">
+                                            <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+                                                <div
+                                                    className={`h-1.5 rounded-full transition-all duration-500 ${product.stock > 10
+                                                        ? 'bg-gradient-to-r from-green-400 to-green-600'
+                                                        : product.stock > 5
+                                                            ? 'bg-gradient-to-r from-yellow-400 to-orange-500'
+                                                            : 'bg-gradient-to-r from-red-400 to-red-600'
+                                                        }`}
+                                                    style={{
+                                                        width: product.stock > 20 ? '100%' : `${(product.stock / 20) * 100}%`
+                                                    }}
+                                                ></div>
+                                            </div>
+                                        </div>
+
+                                        {/* CTA Button */}
                                         <button
                                             onClick={() => handlePesan(product)}
                                             disabled={product.stock === 0}
-                                            className={`py-2 px-5 rounded-full font-medium ${product.stock === 0
-                                                ? "bg-gray-400 text-gray-200 cursor-not-allowed"
-                                                : "bg-white dark:bg-[#A1E3F9] text-[#113F67] hover:bg-[#113F67] dark:hover:bg-[#3674B5] hover:text-white"
-                                                } transition-colors duration-300 shadow-lg`}
+                                            className={`w-full font-medium py-2.5 md:py-3 px-3 md:px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-1 md:space-x-2 text-sm md:text-base
+                                    ${product.stock === 0
+                                                    ? "bg-gray-400 dark:bg-gray-600 text-gray-200 cursor-not-allowed"
+                                                    : "bg-gradient-to-r from-[#3674B5] to-[#5682B1] hover:from-[#2c5a9e] hover:to-[#1e4a73] text-white shadow-lg hover:shadow-xl transform hover:scale-105"
+                                                }`}
                                         >
-                                            Lihat Detail
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="p-5 relative z-20 bg-white dark:bg-slate-800">
-                                    <h3 className="text-xl font-semibold text-[#3674B5] dark:text-[#A1E3F9] mb-2 group-hover:text-[#113F67] dark:group-hover:text-[#5682B1] transition-colors duration-300">
-                                        {product.name}
-                                    </h3>
-                                    <p className="text-xl font-bold text-[#113F67] dark:text-white mb-2">
-                                        {product.price}
-                                    </p>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                                        Stok: {product.stock}
-                                    </p>
-                                    <button
-                                        onClick={() => handlePesan(product)}
-                                        disabled={product.stock === 0}
-                                        className={`w-full font-medium py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center relative overflow-hidden group ${product.stock === 0
-                                            ? "bg-gray-400 text-gray-200 cursor-not-allowed"
-                                            : "bg-[#3674B5] hover:bg-[#113F67] text-white hover:shadow-md"
-                                            }`}
-                                    >
-                                        <span className="relative z-10 flex items-center">
                                             {product.stock === 0 ? (
-                                                "Stok Habis"
+                                                <span className="flex items-center space-x-1">
+                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"></path>
+                                                    </svg>
+                                                    <span>Habis</span>
+                                                </span>
                                             ) : (
-                                                <>
-                                                    <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                                <span className="flex items-center space-x-1 md:space-x-2">
+                                                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.016a9.97 9.97 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.936 9.936 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.864 3.488" />
                                                     </svg>
-                                                    Pesan Via WA
-                                                </>
+                                                    <span className="hidden md:inline">Pesan Via WhatsApp</span>
+                                                    <span className="md:hidden">Pesan</span>
+                                                </span>
                                             )}
-                                        </span>
-                                        {product.stock > 0 && (
-                                            <span className="absolute inset-0 bg-gradient-to-r from-[#3674B5] to-[#113F67] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                                        )}
-                                    </button>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    {/* Kalau kosong */}
+                    {/* Empty State */}
                     {filteredProducts.length === 0 && (
-                        <div className="text-center py-16 fade-in">
-                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-slate-700">
-                                <svg className="w-8 h-8 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
+                        <div className="text-center py-20 fade-in">
+                            <div className="relative mx-auto w-32 h-32 mb-8">
+                                {/* Background circle with gradient */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-[#3674B5]/20 to-[#A1E3F9]/20 rounded-full"></div>
+
+                                {/* Inner content */}
+                                <div className="relative w-full h-full bg-white dark:bg-slate-800 rounded-full flex items-center justify-center border border-gray-200 dark:border-slate-600 shadow-lg">
+                                    <svg className="w-12 h-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                    </svg>
+                                </div>
+
+                                {/* Floating dots */}
+                                <div className="absolute -top-2 -right-2 w-4 h-4 bg-[#3674B5] rounded-full animate-bounce"></div>
+                                <div className="absolute -bottom-2 -left-2 w-3 h-3 bg-[#A1E3F9] rounded-full animate-bounce" style={{ animationDelay: '1s' }}></div>
                             </div>
-                            <h3 className="text-xl font-medium text-gray-600 dark:text-gray-300">
-                                Tidak ada produk dalam kategori ini
+
+                            <h3 className="text-2xl font-bold text-gray-700 dark:text-gray-300 mb-4">
+                                Tidak ada produk ditemukan
                             </h3>
-                            <p className="text-gray-500 dark:text-gray-400 mt-2">
-                                Coba kategori lain untuk melihat lebih banyak pilihan
+                            <p className="text-gray-500 dark:text-gray-400 text-lg max-w-md mx-auto leading-relaxed">
+                                Coba pilih kategori lain atau kembali ke semua kategori untuk melihat lebih banyak pilihan produk menarik
                             </p>
+
+                            {/* Suggestion buttons */}
+                            <div className="flex flex-wrap justify-center gap-3 mt-8">
+                                <button
+                                    onClick={() => setSelectedCategory(null)}
+                                    className="px-6 py-3 bg-gradient-to-r from-[#3674B5] to-[#5682B1] text-white rounded-xl font-medium hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+                                >
+                                    Lihat Semua Produk
+                                </button>
+                                <button className="px-6 py-3 bg-white dark:bg-slate-800 border-2 border-[#3674B5] text-[#3674B5] dark:text-[#A1E3F9] rounded-xl font-medium hover:bg-[#3674B5] hover:text-white dark:hover:bg-[#A1E3F9] dark:hover:text-slate-900 transition-all duration-300">
+                                    Refresh Halaman
+                                </button>
+                            </div>
                         </div>
                     )}
                 </div>
