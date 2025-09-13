@@ -8,6 +8,9 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Admin\MerchandiseController;
 use App\Http\Controllers\Admin\CategoryMerchandiseController;
 use App\Http\Controllers\PublicMerchandiseController;
+use App\Http\Controllers\Admin\DivisiController;
+use App\Http\Controllers\PublicDivisiController;
+
 
 
 // =====================
@@ -46,6 +49,12 @@ Route::prefix('admin')->group(function () {
     Route::post('categories', [CategoryMerchandiseController::class, 'store']);
     Route::put('categories/{id}', [CategoryMerchandiseController::class, 'update']);
     Route::delete('categories/{id}', [CategoryMerchandiseController::class, 'destroy']);
+
+    // Divisi CRUD manual
+    Route::get('divisis', [DivisiController::class, 'index']);
+    Route::post('divisis', [DivisiController::class, 'store']);
+    Route::put('divisis/{id}', [DivisiController::class, 'update']);
+    Route::delete('divisis/{id}', [DivisiController::class, 'destroy']);
 });
 
 // =====================
@@ -53,6 +62,12 @@ Route::prefix('admin')->group(function () {
 // =====================
 Route::get('/merchandises', [PublicMerchandiseController::class, 'index']);
 Route::get('/categories', [PublicMerchandiseController::class, 'categories']);
+
+// =====================
+// Public Profil Routes
+// =====================
+Route::get('/divisi', [PublicDivisiController::class, 'index']);
+
 
 // =====================
 // Public Blog Routes

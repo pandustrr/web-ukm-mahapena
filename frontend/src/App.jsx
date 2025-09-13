@@ -1,6 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 
+// Komponen proteksi route
+import ProtectedRoute from "./components/ProtectedRoute";
+
 // Halaman user biasa
 import Navbar from "./components/Navbar";
 import Beranda from "./pages/Beranda";
@@ -19,11 +22,22 @@ function App() {
 
     return (
         <Router>
-            <div className={`App min-h-screen flex flex-col ${isDarkMode ? "dark" : ""}`}>
+            <div
+                className={`App min-h-screen flex flex-col ${isDarkMode ? "dark" : ""
+                    }`}
+            >
                 {/* Navbar hanya untuk user biasa */}
                 <Routes>
                     <Route path="/admin/*" element={null} />
-                    <Route path="/*" element={<Navbar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />} />
+                    <Route
+                        path="/*"
+                        element={
+                            <Navbar
+                                isDarkMode={isDarkMode}
+                                setIsDarkMode={setIsDarkMode}
+                            />
+                        }
+                    />
                 </Routes>
 
                 {/* Main content */}
@@ -38,7 +52,14 @@ function App() {
 
                         {/* Halaman admin */}
                         <Route path="/admin/login" element={<AdminLogin />} />
-                        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                        <Route
+                            path="/admin/dashboard"
+                            element={
+                                <ProtectedRoute>
+                                    <AdminDashboard />
+                                </ProtectedRoute>
+                            }
+                        />
                     </Routes>
                 </main>
 

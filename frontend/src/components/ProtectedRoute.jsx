@@ -1,10 +1,17 @@
+// src/components/ProtectedRoute.jsx
 import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
-  // Cek apakah admin sudah login
-  const isAuthenticated = localStorage.getItem("adminToken");
+  // Ambil token dari sessionStorage
+  const token = sessionStorage.getItem("adminToken");
 
-  return isAuthenticated ? children : <Navigate to="/admin/login" replace />;
+  // Kalau tidak ada token → redirect ke login
+  if (!token) {
+    return <Navigate to="/admin/login" replace />;
+  }
+
+  // Kalau ada token → izinkan akses
+  return children;
 };
 
 export default ProtectedRoute;
