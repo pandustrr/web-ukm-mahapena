@@ -521,285 +521,255 @@ const Merchandise = () => {
 
             {/* Modal Pesanan */}
             {showModal && selectedProduct && (
-                <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+                <div
+                    className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+                    onClick={() => setShowModal(false)}
+                >
                     <div
-                        className="bg-white dark:bg-slate-800 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+                        className="bg-white dark:bg-slate-900 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-xl border border-gray-200 dark:border-slate-700 flex flex-col md:flex-row"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        {/* Header Modal */}
-                        <div className="p-6 border-b border-gray-200 dark:border-slate-700 bg-gradient-to-r from-[#3674B5] to-[#2c6099] text-white">
-                            <div className="flex justify-between items-center">
-                                <h3 className="text-2xl font-bold">Detail {selectedProduct.name}</h3>
-                                <button
-                                    onClick={() => setShowModal(false)}
-                                    className="text-white hover:text-gray-200 transition-colors duration-200"
-                                >
-                                    <svg
-                                        className="w-6 h-6"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M6 18L18 6M6 6l12 12"
-                                        />
-                                    </svg>
-                                </button>
-                            </div>
-
-                            {/* Tab Navigation */}
-                            <div className="mt-4 flex border-b border-[#5682B1]">
-                                <button
-                                    onClick={() => setActiveTab("detail")}
-                                    className={`py-2 px-4 font-medium ${activeTab === "detail"
-                                        ? "text-white border-b-2 border-white"
-                                        : "text-[#A1E3F9]"
-                                        }`}
-                                >
-                                    Detail Produk
-                                </button>
-                                <button
-                                    onClick={() => setActiveTab("pemesanan")}
-                                    className={`py-2 px-4 font-medium ${activeTab === "pemesanan"
-                                        ? "text-white border-b-2 border-white"
-                                        : "text-[#A1E3F9]"
-                                        }`}
-                                >
-                                    Pemesanan
-                                </button>
+                        {/* Gambar produk di samping untuk tampilan desktop */}
+                        <div className="md:w-2/5 bg-gray-100 dark:bg-slate-800 p-4 flex items-center justify-center">
+                            <div className="aspect-square w-full rounded-xl overflow-hidden">
+                                <img
+                                    src={`http://localhost:8000/storage/${selectedProduct.image}`}
+                                    alt={selectedProduct.name}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                        e.target.src = "https://via.placeholder.com/400?text=No+Image";
+                                    }}
+                                />
                             </div>
                         </div>
 
-                        {showModalTerimakasih && (
-                            <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-                                <div className="bg-white p-6 rounded-lg shadow-lg w-80 text-center">
-                                    <h2 className="text-lg font-semibold mb-4">Terima Kasih 🎉</h2>
-                                    <p className="text-gray-600 mb-6">Pesanan kamu berhasil, klik OK untuk melanjutkan ke WhatsApp.</p>
-                                    <div className="flex justify-center gap-3">
-                                        <button
-                                            onClick={() => setShowModalTerimakasih(false)}
-                                            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-                                        >
-                                            Batal
-                                        </button>
-                                        <button
-                                            onClick={confirmOrderAndGoWhatsApp}
-                                            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                                        >
-                                            OK
-                                        </button>
+                        {/* Konten utama */}
+                        <div className="md:w-3/5 flex flex-col">
+                            {/* Header yang Lebih Ringkas */}
+                            <div className="relative p-4 border-b border-gray-100 dark:border-slate-600">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center space-x-3">
+                                        <div>
+                                            <h3 className="text-base font-semibold text-gray-900 dark:text-white line-clamp-1">
+                                                {selectedProduct.name}
+                                            </h3>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                {selectedProduct.category?.name}
+                                            </p>
+                                        </div>
                                     </div>
+
+                                    <button
+                                        onClick={() => setShowModal(false)}
+                                        className="w-7 h-7 rounded-full bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 flex items-center justify-center transition-colors"
+                                    >
+                                        <svg className="w-3 h-3 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                {/* Tab Navigation yang Lebih Sederhana */}
+                                <div className="mt-3 flex bg-gray-100 dark:bg-slate-700 rounded-md p-1">
+                                    <button
+                                        onClick={() => setActiveTab("detail")}
+                                        className={`flex-1 py-1.5 px-2 rounded-md text-xs font-medium transition-all duration-200 ${activeTab === "detail"
+                                                ? "bg-white dark:bg-slate-600 text-gray-900 dark:text-white shadow-sm"
+                                                : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+                                            }`}
+                                    >
+                                        Detail
+                                    </button>
+                                    <button
+                                        onClick={() => setActiveTab("pemesanan")}
+                                        className={`flex-1 py-1.5 px-2 rounded-md text-xs font-medium transition-all duration-200 ${activeTab === "pemesanan"
+                                                ? "bg-white dark:bg-slate-600 text-gray-900 dark:text-white shadow-sm"
+                                                : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+                                            }`}
+                                    >
+                                        Pemesanan
+                                    </button>
                                 </div>
                             </div>
-                        )}
 
-
-                        {/* Konten berdasarkan tab aktif */}
-                        {activeTab === "detail" ? (
-                            <div className="p-6 dark:bg-slate-800 dark:text-white">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    {/* Gambar Produk */}
-                                    <div className="rounded-lg overflow-hidden">
-                                        <img
-                                            src={`http://localhost:8000/storage/${selectedProduct.image}`}
-                                            alt={selectedProduct.name}
-                                            className="w-full h-auto object-cover rounded-lg shadow-md"
-                                            onError={(e) => {
-                                                e.target.src = "https://via.placeholder.com/300?text=No+Image";
-                                            }}
-                                        />
-                                    </div>
-                                    {/* Detail Produk */}
-                                    <div>
-                                        <h4 className="text-2xl font-bold text-[#3674B5] dark:text-[#A1E3F9] mb-2">
-                                            {selectedProduct.name}
-                                        </h4>
-                                        <p className="text-3xl font-bold text-[#113F67] dark:text-white mb-4">
-                                            {selectedProduct.price}
-                                        </p>
-
-                                        <div className="mb-6">
-                                            <div className="flex items-center mb-2">
-                                                <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
-                                                    Stok: {selectedProduct.stock}
-                                                </span>
-                                                <span className="ml-3 bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
-                                                    Kategori: {selectedProduct.category?.name}
-                                                </span>
+                            {/* Confirmation Modal */}
+                            {showModalTerimakasih && (
+                                <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50">
+                                    <div className="bg-white dark:bg-slate-800 rounded-xl p-5 shadow-xl w-80 mx-4 border border-gray-100 dark:border-slate-700">
+                                        <div className="text-center">
+                                            <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-2">
+                                                <svg className="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                                </svg>
                                             </div>
+                                            <h2 className="text-base font-semibold text-gray-900 dark:text-white mb-1">Pesanan Berhasil!</h2>
+                                            <p className="text-xs text-gray-600 dark:text-gray-300 mb-3">Lanjutkan ke WhatsApp untuk menyelesaikan pesanan.</p>
+                                            <div className="flex gap-2">
+                                                <button
+                                                    onClick={() => setShowModalTerimakasih(false)}
+                                                    className="flex-1 px-3 py-1.5 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors text-xs font-medium"
+                                                >
+                                                    Batal
+                                                </button>
+                                                <button
+                                                    onClick={confirmOrderAndGoWhatsApp}
+                                                    className="flex-1 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-xs font-medium"
+                                                >
+                                                    Lanjutkan
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
 
-                                            <div className="mt-4 space-y-3">
+                            {/* Modal Content */}
+                            <div className="overflow-y-auto flex-1 p-4">
+                                {activeTab === "detail" ? (
+                                    <div className="space-y-3">
+                                        {/* Product Info - untuk mobile, gambar disembunyikan karena sudah ada di samping */}
+                                        <div className="md:hidden aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-slate-800 mb-3">
+                                            <img
+                                                src={`http://localhost:8000/storage/${selectedProduct.image}`}
+                                                alt={selectedProduct.name}
+                                                className="w-full h-full object-cover"
+                                                onError={(e) => {
+                                                    e.target.src = "https://via.placeholder.com/400?text=No+Image";
+                                                }}
+                                            />
+                                        </div>
 
-                                                <div className="flex items-center">
-                                                    <svg
-                                                        className="w-5 h-5 text-[#3674B5] dark:text-[#A1E3F9] mt-0.5 mr-2"
-                                                        fill="currentColor"
-                                                        viewBox="0 0 20 20"
-                                                    >
-                                                        <path
-                                                            fillRule="evenodd"
-                                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                                            clipRule="evenodd"
-                                                        ></path>
-                                                    </svg>
-                                                    <span>
-                                                        Min. Pemesanan: 1
+                                        {/* Price and Stock */}
+                                        <div className="flex items-center justify-between">
+                                            <h4 className="text-lg font-bold text-gray-900 dark:text-white">
+                                                {selectedProduct.price}
+                                            </h4>
+                                            <div className={`px-2 py-1 rounded-full text-xs font-medium ${selectedProduct.stock > 10
+                                                    ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                                                    : selectedProduct.stock > 0
+                                                        ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
+                                                        : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                                                }`}>
+                                                Stok: {selectedProduct.stock}
+                                            </div>
+                                        </div>
 
-                                                    </span>
+                                        {/* Description */}
+                                        <div className="space-y-1">
+                                            <h5 className="font-medium text-gray-900 dark:text-white text-xs">Deskripsi</h5>
+                                            <p className="text-gray-600 dark:text-gray-300 text-xs leading-relaxed">
+                                                {selectedProduct.description || "Tidak ada deskripsi untuk produk ini."}
+                                            </p>
+                                        </div>
+
+                                        {/* Sizes */}
+                                        {selectedProduct.sizes && selectedProduct.sizes.length > 0 && (
+                                            <div className="space-y-1">
+                                                <h5 className="font-medium text-gray-900 dark:text-white text-xs">Ukuran Tersedia</h5>
+                                                <div className="flex flex-wrap gap-1">
+                                                    {selectedProduct.sizes.map((size, index) => (
+                                                        <span key={index} className="px-2 py-0.5 bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 rounded text-xs font-medium">
+                                                            {size}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Colors */}
+                                        {selectedProduct.colors && selectedProduct.colors.length > 0 && (
+                                            <div className="space-y-1">
+                                                <h5 className="font-medium text-gray-900 dark:text-white text-xs">Warna Tersedia</h5>
+                                                <div className="flex flex-wrap gap-1">
+                                                    {selectedProduct.colors.map((color, index) => (
+                                                        <span key={index} className="px-2 py-0.5 bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 rounded text-xs font-medium">
+                                                            {color}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* CTA Button */}
+                                        <button
+                                            onClick={() => setActiveTab("pemesanan")}
+                                            className="w-full mt-3 py-2 px-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-colors text-sm"
+                                        >
+                                            Pesan Sekarang
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-3">
+                                        {/* Product Summary Card */}
+                                        <div className="bg-gray-50 dark:bg-slate-800 rounded-lg p-3 mb-2 border border-gray-200 dark:border-slate-600">
+                                            <div className="flex items-center space-x-2">
+                                                <div className="w-10 h-10 rounded-lg overflow-hidden bg-white dark:bg-slate-700">
+                                                    <img
+                                                        src={`http://localhost:8000/storage/${selectedProduct.image}`}
+                                                        alt={selectedProduct.name}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <h4 className="font-medium text-gray-900 dark:text-white text-xs truncate">{selectedProduct.name}</h4>
+                                                    <p className="text-sm font-bold text-blue-600 dark:text-blue-400">{selectedProduct.price}</p>
+                                                    <div className="flex items-center space-x-1 mt-0.5 text-xs text-gray-600 dark:text-gray-300">
+                                                        <span>{selectedProduct.category?.name}</span>
+                                                        <span>•</span>
+                                                        <span className="text-green-600 dark:text-green-400">Stok: {selectedProduct.stock}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        {/* Deskripsi Produk */}
-                                        <div className="prose max-w-none dark:prose-invert">
-                                            <h5 className="text-lg font-semibold text-[#3674B5] dark:text-[#A1E3F9] mb-2">
-                                                Deskripsi Produk
-                                            </h5>
-
-                                            {/* Teks Deskripsi */}
-                                            <p className="text-gray-700 dark:text-gray-300 mb-4">
-                                                {selectedProduct.description || "-"}
-                                            </p>
-
-                                            {/* Pilihan Ukuran */}
-                                            <h6 className="font-semibold text-[#113F67] dark:text-[#A1E3F9] mt-4 mb-2">
-                                                Pilihan Ukuran
-                                            </h6>
-                                            {Array.isArray(selectedProduct.sizes) && selectedProduct.sizes.length > 0 ? (
-                                                <ul className="text-gray-700 dark:text-gray-300 list-disc pl-5 mb-4">
-                                                    {selectedProduct.sizes.map((size, index) => (
-                                                        <li key={index}>{size}</li>
-                                                    ))}
-                                                </ul>
-                                            ) : (
-                                                <p className="text-gray-700 dark:text-gray-300 mb-4">-</p>
-                                            )}
-
-                                            {/* Pilihan Warna */}
-                                            <h6 className="font-semibold text-[#113F67] dark:text-[#A1E3F9] mt-4 mb-2">
-                                                Pilihan Warna
-                                            </h6>
-                                            {Array.isArray(selectedProduct.colors) && selectedProduct.colors.length > 0 ? (
-                                                <ul className="text-gray-700 dark:text-gray-300 list-disc pl-5 mb-4">
-                                                    {selectedProduct.colors.map((color, index) => (
-                                                        <li key={index}>{color}</li>
-                                                    ))}
-                                                </ul>
-                                            ) : (
-                                                <p className="text-gray-700 dark:text-gray-300 mb-4">-</p>
-                                            )}
-                                        </div>
-
-
-                                        {/* Tombol untuk beralih ke pemesanan */}
-                                        <div className="mt-8">
-                                            <button
-                                                type="button"
-                                                onClick={() => setActiveTab("pemesanan")}
-                                                className="w-full py-3 bg-[#3674B5] hover:bg-[#113F67] text-white rounded-lg transition-colors duration-300 font-medium"
-                                            >
-                                                Pesan Sekarang
-                                            </button>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="dark:bg-slate-800">
-                                <div className="p-6">
-
-                                    {/* Info Produk */}
-                                    <div className="flex items-center mb-6 p-4 bg-gray-50 dark:bg-slate-700 rounded-lg border border-gray-200 dark:border-slate-600 shadow-sm">
-                                        <div className="relative">
-                                            <img
-                                                src={`http://localhost:8000/storage/${selectedProduct.image}`}
-                                                alt={selectedProduct.name}
-                                                className="w-16 h-16 object-cover rounded-md mr-4"
-                                            />
-                                            <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#3674B5] rounded-full flex items-center justify-center text-white text-xs">
-                                                {selectedProduct.stock}
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <h4 className="font-semibold text-[#3674B5] dark:text-[#A1E3F9]">{selectedProduct.name}</h4>
-                                            <p className="text-lg font-bold text-[#113F67] dark:text-white">{selectedProduct.price}</p>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400">Kategori: {selectedProduct.category?.name}</p>
-                                        </div>
-                                    </div>
-
-                                    {/* Form Pemesanan */}
-                                    <div className="space-y-4">
-                                        <div>
-                                            {/* Jumlah + Ukuran + Warna sejajar */}
-                                            <div className="flex items-start gap-6 flex-wrap">
-
-                                                {/* Input Jumlah */}
-                                                <div>
-                                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                        {/* Order Form */}
+                                        <div className="space-y-3">
+                                            {/* Product Options */}
+                                            <div className="grid grid-cols-1 gap-3">
+                                                {/* Quantity */}
+                                                <div className="space-y-1">
+                                                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
                                                         Jumlah
                                                     </label>
-                                                    <div className="flex items-center max-w-xs rounded-lg overflow-hidden border border-gray-300 dark:border-slate-600 shadow-sm">
-                                                        {/* Tombol - */}
+                                                    <div className="flex items-center bg-gray-50 dark:bg-slate-700 rounded-lg overflow-hidden border border-gray-200 dark:border-slate-600">
                                                         <button
                                                             onClick={() => handleJumlahChange(-1)}
                                                             disabled={formData.jumlah <= 1}
-                                                            className={`w-10 h-10 flex items-center justify-center font-bold 
-        transition-colors duration-200
-        ${formData.jumlah <= 1
-                                                                    ? "bg-gray-200 text-gray-400 dark:bg-slate-700 dark:text-gray-500 cursor-not-allowed"
-                                                                    : "bg-red-500 hover:bg-red-600 text-white dark:bg-red-600 dark:hover:bg-red-700"}`}
+                                                            className="w-8 h-8 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-white hover:bg-gray-100 dark:hover:bg-slate-600 transition-colors text-sm"
                                                         >
                                                             −
                                                         </button>
-
-                                                        {/* Input Jumlah */}
-                                                        <input
-                                                            type="number"
-                                                            value={formData.jumlah}
-                                                            readOnly
-                                                            className="w-16 h-10 text-center font-semibold 
-        bg-white dark:bg-slate-800 text-gray-800 dark:text-white
-        border-x border-gray-300 dark:border-slate-600"
-                                                        />
-
-                                                        {/* Tombol + */}
+                                                        <div className="flex-1 text-center py-1.5 font-medium text-gray-900 dark:text-white bg-white dark:bg-slate-800 border-x border-gray-200 dark:border-slate-600 text-xs">
+                                                            {formData.jumlah}
+                                                        </div>
                                                         <button
                                                             onClick={() => handleJumlahChange(1)}
                                                             disabled={formData.jumlah >= selectedProduct.stock}
-                                                            className={`w-10 h-10 flex items-center justify-center font-bold 
-        transition-colors duration-200
-        ${formData.jumlah >= selectedProduct.stock
-                                                                    ? "bg-gray-200 text-gray-400 dark:bg-slate-700 dark:text-gray-500 cursor-not-allowed"
-                                                                    : "bg-green-500 hover:bg-green-600 text-white dark:bg-green-600 dark:hover:bg-green-700"}`}
+                                                            className="w-8 h-8 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-white hover:bg-gray-100 dark:hover:bg-slate-600 transition-colors text-sm"
                                                         >
                                                             +
                                                         </button>
                                                     </div>
-                                                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                                        Maksimal: {selectedProduct.stock} pcs
+                                                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                        Max: {selectedProduct.stock} pcs
                                                     </p>
                                                 </div>
 
-                                                {/* Pilih Ukuran */}
+                                                {/* Size Selection */}
                                                 {selectedProduct.sizes && selectedProduct.sizes.length > 0 && (
-                                                    <div>
-                                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                            Pilih Ukuran
+                                                    <div className="space-y-1">
+                                                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
+                                                            Ukuran
                                                         </label>
-                                                        <div className="flex gap-2 flex-wrap">
+                                                        <div className="grid grid-cols-2 gap-1">
                                                             {selectedProduct.sizes.map((size, index) => (
                                                                 <button
                                                                     key={index}
                                                                     type="button"
                                                                     onClick={() => setFormData({ ...formData, ukuran: size })}
-                                                                    className={`px-4 py-2 rounded-lg border transition-colors duration-200 
-                                ${formData.ukuran === size
-                                                                            ? "bg-[#3674B5] text-white border-[#3674B5]"
-                                                                            : "bg-white dark:bg-slate-800 dark:text-white border-gray-300 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700"
+                                                                    className={`py-1.5 px-2 rounded text-xs font-medium transition-colors ${formData.ukuran === size
+                                                                            ? "bg-blue-600 text-white"
+                                                                            : "bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600"
                                                                         }`}
                                                                 >
                                                                     {size}
@@ -809,22 +779,21 @@ const Merchandise = () => {
                                                     </div>
                                                 )}
 
-                                                {/* Pilih Warna */}
+                                                {/* Color Selection */}
                                                 {selectedProduct.colors && selectedProduct.colors.length > 0 && (
-                                                    <div>
-                                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                            Pilih Warna
+                                                    <div className="space-y-1">
+                                                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
+                                                            Warna
                                                         </label>
-                                                        <div className="flex gap-2 flex-wrap">
+                                                        <div className="grid grid-cols-2 gap-1">
                                                             {selectedProduct.colors.map((color, index) => (
                                                                 <button
                                                                     key={index}
                                                                     type="button"
                                                                     onClick={() => setFormData({ ...formData, warna: color })}
-                                                                    className={`px-4 py-2 rounded-lg border transition-colors duration-200 
-                                ${formData.warna === color
-                                                                            ? "bg-[#3674B5] text-white border-[#3674B5]"
-                                                                            : "bg-white dark:bg-slate-800 dark:text-white border-gray-300 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-700"
+                                                                    className={`py-1.5 px-2 rounded text-xs font-medium transition-colors ${formData.warna === color
+                                                                            ? "bg-purple-600 text-white"
+                                                                            : "bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600"
                                                                         }`}
                                                                 >
                                                                     {color}
@@ -833,101 +802,104 @@ const Merchandise = () => {
                                                         </div>
                                                     </div>
                                                 )}
+                                            </div>
 
+                                            {/* Customer Information */}
+                                            <div className="space-y-2 pt-1 border-t border-gray-200 dark:border-slate-700">
+                                                <div className="space-y-1">
+                                                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
+                                                        Nama Lengkap
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="nama"
+                                                        value={formData.nama}
+                                                        onChange={handleInputChange}
+                                                        className="w-full px-2.5 py-1.5 border border-gray-300 dark:border-slate-600 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-transparent transition-all bg-white dark:bg-slate-800 dark:text-white"
+                                                        placeholder="Masukkan nama lengkap"
+                                                        required
+                                                    />
+                                                </div>
+
+                                                <div className="space-y-1">
+                                                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
+                                                        Nomor WhatsApp
+                                                    </label>
+                                                    <input
+                                                        type="tel"
+                                                        name="noWa"
+                                                        value={formData.noWa}
+                                                        onChange={handleInputChange}
+                                                        className="w-full px-2.5 py-1.5 border border-gray-300 dark:border-slate-600 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-transparent transition-all bg-white dark:bg-slate-800 dark:text-white"
+                                                        placeholder="081234567890"
+                                                        required
+                                                    />
+                                                </div>
+
+                                                <div className="space-y-1">
+                                                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
+                                                        Alamat Pengiriman
+                                                    </label>
+                                                    <textarea
+                                                        name="alamat"
+                                                        value={formData.alamat}
+                                                        onChange={handleInputChange}
+                                                        rows="2"
+                                                        className="w-full px-2.5 py-1.5 border border-gray-300 dark:border-slate-600 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-transparent transition-all bg-white dark:bg-slate-800 dark:text-white resize-none"
+                                                        placeholder="Masukkan alamat lengkap untuk pengiriman"
+                                                        required
+                                                    />
+                                                </div>
+
+                                                <div className="space-y-1">
+                                                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
+                                                        Catatan (Opsional)
+                                                    </label>
+                                                    <textarea
+                                                        name="catatan"
+                                                        value={formData.catatan}
+                                                        onChange={handleInputChange}
+                                                        rows="2"
+                                                        className="w-full px-2.5 py-1.5 border border-gray-300 dark:border-slate-600 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-transparent transition-all bg-white dark:bg-slate-800 dark:text-white resize-none"
+                                                        placeholder="Catatan tambahan untuk pesanan"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            {/* Action Buttons */}
+                                            <div className="flex flex-col gap-1.5 pt-2 border-t border-gray-200 dark:border-slate-700">
+                                                <button
+                                                    onClick={handleWhatsAppOrder}
+                                                    disabled={
+                                                        !formData.nama ||
+                                                        !formData.noWa ||
+                                                        !formData.alamat ||
+                                                        formData.jumlah < 1 ||
+                                                        formData.jumlah > selectedProduct.stock
+                                                    }
+                                                    className="w-full py-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center font-medium text-xs"
+                                                >
+                                                    <svg className="w-3.5 h-3.5 mr-1.5" fill="currentColor" viewBox="0 0 24 24">
+                                                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.016a9.97 9.97 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.936 9.936 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.864 3.488" />
+                                                    </svg>
+                                                    Pesan via WhatsApp
+                                                </button>
+
+                                                <button
+                                                    onClick={() => setShowModal(false)}
+                                                    className="w-full py-1.5 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors text-xs font-medium"
+                                                >
+                                                    Batal
+                                                </button>
                                             </div>
                                         </div>
-
-
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Lengkap</label>
-                                            <input
-                                                type="text"
-                                                name="nama"
-                                                value={formData.nama}
-                                                onChange={handleInputChange}
-                                                className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-[#3674B5] focus:border-transparent transition-colors duration-200 bg-white dark:bg-slate-800 dark:text-white"
-                                                placeholder="Masukkan nama lengkap"
-                                                required
-                                            />
-                                        </div>
-
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nomor WhatsApp</label>
-                                            <input
-                                                type="tel"
-                                                name="noWa"
-                                                value={formData.noWa}
-                                                onChange={handleInputChange}
-                                                className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-[#3674B5] focus:border-transparent transition-colors duration-200 bg-white dark:bg-slate-800 dark:text-white"
-                                                placeholder="Contoh: 081234567890"
-                                                required
-                                            />
-                                        </div>
-
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Alamat Pengiriman</label>
-                                            <textarea
-                                                name="alamat"
-                                                value={formData.alamat}
-                                                onChange={handleInputChange}
-                                                rows="3"
-                                                className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-[#3674B5] focus:border-transparent transition-colors duration-200 bg-white dark:bg-slate-800 dark:text-white"
-                                                placeholder="Masukkan alamat lengkap untuk pengiriman"
-                                                required
-                                            />
-                                        </div>
-
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Catatan (Opsional)</label>
-                                            <textarea
-                                                name="catatan"
-                                                value={formData.catatan}
-                                                onChange={handleInputChange}
-                                                rows="2"
-                                                className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-[#3674B5] focus:border-transparent transition-colors duration-200 bg-white dark:bg-slate-800 dark:text-white"
-                                                placeholder="Catatan tambahan untuk pesanan"
-                                            />
-                                        </div>
                                     </div>
-                                </div>
-
-                                <div className="p-6 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-700 rounded-b-xl">
-                                    <div className="flex flex-col sm:flex-row gap-4">
-                                        {/* Tombol Batal */}
-                                        <button
-                                            onClick={() => setShowModal(false)}
-                                            className="px-6 py-3 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-600 transition-all font-medium"
-                                        >
-                                            Batal
-                                        </button>
-
-                                        {/* Tombol Pesan via WhatsApp */}
-                                        <button
-                                            onClick={handleWhatsAppOrder}
-                                            disabled={
-                                                !formData.nama ||
-                                                !formData.noWa ||
-                                                !formData.alamat ||
-                                                formData.jumlah < 1 ||
-                                                formData.jumlah > selectedProduct.stock
-                                            } className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center font-medium relative overflow-hidden group"
-                                        >
-                                            <span className="relative z-10 flex items-center">
-                                                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.016a9.97 9.97 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.936 9.936 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.864 3.488" />
-                                                </svg>
-                                                Pesan Sekarang via WhatsApp
-                                            </span>
-                                            <span className="absolute inset-0 bg-green-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                                        </button>
-                                    </div>
-                                </div>
+                                )}
                             </div>
-                        )}
+                        </div>
                     </div>
                 </div>
             )}
-
             <style jsx>{`
                 .fade-in { 
                     opacity: 0; 
