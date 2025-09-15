@@ -76,29 +76,43 @@ function ManajemenDivisi() {
         });
     };
 
-    const handleSubmitDivisi = async (e) => {
-        e.preventDefault();
-        try {
-            if (formDivisi.id) {
-                await axios.put(
-                    `http://localhost:8000/api/admin/divisis/${formDivisi.id}`,
-                    formDivisi,
-                    { headers: { Authorization: `Bearer ${token}` } }
-                );
-                alert("✅ Divisi berhasil diperbarui");
-            } else {
-                await axios.post("http://localhost:8000/api/admin/divisis", formDivisi, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                alert("✅ Divisi berhasil ditambahkan");
-            }
-            resetDivisi();
-            fetchDivisis();
-        } catch (err) {
-            console.error(err);
+const handleSubmitDivisi = async (e) => {
+    e.preventDefault();
+    try {
+        // hanya ambil field yg ada di fillable
+        const payload = {
+            nama_divisi: formDivisi.nama_divisi,
+            singkatan_divisi: formDivisi.singkatan_divisi,
+            judul_deskripsi: formDivisi.judul_deskripsi,
+            deskripsi: formDivisi.deskripsi,
+            pengertian: formDivisi.pengertian,
+            periode_id: selectedPeriode, // selalu ikut periode terpilih
+        };
+
+        if (formDivisi.id) {
+            await axios.put(
+                `http://localhost:8000/api/admin/divisis/${formDivisi.id}`,
+                payload,
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            alert("✅ Divisi berhasil diperbarui");
+        } else {
+            await axios.post("http://localhost:8000/api/admin/divisis", payload, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            alert("✅ Divisi berhasil ditambahkan");
+        }
+        resetDivisi();
+        fetchDivisis();
+    } catch (err) {
+        console.error(err);
+        if (err.response?.status === 422) {
+            alert("❌ Validasi gagal: " + JSON.stringify(err.response.data.errors));
+        } else {
             alert("❌ Gagal menyimpan divisi");
         }
-    };
+    }
+};
 
     const handleEditDivisi = (divisi) => {
         setFormDivisi(divisi);
