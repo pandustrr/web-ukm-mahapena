@@ -2,6 +2,7 @@ import { useState } from "react";
 import SidebarAdmin from "./SidebarAdmin";
 import ManajemenMerchandise from "./ManajemenMerchandise";
 import ManajemenDivisi from "./ManajemenDivisi";
+import ManajemenPengurus from "./ManajemenPengurus";
 
 function AdminDashboard() {
   const [activePage, setActivePage] = useState("dashboard");
@@ -18,14 +19,11 @@ function AdminDashboard() {
             Selamat Datang di Dashboard Admin
           </h1>
         )}
-        
+
         {activePage === "divisi" && <ManajemenDivisi />}
 
-        {activePage === "pengurus" && (
-          <h1 className="text-2xl font-bold text-[#113F67]">
-            Manajemen Pengurus (Coming Soon)
-          </h1>
-        )}
+        {activePage === "pengurus" && <ManajemenPengurus />}
+
 
         {activePage === "merchandise" && <ManajemenMerchandise />}
 

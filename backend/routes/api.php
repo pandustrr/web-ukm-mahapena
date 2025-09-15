@@ -10,8 +10,8 @@ use App\Http\Controllers\Admin\CategoryMerchandiseController;
 use App\Http\Controllers\PublicMerchandiseController;
 use App\Http\Controllers\Admin\DivisiController;
 use App\Http\Controllers\PublicDivisiController;
-
-
+use App\Http\Controllers\Admin\PeriodeController;
+use App\Http\Controllers\Admin\PengurusController;
 
 // =====================
 // POST Routes
@@ -26,7 +26,7 @@ Route::get('public/blogs', [BlogController::class, 'indexPublic']);
 Route::get('public/blogs/{slug}', [BlogController::class, 'showPublic']);
 
 // =====================
-// User info
+// User info (sanctum default)
 // =====================
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -42,7 +42,6 @@ Route::prefix('admin')->group(function () {
     Route::put('merchandises/{id}', [MerchandiseController::class, 'update']);
     Route::delete('merchandises/{id}', [MerchandiseController::class, 'destroy']);
     Route::post('merchandises/{id}/image', [MerchandiseController::class, 'updateImage']);
-    // Route::post('/admin/merchandise/{id}/decrease-stock', [MerchandiseController::class, 'decreaseStock']);
 
     // Category Merchandise CRUD manual
     Route::get('categories', [CategoryMerchandiseController::class, 'index']);
@@ -50,11 +49,25 @@ Route::prefix('admin')->group(function () {
     Route::put('categories/{id}', [CategoryMerchandiseController::class, 'update']);
     Route::delete('categories/{id}', [CategoryMerchandiseController::class, 'destroy']);
 
-    // Divisi CRUD manual
-    Route::get('divisis', [DivisiController::class, 'index']);
-    Route::post('divisis', [DivisiController::class, 'store']);
-    Route::put('divisis/{id}', [DivisiController::class, 'update']);
-    Route::delete('divisis/{id}', [DivisiController::class, 'destroy']);
+    // Periode
+    Route::get('/periodes', [PeriodeController::class, 'index']);
+    Route::post('/periodes', [PeriodeController::class, 'store']);
+    Route::put('/periodes/{id}', [PeriodeController::class, 'update']);
+    Route::delete('/periodes/{id}', [PeriodeController::class, 'destroy']);
+    Route::get('/periodes-with-pengurus', [PeriodeController::class, 'withPengurus']); // ✅ tambahan
+
+    // Divisi
+    Route::get('/divisis', [DivisiController::class, 'index']);
+    Route::post('/divisis', [DivisiController::class, 'store']);
+    Route::put('/divisis/{id}', [DivisiController::class, 'update']);
+    Route::delete('/divisis/{id}', [DivisiController::class, 'destroy']);
+    Route::get('/divisi/periode/{periodeId}', [DivisiController::class, 'byPeriode']);
+
+    // Pengurus CRUD manual
+    Route::get('pengurus', [PengurusController::class, 'index']);
+    Route::post('pengurus', [PengurusController::class, 'store']);
+    Route::put('pengurus/{id}', [PengurusController::class, 'update']);
+    Route::delete('pengurus/{id}', [PengurusController::class, 'destroy']);
 });
 
 // =====================
@@ -62,19 +75,12 @@ Route::prefix('admin')->group(function () {
 // =====================
 Route::get('/merchandises', [PublicMerchandiseController::class, 'index']);
 Route::get('/categories', [PublicMerchandiseController::class, 'categories']);
+Route::post('/merchandise/{id}/decrease-stock-public', [App\Http\Controllers\Admin\MerchandiseController::class, 'decreaseStockPublic']);
 
 // =====================
 // Public Profil Routes
 // =====================
 Route::get('/divisi', [PublicDivisiController::class, 'index']);
-
-
-// =====================
-// Public Blog Routes
-// =====================
-Route::get('public/blogs', [BlogController::class, 'indexPublic']);
-Route::get('public/blogs/{slug}', [BlogController::class, 'showPublic']);
-Route::post('/merchandise/{id}/decrease-stock-public', [App\Http\Controllers\Admin\MerchandiseController::class, 'decreaseStockPublic']);
 
 // =====================
 // Admin (login/logout)
