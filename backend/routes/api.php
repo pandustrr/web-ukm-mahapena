@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\DivisiController;
 use App\Http\Controllers\PublicDivisiController;
 use App\Http\Controllers\Admin\PeriodeController;
 use App\Http\Controllers\Admin\PengurusController;
+use App\Http\Controllers\PublicPeriodeController;
+use App\Http\Controllers\PublicPengurusController;
 
 // =====================
 // POST Routes
@@ -81,6 +83,14 @@ Route::post('/merchandise/{id}/decrease-stock-public', [App\Http\Controllers\Adm
 // Public Profil Routes
 // =====================
 Route::get('/divisi', [PublicDivisiController::class, 'index']);
+
+// =====================
+// Public Pengurus Routes
+// =====================
+Route::get('periodes-with-pengurus-public', [PublicPeriodeController::class, 'all']);
+Route::get('divisi/periode/{periodeId}', [PublicDivisiController::class, 'byPeriode']); // divisi by periode
+Route::get('pengurus-public', [PublicPengurusController::class, 'index']);
+
 
 // =====================
 // Admin (login/logout)

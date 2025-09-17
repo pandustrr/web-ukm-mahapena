@@ -20,4 +20,12 @@ class PublicDivisiController extends Controller
             )->get()
         );
     }
+
+    // Ambil divisi berdasarkan periode untuk publik
+    public function byPeriode($periodeId)
+    {
+        $divisis = Divisi::where('periode_id', $periodeId)
+            ->get(['id', 'nama_divisi as nama']);
+        return response()->json($divisis);
+    }
 }
