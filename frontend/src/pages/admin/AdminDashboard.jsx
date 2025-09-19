@@ -3,6 +3,7 @@ import SidebarAdmin from "./SidebarAdmin";
 import ManajemenMerchandise from "./ManajemenMerchandise";
 import ManajemenDivisi from "./ManajemenDivisi";
 import ManajemenPengurus from "./ManajemenPengurus";
+import ManajemenPortofolio from "./ManajemenPortofolio";
 
 function AdminDashboard() {
   const [activePage, setActivePage] = useState("dashboard");
@@ -32,6 +33,9 @@ function AdminDashboard() {
             Manajemen Blog (Coming Soon)
           </h1>
         )}
+
+        {activePage === "portofolio" && <ManajemenPortofolio />}
+
 
       </main>
     </div>

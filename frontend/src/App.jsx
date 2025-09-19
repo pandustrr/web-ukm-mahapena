@@ -11,6 +11,7 @@ import Profil from "./pages/Profil";
 import Proker from "./pages/Proker";
 import Blog from "./pages/Blog";
 import Portofolio from "./pages/Portofolio";
+import PortofolioDetail from "./pages/PortofolioDetail";
 import Merchandise from "./pages/Merchandise";
 import Footer from "./components/Footer";
 
@@ -50,6 +51,7 @@ function App() {
                         <Route path="/proker" element={<Proker />} />
                         <Route path="/blog" element={<Blog />} />
                         <Route path="/portofolio" element={<Portofolio />} />
+                        <Route path="/portofolio/:id" element={<PortofolioDetail />} />
                         <Route path="/merchandise" element={<Merchandise />} />
 
                         {/* Halaman admin */}

@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\PeriodeController;
 use App\Http\Controllers\Admin\PengurusController;
 use App\Http\Controllers\PublicPeriodeController;
 use App\Http\Controllers\PublicPengurusController;
+use App\Http\Controllers\Admin\PortofolioController;
+use App\Http\Controllers\PublicPortofolioController;
 
 // =====================
 // POST Routes
@@ -70,6 +72,9 @@ Route::prefix('admin')->group(function () {
     Route::post('pengurus', [PengurusController::class, 'store']);
     Route::put('pengurus/{id}', [PengurusController::class, 'update']);
     Route::delete('pengurus/{id}', [PengurusController::class, 'destroy']);
+
+    Route::apiResource('portofolio', PortofolioController::class);
+
 });
 
 // =====================
@@ -90,6 +95,12 @@ Route::get('/divisi', [PublicDivisiController::class, 'index']);
 Route::get('periodes-with-pengurus-public', [PublicPeriodeController::class, 'all']);
 Route::get('divisi/periode/{periodeId}', [PublicDivisiController::class, 'byPeriode']); // divisi by periode
 Route::get('pengurus-public', [PublicPengurusController::class, 'index']);
+
+// =====================
+// Public Portofolio Routes
+// =====================
+Route::get('portofolio', [PublicPortofolioController::class, 'index']);
+Route::get('portofolio/{id}', [PublicPortofolioController::class, 'show']);
 
 
 // =====================
