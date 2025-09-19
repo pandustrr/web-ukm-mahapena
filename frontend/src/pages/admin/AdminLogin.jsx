@@ -9,7 +9,10 @@ export default function AdminLogin() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post("http://localhost:8000/api/admin/login", { username, password });
+            const res = await axios.post("http://localhost:8000/api/admin/login", {
+                username,
+                password,
+            });
             // Simpan token di sessionStorage
             sessionStorage.setItem("adminToken", res.data.token);
             window.location.href = "/admin/dashboard";
@@ -19,13 +22,47 @@ export default function AdminLogin() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-[#A1E3F9]">
-            <form onSubmit={handleLogin} className="bg-[#113F67] p-10 rounded-lg shadow-lg w-96">
-                <h2 className="text-white text-2xl mb-6 text-center">Admin Login</h2>
-                <input type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} className="w-full p-3 mb-4 rounded" />
-                <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} className="w-full p-3 mb-4 rounded" />
-                <button type="submit" className="w-full p-3 bg-[#3674B5] text-white rounded hover:bg-[#5682B1]">Login</button>
-                {msg && <p className="text-white mt-3">{msg}</p>}
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#A1E3F9] to-[#3674B5] p-4">
+            <form
+                onSubmit={handleLogin}
+                className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-sm"
+            >
+                <h2 className="text-[#113F67] text-2xl font-bold mb-6 text-center">
+                    Admin Login
+                </h2>
+
+                {/* Username */}
+                <input
+                    type="text"
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="w-full p-3 mb-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#3674B5] transition"
+                />
+
+                {/* Password */}
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full p-3 mb-6 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#3674B5] transition"
+                />
+
+                {/* Tombol Login */}
+                <button
+                    type="submit"
+                    className="w-full p-3 bg-[#113F67] text-white rounded-lg font-semibold hover:bg-[#0e2f4c] transition-colors"
+                >
+                    Login
+                </button>
+
+                {/* Pesan error */}
+                {msg && (
+                    <p className="text-red-500 text-sm mt-4 text-center bg-red-100 py-2 rounded">
+                        {msg}
+                    </p>
+                )}
             </form>
         </div>
     );

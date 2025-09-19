@@ -14,6 +14,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
         { name: "Profil", path: "/profil" },
         { name: "Proker", path: "/proker" },
         { name: "Blog", path: "/blog" },
+        { name: "Portofolio", path: "/portofolio" },
         { name: "Merchandise", path: "/merchandise" },
     ]
 
