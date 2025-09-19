@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 
@@ -31,10 +30,7 @@ class AuthController extends Controller
         $admin->api_token = $token;
         $admin->save();
 
-        return response()->json([
-            'token' => $token,
-            'admin_id' => $admin->id
-        ]);
+        return response()->json(['token' => $token]);
     }
 
     // logout admin

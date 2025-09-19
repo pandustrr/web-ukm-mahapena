@@ -1,19 +1,14 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PostController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\BlogController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\TagController;
 
 Route::apiResource('posts', PostController::class);
 
 Route::apiResource('blogs', BlogController::class);
-Route::apiResource('categories', CategoryController::class);
-Route::apiResource('tags', TagController::class);
-
 Route::get('public/blogs', [BlogController::class, 'indexPublic']);
 Route::get('public/blogs/{slug}', [BlogController::class, 'showPublic']);
 

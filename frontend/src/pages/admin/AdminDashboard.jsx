@@ -2,18 +2,13 @@ import { useEffect, useState } from "react";
 import ManajemenBlog from "./ManajemenBlog";
 import ManajemenPengurus from "./ManajemenPengurus";
 import SidebarAdmin from "./SidebarAdmin";
-import { useLocation } from "react-router-dom";
 
 export default function AdminDashboard() {
   const [activePage, setActivePage] = useState("dashboard");
-  const location = useLocation();
 
   useEffect(() => {
     const checkLogin = () => {
       const token = sessionStorage.getItem("adminToken");
-      const admin_id = sessionStorage.getItem("adminID");
-      console.log(admin_id);
-
       if (!token) window.location.href = "/admin/login";
     };
 
@@ -22,12 +17,6 @@ export default function AdminDashboard() {
 
     return () => window.removeEventListener("pageshow", checkLogin);
   }, []);
-
-  useEffect(() => {
-    if (location.state?.page) {
-      setActivePage(location.state.page);
-    }
-  }, [location.state]);
 
   const handleLogout = () => {
     sessionStorage.removeItem("adminToken");

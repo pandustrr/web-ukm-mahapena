@@ -12,6 +12,7 @@ class Blog extends Model
         'content',
         'excerpt',
         'category_id',
+        'author_id',
         'status',
         'featured_image',
         'meta_title',
@@ -19,6 +20,11 @@ class Blog extends Model
         'views',
         'published_at'
     ];
+
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'author_id');
+    }
 
     public function category()
     {
