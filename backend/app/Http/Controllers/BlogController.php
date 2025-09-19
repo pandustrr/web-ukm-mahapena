@@ -6,6 +6,7 @@ use App\Models\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class BlogController extends Controller
 {
@@ -14,22 +15,19 @@ class BlogController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Blog::with('author', 'category');
+        $query = Blog::with('category');
 
         // Search functionality
-        if ($request->has('search')) {
-            $query->where('title', 'like', '%' . $request->search . '%')
-                ->orWhere('content', 'like', '%' . $request->search . '%');
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->search . '%')
+                    ->orWhere('content', 'like', '%' . $request->search . '%');
+            });
         }
 
         // Filter by status
-        if ($request->has('status')) {
+        if ($request->has('status') && $request->status !== 'all') {
             $query->where('status', $request->status);
-        }
-
-        // Filter by category
-        if ($request->has('category_id')) {
-            $query->where('category_id', $request->category_id);
         }
 
         // Ordering
@@ -43,7 +41,8 @@ class BlogController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $blogs
+            'data' => $blogs,
+            'id' => Auth::id()
         ]);
     }
 
@@ -53,12 +52,12 @@ class BlogController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
+            'title' => 'sometimes|required|string|max:255',
+            'content' => 'sometimes|required|string',
             'excerpt' => 'nullable|string|max:500',
-            'category_id' => 'required|exists:categories,id',
+            'category_id' => 'sometimes|required|exists:blog_categories,id',
             'tags' => 'nullable|array',
-            'status' => 'required|in:draft,published,archived',
+            'status' => 'sometimes|required|in:draft,published,archived',
             'featured_image' => 'nullable|image|max:2048',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
@@ -72,7 +71,7 @@ class BlogController extends Controller
             }
 
             $validated['slug'] = Str::slug($validated['title']);
-            // $validated['author_id'] = auth()->id();
+            $iddd = Auth::user();
 
             // Ensure slug is unique
             $count = Blog::where('slug', $validated['slug'])->count();
@@ -84,13 +83,14 @@ class BlogController extends Controller
 
             // Handle tags
             if ($request->has('tags')) {
-                $blog->tags()->sync($request->tags);
+                $tags = is_array($request->tags) ? $request->tags : [$request->tags];
+                $blog->tags()->sync($tags);
             }
 
             return response()->json([
                 'success' => true,
                 'message' => 'Blog created successfully',
-                'data' => $blog->load('author', 'category', 'tags')
+                'data' => $blog->load('category', 'tags'),
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
@@ -106,7 +106,7 @@ class BlogController extends Controller
      */
     public function show(string $id)
     {
-        $blog = Blog::with('author', 'category', 'tags')->findOrFail($id);
+        $blog = Blog::with('category', 'tags')->findOrFail($id);
 
         return response()->json([
             'success' => true,
@@ -121,19 +121,11 @@ class BlogController extends Controller
     {
         $blog = Blog::findOrFail($id);
 
-        // Authorization check (user can only update their own blogs unless admin)
-        // if (auth()->user()->role !== 'admin' && $blog->author_id !== auth()->id()) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'Unauthorized to update this blog'
-        //     ], 403);
-        // }
-
         $validated = $request->validate([
             'title' => 'sometimes|required|string|max:255',
             'content' => 'sometimes|required|string',
             'excerpt' => 'nullable|string|max:500',
-            'category_id' => 'sometimes|required|exists:categories,id',
+            'category_id' => 'sometimes|required|exists:blog_categories,id',
             'tags' => 'nullable|array',
             'status' => 'sometimes|required|in:draft,published,archived',
             'featured_image' => 'nullable|image|max:2048',
@@ -169,14 +161,20 @@ class BlogController extends Controller
             $blog->update($validated);
 
             // Handle tags
+            // if ($request->has('tags')) {
+            //     $blog->tags()->sync($request->tags);
+            // }
+
             if ($request->has('tags')) {
-                $blog->tags()->sync($request->tags);
+                $tags = is_array($request->tags) ? $request->tags : [$request->tags];
+                $blog->tags()->sync($tags);
             }
+
 
             return response()->json([
                 'success' => true,
                 'message' => 'Blog updated successfully',
-                'data' => $blog->load('author', 'category', 'tags')
+                'data' => $blog->load('category', 'tags')
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -245,27 +243,27 @@ class BlogController extends Controller
         ]);
     }
 
-    public function myBlogs(Request $request)
-    {
-        $query = Blog::with('category')
-            ->where(
-                'author_id', // auth()->id()
-            );
+    // public function myBlogs(Request $request)
+    // {
+    //     $query = Blog::with('category')
+    //         ->where(
+    //             'author_id', // auth()->id()
+    //         );
 
-        // Add filters and pagination similar to index method
-        $perPage = $request->get('per_page', 10);
-        $blogs = $query->paginate($perPage);
+    //     // Add filters and pagination similar to index method
+    //     $perPage = $request->get('per_page', 10);
+    //     $blogs = $query->paginate($perPage);
 
-        return response()->json([
-            'success' => true,
-            'data' => $blogs
-        ]);
-    }
+    //     return response()->json([
+    //         'success' => true,
+    //         'data' => $blogs
+    //     ]);
+    // }
 
     // Public methods for frontend display
     public function indexPublic(Request $request)
     {
-        $query = Blog::with('author', 'category')
+        $query = Blog::with('category')
             ->where('status', 'published')
             ->orderBy('published_at', 'desc');
 
@@ -281,7 +279,7 @@ class BlogController extends Controller
 
     public function showPublic($slug)
     {
-        $blog = Blog::with('author', 'category', 'tags')
+        $blog = Blog::with('category', 'tags')
             ->where('slug', $slug)
             ->where('status', 'published')
             ->firstOrFail();
