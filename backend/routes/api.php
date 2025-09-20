@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\PeriodeController;
 use App\Http\Controllers\Admin\PengurusController;
 use App\Http\Controllers\PublicPeriodeController;
 use App\Http\Controllers\PublicPengurusController;
+use App\Http\Controllers\Admin\AlumniController;
+use App\Http\Controllers\PublicAlumniController;
 use App\Http\Controllers\Admin\PortofolioController;
 use App\Http\Controllers\PublicPortofolioController;
 
@@ -73,6 +75,12 @@ Route::prefix('admin')->group(function () {
     Route::put('pengurus/{id}', [PengurusController::class, 'update']);
     Route::delete('pengurus/{id}', [PengurusController::class, 'destroy']);
 
+    Route::get('alumni', [AlumniController::class, 'index']);
+    Route::post('alumni', [AlumniController::class, 'store']);
+    Route::get('alumni/{id}', [AlumniController::class, 'show']);
+    Route::put('alumni/{id}', [AlumniController::class, 'update']);
+    Route::delete('alumni/{id}', [AlumniController::class, 'destroy']);
+
     Route::apiResource('portofolio', PortofolioController::class);
 
 });
@@ -95,6 +103,12 @@ Route::get('/divisi', [PublicDivisiController::class, 'index']);
 Route::get('periodes-with-pengurus-public', [PublicPeriodeController::class, 'all']);
 Route::get('divisi/periode/{periodeId}', [PublicDivisiController::class, 'byPeriode']); // divisi by periode
 Route::get('pengurus-public', [PublicPengurusController::class, 'index']);
+
+// =====================
+// Public Alumni Routes
+// =====================
+Route::get('alumni', [PublicAlumniController::class, 'index']);
+Route::get('alumni/{id}', [PublicAlumniController::class, 'show']);
 
 // =====================
 // Public Portofolio Routes

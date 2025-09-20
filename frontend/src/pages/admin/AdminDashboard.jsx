@@ -4,6 +4,7 @@ import ManajemenMerchandise from "./ManajemenMerchandise";
 import ManajemenDivisi from "./ManajemenDivisi";
 import ManajemenPengurus from "./ManajemenPengurus";
 import ManajemenPortofolio from "./ManajemenPortofolio";
+import ManajemenAlumni from "./ManajemenAlumni"; // ✅ tambahkan import
 
 function AdminDashboard() {
   const [activePage, setActivePage] = useState("dashboard");
@@ -22,21 +23,16 @@ function AdminDashboard() {
         )}
 
         {activePage === "divisi" && <ManajemenDivisi />}
-
         {activePage === "pengurus" && <ManajemenPengurus />}
-
-
         {activePage === "merchandise" && <ManajemenMerchandise />}
+        {activePage === "portofolio" && <ManajemenPortofolio />}
+        {activePage === "alumni" && <ManajemenAlumni />} 
 
         {activePage === "blog" && (
           <h1 className="text-2xl font-bold text-[#113F67]">
             Manajemen Blog (Coming Soon)
           </h1>
         )}
-
-        {activePage === "portofolio" && <ManajemenPortofolio />}
-
-
       </main>
     </div>
   );

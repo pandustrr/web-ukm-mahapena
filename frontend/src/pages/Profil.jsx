@@ -427,7 +427,7 @@ const Profil = () => {
                 </div>
             )}
 
-            {/* Manajemen Pengurus Section */}
+            {/* Pengurus Section */}
             <section className="py-16 bg-gradient-to-br from-slate-50 via-white to-blue-50/20 dark:from-slate-900 dark:via-slate-800 dark:to-slate-800 relative overflow-hidden">
                 {/* Background Elements */}
                 <div className="absolute inset-0">
