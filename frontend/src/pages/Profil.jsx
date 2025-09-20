@@ -14,6 +14,8 @@ const Profil = () => {
     const [selectedDivisiPengurus, setSelectedDivisiPengurus] = useState("Semua");
     const [pengurus, setPengurus] = useState([]);
 
+    const [alumni, setAlumni] = useState([]);
+
     // Animasi fade-in
     useEffect(() => {
         setIsVisible(true);
@@ -98,6 +100,19 @@ const Profil = () => {
         };
         fetchPengurus();
     }, [selectedPeriode, selectedDivisiPengurus]);
+
+    // Fetch data alumni dari API publik
+    useEffect(() => {
+        const fetchAlumni = async () => {
+            try {
+                const res = await axios.get("http://localhost:8000/api/alumni");
+                setAlumni(res.data);
+            } catch (err) {
+                console.error("Gagal ambil alumni:", err);
+            }
+        };
+        fetchAlumni();
+    }, []);
 
     return (
         <div className="relative">
@@ -427,7 +442,7 @@ const Profil = () => {
                 </div>
             )}
 
-            {/* Pengurus Section */}
+{/* Pengurus & Alumni Section */}
             <section className="py-16 bg-gradient-to-br from-slate-50 via-white to-blue-50/20 dark:from-slate-900 dark:via-slate-800 dark:to-slate-800 relative overflow-hidden">
                 {/* Background Elements */}
                 <div className="absolute inset-0">
@@ -435,164 +450,276 @@ const Profil = () => {
                     <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-[#5682B1]/15 to-[#3674B5]/10 rounded-full blur-3xl transform -translate-x-1/3 translate-y-1/3"></div>
                 </div>
 
-                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    {/* Section Header */}
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#3674B5] to-[#5682B1] bg-clip-text text-transparent mb-4">
-                            Struktur Pengurus
-                        </h2>
-                        <div className="w-20 h-1 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] mx-auto rounded-full mb-6"></div>
-                        <p className="text-gray-600 dark:text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">
-                            Kenali para pengurus UKM Mahapena yang berdedikasi dalam mengembangkan kreativitas dan inovasi mahasiswa
-                        </p>
-                    </div>
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-16">
+                    {/* Pengurus Section */}
+                    <div className="space-y-8">
+                        {/* Section Header */}
+                        <div className="text-center">
+                            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#3674B5] to-[#5682B1] bg-clip-text text-transparent mb-4">
+                                Struktur Pengurus
+                            </h2>
+                            <div className="w-20 h-1 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] mx-auto rounded-full mb-6"></div>
+                            <p className="text-gray-600 dark:text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">
+                                Kenali para pengurus UKM Mahapena yang berdedikasi dalam mengembangkan kreativitas dan inovasi mahasiswa
+                            </p>
+                        </div>
 
-                    {/* Filter Controls */}
-                    <div className="bg-white/80 dark:bg-slate-800/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-gray-100 dark:border-slate-700 mb-8">
-                        <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
-                            {/* Periode Select */}
-                            <div className="flex-1 w-full">
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                    Periode
-                                </label>
-                                <div className="relative">
-                                    <select
-                                        className="w-full border border-gray-200 dark:border-slate-600 rounded-xl p-3 bg-white dark:bg-slate-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-[#3674B5] focus:border-transparent transition-all duration-300 pl-4 pr-10 appearance-none shadow-sm"
-                                        value={selectedPeriode}
-                                        onChange={(e) => setSelectedPeriode(e.target.value)}
-                                    >
-                                        {periodes.map((p) => (
-                                            <option key={p.id} value={p.id}>
-                                                {p.nama_periode}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                                        </svg>
+                        {/* Filter Controls */}
+                        <div className="bg-white/80 dark:bg-slate-800/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-gray-100 dark:border-slate-700 mb-8">
+                            <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
+                                {/* Periode Select */}
+                                <div className="flex-1 w-full">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Periode
+                                    </label>
+                                    <div className="relative">
+                                        <select
+                                            className="w-full border border-gray-200 dark:border-slate-600 rounded-xl p-3 bg-white dark:bg-slate-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-[#3674B5] focus:border-transparent transition-all duration-300 pl-4 pr-10 appearance-none shadow-sm"
+                                            value={selectedPeriode}
+                                            onChange={(e) => setSelectedPeriode(e.target.value)}
+                                        >
+                                            {periodes.map((p) => (
+                                                <option key={p.id} value={p.id}>
+                                                    {p.nama_periode}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                                            </svg>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            {/* Divisi Filter */}
-                            <div className="flex-1 w-full">
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                    Divisi
-                                </label>
-                                <div className="flex flex-wrap gap-2">
-                                    <button
-                                        className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm ${selectedDivisiPengurus === "Semua"
-                                            ? "bg-gradient-to-r from-[#3674B5] to-[#5682B1] text-white shadow-md transform scale-105"
-                                            : "bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 hover:scale-105"
-                                            }`}
-                                        onClick={() => setSelectedDivisiPengurus("Semua")}
-                                    >
-                                        Semua
-                                    </button>
-                                    {divisisPengurus.map((d) => (
+                                {/* Divisi Filter */}
+                                <div className="flex-1 w-full">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Divisi
+                                    </label>
+                                    <div className="flex flex-wrap gap-2">
                                         <button
-                                            key={d.id}
-                                            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm ${selectedDivisiPengurus === d.id
+                                            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm ${selectedDivisiPengurus === "Semua"
                                                 ? "bg-gradient-to-r from-[#3674B5] to-[#5682B1] text-white shadow-md transform scale-105"
                                                 : "bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 hover:scale-105"
                                                 }`}
-                                            onClick={() => setSelectedDivisiPengurus(d.id)}
+                                            onClick={() => setSelectedDivisiPengurus("Semua")}
                                         >
-                                            {d.nama}
+                                            Semua
                                         </button>
-                                    ))}
+                                        {divisisPengurus.map((d) => (
+                                            <button
+                                                key={d.id}
+                                                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm ${selectedDivisiPengurus === d.id
+                                                    ? "bg-gradient-to-r from-[#3674B5] to-[#5682B1] text-white shadow-md transform scale-105"
+                                                    : "bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 hover:scale-105"
+                                                    }`}
+                                                onClick={() => setSelectedDivisiPengurus(d.id)}
+                                            >
+                                                {d.nama}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+
+                        {/* Pengurus List */}
+                        <div className="bg-white/80 dark:bg-slate-800/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-gray-100 dark:border-slate-700">
+                            <div className="flex items-center justify-between mb-6">
+                                <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
+                                    Daftar Pengurus
+                                </h3>
+                                <div className="text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-slate-700 px-3 py-1 rounded-full">
+                                    {pengurus.length} anggota
+                                </div>
+                            </div>
+
+                            {pengurus.length === 0 ? (
+                                <div className="text-center py-16">
+                                    <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-r from-[#3674B5] to-[#5682B1] rounded-full flex items-center justify-center shadow-lg">
+                                        <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Tidak Ada Pengurus</h4>
+                                    <p className="text-gray-500 dark:text-gray-400">Tidak ada pengurus untuk filter yang dipilih</p>
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+                                    {pengurus.map((p) => (
+                                        <div key={p.id} className="group bg-white/70 dark:bg-slate-700/80 backdrop-blur-sm rounded-2xl p-3 lg:p-6 border border-gray-200 dark:border-slate-600 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:scale-105">
+                                            {/* Foto Pengurus - Portrait dengan Overlay */}
+                                            <div className="relative mb-3 lg:mb-4">
+                                                <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-lg border-3 border-[#5682B1] group-hover:border-[#A1E3F9] transition-all duration-300">
+                                                    {p.foto ? (
+                                                        <>
+                                                            <img
+                                                                src={`http://localhost:8000/storage/${p.foto}`}
+                                                                alt={p.nama}
+                                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                                                onError={(e) => {
+                                                                    e.target.style.display = "none";
+                                                                    e.target.nextSibling.style.display = "flex";
+                                                                }}
+                                                            />
+                                                            <div className="w-full h-full hidden items-center justify-center bg-gradient-to-r from-[#3674B5] to-[#5682B1] text-white font-bold text-4xl lg:text-6xl">
+                                                                {p.nama.charAt(0).toUpperCase()}
+                                                            </div>
+                                                        </>
+                                                    ) : (
+                                                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-[#3674B5] to-[#5682B1] text-white font-bold text-4xl lg:text-6xl group-hover:from-[#A1E3F9] group-hover:to-[#3674B5] transition-all duration-300">
+                                                            {p.nama.charAt(0).toUpperCase()}
+                                                        </div>
+                                                    )}
+
+                                                    {/* Badge Divisi di pojok kanan atas */}
+                                                    {p.divisi && (
+                                                        <div className="absolute top-2 lg:top-3 right-2 lg:right-3">
+                                                            <span className="px-2 lg:px-3 py-1 text-xs font-semibold text-white bg-[#5682B1]/80 rounded-full shadow-md border border-[#5682B1]/30">
+                                                                {p.divisi.nama_divisi}
+                                                            </span>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Overlay gradient */}
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                                                    
+                                                    {/* Nama & Prodi overlay */}
+                                                    <div className="absolute bottom-0 left-0 right-0 p-2 lg:p-4">
+                                                        <h5 className="font-bold text-sm lg:text-lg text-white drop-shadow-lg">{p.nama}</h5>
+                                                        <p className="text-xs lg:text-sm text-white/90 font-medium drop-shadow-md">
+                                                            {p.prodi} ({p.angkatan})
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Jabatan - Clean centered layout */}
+                                            <div className="text-center">
+                                                <div className="inline-block">
+                                                    <span className="px-3 lg:px-4 py-1 lg:py-2 text-xs lg:text-sm font-semibold text-[#3674B5] dark:text-[#A1E3F9] bg-[#3674B5]/10 dark:bg-[#A1E3F9]/10 rounded-full border border-[#3674B5]/20 dark:border-[#A1E3F9]/20 group-hover:bg-[#3674B5] group-hover:text-white dark:group-hover:bg-[#A1E3F9] dark:group-hover:text-slate-800 transition-all duration-300">
+                                                        {p.jabatan}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            {/* Decorative element */}
+                                            <div className="absolute top-4 right-4 w-2 h-2 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
 
-                    {/* Pengurus List */}
-                    <div className="bg-white/80 dark:bg-slate-800/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-gray-100 dark:border-slate-700">
-                        <div className="flex items-center justify-between mb-6">
-                            <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-                                Daftar Pengurus
-                            </h3>
-                            <div className="text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-slate-700 px-3 py-1 rounded-full">
-                                {pengurus.length} anggota
-                            </div>
+                    {/* Alumni Section */}
+                    <div className="space-y-8">
+                        {/* Section Header */}
+                        <div className="text-center">
+                            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#3674B5] to-[#5682B1] bg-clip-text text-transparent mb-4">
+                                Alumni Mahapena
+                            </h2>
+                            <div className="w-20 h-1 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] mx-auto rounded-full mb-6"></div>
+                            <p className="text-gray-600 dark:text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">
+                                Kenali para alumni UKM Mahapena yang telah berkontribusi dan melanjutkan perjalanan kreatif mereka
+                            </p>
                         </div>
 
-                        {pengurus.length === 0 ? (
-                            <div className="text-center py-16">
-                                <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-r from-[#3674B5] to-[#5682B1] rounded-full flex items-center justify-center shadow-lg">
-                                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"></path>
-                                    </svg>
+                        {/* Alumni List */}
+                        <div className="bg-white/80 dark:bg-slate-800/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-gray-100 dark:border-slate-700">
+                            <div className="flex items-center justify-between mb-6">
+                                <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
+                                    Daftar Alumni
+                                </h3>
+                                <div className="text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-slate-700 px-3 py-1 rounded-full">
+                                    {alumni.length} alumni
                                 </div>
-                                <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Tidak Ada Pengurus</h4>
-                                <p className="text-gray-500 dark:text-gray-400">Tidak ada pengurus untuk filter yang dipilih</p>
                             </div>
-                        ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                                {pengurus.map((p) => (
-                                    <div key={p.id} className="group bg-white/70 dark:bg-slate-700/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 dark:border-slate-600 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:scale-105">
-                                        {/* Foto Pengurus - Large with Name Overlay */}
-                                        <div className="relative mb-4">
-                                            <div className="relative w-full h-48 rounded-2xl overflow-hidden shadow-lg border-3 border-[#3674B5] group-hover:border-[#A1E3F9] transition-all duration-300">
-                                                {p.foto ? (
-                                                    <>
-                                                        <img
-                                                            src={`http://localhost:8000/storage/${p.foto}`}
-                                                            alt={p.nama}
-                                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                                                            onError={(e) => {
-                                                                e.target.style.display = 'none';
-                                                                e.target.nextSibling.style.display = 'flex';
-                                                            }}
-                                                        />
-                                                        <div className="w-full h-full hidden items-center justify-center bg-gradient-to-r from-[#3674B5] to-[#5682B1] text-white font-bold text-6xl">
-                                                            {p.nama.charAt(0).toUpperCase()}
+
+                            {alumni.length === 0 ? (
+                                <div className="text-center py-16">
+                                    <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-r from-[#3674B5] to-[#5682B1] rounded-full flex items-center justify-center shadow-lg">
+                                        <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        </svg>
+                                    </div>
+                                    <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Belum Ada Alumni</h4>
+                                    <p className="text-gray-500 dark:text-gray-400">Data alumni akan segera tersedia</p>
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+                                    {alumni.map((a) => (
+                                        <div key={a.id} className="group bg-white/70 dark:bg-slate-700/80 backdrop-blur-sm rounded-2xl p-3 lg:p-6 border border-gray-200 dark:border-slate-600 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:scale-105">
+                                            {/* Foto Alumni - Portrait dengan Overlay */}
+                                            <div className="relative mb-3 lg:mb-4">
+                                                <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-lg border-3 border-[#5682B1] group-hover:border-[#A1E3F9] transition-all duration-300">
+                                                    {a.foto ? (
+                                                        <>
+                                                            <img
+                                                                src={`http://localhost:8000/storage/${a.foto}`}
+                                                                alt={a.nama}
+                                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                                                onError={(e) => {
+                                                                    e.target.style.display = 'none';
+                                                                    e.target.nextSibling.style.display = 'flex';
+                                                                }}
+                                                            />
+                                                            <div className="w-full h-full hidden items-center justify-center bg-gradient-to-r from-[#5682B1] to-[#3674B5] text-white font-bold text-4xl lg:text-6xl">
+                                                                {a.nama.charAt(0).toUpperCase()}
+                                                            </div>
+                                                        </>
+                                                    ) : (
+                                                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-[#5682B1] to-[#3674B5] text-white font-bold text-4xl lg:text-6xl group-hover:from-[#A1E3F9] group-hover:to-[#5682B1] transition-all duration-300">
+                                                            {a.nama.charAt(0).toUpperCase()}
                                                         </div>
-                                                    </>
-                                                ) : (
-                                                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-[#3674B5] to-[#5682B1] text-white font-bold text-6xl group-hover:from-[#A1E3F9] group-hover:to-[#3674B5] transition-all duration-300">
-                                                        {p.nama.charAt(0).toUpperCase()}
+                                                    )}
+
+                                                    {/* Badge Divisi di pojok kanan atas */}
+                                                    {a.divisi && (
+                                                        <div className="absolute top-2 lg:top-3 right-2 lg:right-3">
+                                                            <span className="px-2 lg:px-3 py-1 text-xs font-semibold text-white bg-[#5682B1]/80 rounded-full shadow-md border border-[#5682B1]/30">
+                                                                {a.divisi}
+                                                            </span>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Overlay gradient */}
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+
+                                                    {/* Nama & Prodi overlay */}
+                                                    <div className="absolute bottom-0 left-0 right-0 p-2 lg:p-4">
+                                                        <h5 className="font-bold text-sm lg:text-lg text-white drop-shadow-lg">
+                                                            {a.nama}
+                                                        </h5>
+                                                        <p className="text-xs lg:text-sm text-white/90 font-medium drop-shadow-md">
+                                                            {a.prodi} ({a.angkatan})
+                                                        </p>
                                                     </div>
-                                                )}
-
-                                                {/* Dark gradient overlay for text readability */}
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
-
-                                                {/* Name Overlay */}
-                                                <div className="absolute bottom-0 left-0 right-0 p-4">
-                                                    <h5 className="font-bold text-lg text-white drop-shadow-lg">
-                                                        {p.nama}
-                                                    </h5>
                                                 </div>
                                             </div>
+
+                                            {/* Jabatan - hanya jika ada */}
+                                            {a.jabatan && (
+                                                <div className="text-center">
+                                                    <div className="inline-block">
+                                                        <span className="px-2 lg:px-3 py-1 text-xs lg:text-sm font-semibold text-[#5682B1] dark:text-[#A1E3F9] bg-[#5682B1]/10 dark:bg-[#A1E3F9]/10 rounded-full border border-[#5682B1]/20 dark:border-[#A1E3F9]/20 group-hover:bg-[#5682B1] group-hover:text-white dark:group-hover:bg-[#A1E3F9] dark:group-hover:text-slate-800 transition-all duration-300">
+                                                            {a.jabatan}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {/* Decorative element */}
+                                            <div className="absolute top-4 right-4 w-2 h-2 bg-gradient-to-r from-[#5682B1] to-[#A1E3F9] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                         </div>
-
-                                        {/* Informasi Pengurus - Centered Layout */}
-                                        <div className="text-center space-y-3">
-                                            {/* Prodi (Angkatan) */}
-                                            <p className="text-sm text-gray-600 dark:text-white font-medium">
-                                                {p.prodi} ({p.angkatan})
-                                            </p>
-
-                                            {/* Jabatan - Highlighted */}
-                                            <div className="inline-block">
-                                                <span className="px-3 py-1 text-sm font-semibold text-[#3674B5] dark:text-[#A1E3F9] bg-[#3674B5]/10 dark:bg-[#A1E3F9]/10 rounded-full border border-[#3674B5]/20 dark:border-[#A1E3F9]/20 group-hover:bg-[#3674B5] group-hover:text-white dark:group-hover:bg-[#A1E3F9] dark:group-hover:text-slate-800 transition-all duration-300">
-                                                    {p.jabatan}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        {/* Decorative element */}
-                                        <div className="absolute top-4 right-4 w-2 h-2 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </section>
-
             <style jsx>{`
                 .slide-in-left {
                     opacity: 0;
