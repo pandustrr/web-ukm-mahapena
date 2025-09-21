@@ -378,11 +378,11 @@ const Profil = () => {
                 </div>
             </section>
 
-            {/* Modal detail divisi */}
+{/* Modal detail divisi */}
             {selectedDivisi && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-300">
                     <div
-                        className="bg-white dark:bg-slate-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-gray-200 dark:border-slate-600 animate-in zoom-in-95 duration-300"
+                        className="bg-white dark:bg-slate-800 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-gray-200 dark:border-slate-600 animate-in zoom-in-95 duration-300"
                         onClick={(e) => e.stopPropagation()}
                     >
                         {/* Header Modal */}
@@ -390,11 +390,11 @@ const Profil = () => {
                             <div className="flex justify-between items-start">
                                 <div className="flex-1 text-center">
                                     <h3 className="text-2xl font-semibold mb-2 text-gray-800 dark:text-white">
-                                        {selectedDivisi.nama}
+                                        {selectedDivisi.nama_divisi || selectedDivisi.nama}
                                     </h3>
                                     <div className="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-[#3674B5]/10 to-[#A1E3F9]/10 dark:from-[#3674B5]/20 dark:to-[#A1E3F9]/20 rounded-full border border-[#3674B5]/20 dark:border-[#A1E3F9]/30">
                                         <span className="text-sm font-medium text-[#3674B5] dark:text-[#A1E3F9]">
-                                            {selectedDivisi.singkatan}
+                                            {selectedDivisi.singkatan_divisi || selectedDivisi.singkatan}
                                         </span>
                                     </div>
                                 </div>
@@ -420,20 +420,52 @@ const Profil = () => {
                         </div>
 
                         {/* Konten Modal */}
-                        <div className="p-6 dark:bg-slate-800 dark:text-white bg-gradient-to-b from-gray-50/50 to-white dark:from-slate-700/50 dark:to-slate-800 rounded-b-2xl">
-                            <div className="relative">
-                                <div className="absolute -top-4 left-0 w-10 h-0.5 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] rounded-full"></div>
-                                <div className="pt-3">
-                                    <h4 className="text-base font-medium text-gray-800 dark:text-white mb-3 flex items-center">
-                                        <svg className="w-4 h-4 mr-2 text-[#3674B5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        Tugas dan Fungsi
-                                    </h4>
-                                    <div className="prose max-w-none dark:prose-invert">
-                                        <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm font-light">
-                                            {selectedDivisi.deskripsi}
-                                        </p>
+                        <div className="p-6 dark:bg-slate-800 dark:text-white bg-gradient-to-b from-gray-50/50 to-white dark:from-slate-700/50 dark:to-slate-800 rounded-b-2xl max-h-[70vh] overflow-y-auto">
+                            <div className="space-y-6">
+                                {/* Pengertian Section - Hanya tampil jika ada data baru */}
+                                {selectedDivisi.pengertian && (
+                                    <div className="relative">
+                                        <div className="absolute -top-2 left-0 w-10 h-0.5 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] rounded-full"></div>
+                                        <div className="pt-3">
+                                            <h4 className="text-base font-medium text-gray-800 dark:text-white mb-3 flex items-center">
+                                                <svg className="w-4 h-4 mr-2 text-[#3674B5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                                </svg>
+                                                Pengertian
+                                            </h4>
+                                            <div className="prose max-w-none dark:prose-invert">
+                                                <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm font-light">
+                                                    {selectedDivisi.pengertian}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Judul Deskripsi Section - Hanya tampil jika ada data baru */}
+                                {selectedDivisi.judul_deskripsi && (
+                                    <div className="relative">
+                                        <div className="absolute -top-2 left-0 w-10 h-0.5 bg-gradient-to-r from-[#5682B1] to-[#A1E3F9] rounded-full"></div>
+                                        <div className="pt-3">
+                                            <h4 className="text-base font-medium text-gray-800 dark:text-white mb-3 flex items-center">
+                                                <svg className="w-4 h-4 mr-2 text-[#5682B1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                                </svg>
+                                                {selectedDivisi.judul_deskripsi}
+                                            </h4>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Section Tugas dan Fungsi */}
+                                <div className="relative">
+                                    <div className="absolute -top-4 left-0 w-10 h-0.5 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] rounded-full"></div>
+                                    <div className="pt-3">
+                                        <div className="prose max-w-none dark:prose-invert">
+                                            <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm font-light">
+                                                {selectedDivisi.deskripsi}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -41,27 +41,26 @@ const Portofolio = () => {
                 {/* Background with gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-br from-[#3674B5] via-[#5682B1] to-[#A1E3F9]"></div>
                 <div className="absolute inset-0 bg-black/20"></div>
-                
-<div
-    className="absolute inset-0 bg-cover bg-center"
-    style={{
-        backgroundImage: `url(https://png.pngtree.com/thumb_back/fh260/background/20230617/pngtree-d-illustration-of-a-graduation-hat-being-thrown-by-a-hand-image_3628023.jpg)`
-    }}
->
-    {/* Gradient overlay biar teks tetap jelas */}
-    <div className="absolute inset-0 bg-gradient-to-r from-[#000000]/80 to-[#000000]/60 dark:from-[#000000]/90 dark:to-[#113F67]/70"></div>
 
-    {/* Noise overlay untuk efek tekstur halus */}
-    <div className="absolute inset-0 bg-noise opacity-10 dark:opacity-20"></div>
-</div>
+                <div
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{
+                        backgroundImage: `url(https://png.pngtree.com/thumb_back/fh260/background/20230617/pngtree-d-illustration-of-a-graduation-hat-being-thrown-by-a-hand-image_3628023.jpg)`
+                    }}
+                >
+                    {/* Gradient overlay biar teks tetap jelas */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#000000]/80 to-[#000000]/60 dark:from-[#000000]/90 dark:to-[#113F67]/70"></div>
+
+                    {/* Noise overlay untuk efek tekstur halus */}
+                    <div className="absolute inset-0 bg-noise opacity-10 dark:opacity-20"></div>
+                </div>
 
                 <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <h1
-                        className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white transform transition-all duration-1000 ${
-                            isVisible
+                        className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white transform transition-all duration-1000 ${isVisible
                                 ? "translate-y-0 opacity-100"
                                 : "translate-y-10 opacity-0"
-                        }`}
+                            }`}
                     >
                         Portofolio{" "}
                         <span className="bg-gradient-to-r from-[#A1E3F9] to-white bg-clip-text text-transparent">
@@ -136,7 +135,7 @@ const Portofolio = () => {
                                                     {item.judul.charAt(0).toUpperCase()}
                                                 </div>
                                             )}
-                                            
+
                                             {/* Overlay gradient */}
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                         </div>
@@ -149,7 +148,7 @@ const Portofolio = () => {
                                             <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
                                                 {item.deskripsi}
                                             </p>
-                                            
+
                                             {/* Date Info */}
                                             <div className="flex justify-between items-end">
                                                 <div className="text-left">
@@ -167,7 +166,7 @@ const Portofolio = () => {
                                                         })}
                                                     </p>
                                                 </div>
-                                                
+
                                                 {/* Arrow Icon */}
                                                 <svg className="w-4 h-4 text-[#3674B5] dark:text-[#A1E3F9] opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
