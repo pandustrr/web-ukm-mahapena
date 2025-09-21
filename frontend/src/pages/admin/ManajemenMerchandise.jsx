@@ -551,22 +551,24 @@ function ManajemenMerchandise() {
                                     return (
                                         <tr
                                             key={c.id}
-                                            className={`transition-colors duration-200 ${isEditing
+                                            className={`transition-colors duration-200 ${
+                                                isEditing 
                                                     ? "bg-green-50 border-l-4 border-green-500"
                                                     : isSelected
-                                                        ? "bg-blue-50 border-l-4 border-blue-500"
-                                                        : "hover:bg-gray-50"
-                                                }`}
+                                                    ? "bg-blue-50 border-l-4 border-blue-500"
+                                                    : "hover:bg-gray-50"
+                                            }`}
                                         >
                                             <td className="px-4 py-3 text-gray-800 font-medium">{c.name}</td>
                                             <td className="px-4 py-3 text-center">
                                                 <div className="flex justify-center gap-2 flex-wrap">
                                                     <button
                                                         onClick={() => handleEditCategory(c)}
-                                                        className={`flex items-center gap-1 px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 ${isEditing
+                                                        className={`flex items-center gap-1 px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 ${
+                                                            isEditing
                                                                 ? "bg-green-200 text-green-800 hover:bg-green-300"
                                                                 : "bg-yellow-100 hover:bg-yellow-200 text-yellow-700"
-                                                            }`}
+                                                        }`}
                                                         disabled={loading}
                                                     >
                                                         <Edit3 size={14} />
@@ -847,108 +849,110 @@ function ManajemenMerchandise() {
                         </div>
                     </form>
 
-                    <div className="overflow-x-auto">
-                        <table className="w-full rounded-lg overflow-hidden">
-                            <thead className="bg-gray-100">
-                                <tr>
-                                    <th className="px-4 py-3 text-left font-medium text-gray-700">Gambar</th>
-                                    <th className="px-4 py-3 text-left font-medium text-gray-700">Nama</th>
-                                    <th className="px-4 py-3 text-left font-medium text-gray-700">Harga</th>
-                                    <th className="px-4 py-3 text-left font-medium text-gray-700">Stok</th>
-                                    <th className="px-4 py-3 text-left font-medium text-gray-700">Ukuran</th>
-                                    <th className="px-4 py-3 text-left font-medium text-gray-700">Warna</th>
-                                    <th className="px-4 py-3 text-center font-medium text-gray-700">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
-                                {filteredMerchandises.length > 0 ? (
-                                    filteredMerchandises.map((m) => {
-                                        const isEditing = formMerchandise.id === m.id;
-                                        return (
-                                            <tr
-                                                key={m.id}
-                                                className={`transition-colors duration-200 ${isEditing
-                                                        ? "bg-green-50 border-l-4 border-green-500"
-                                                        : "hover:bg-gray-50"
-                                                    }`}
-                                            >
-                                                <td className="px-4 py-3">
-                                                    {m.image ? (
-                                                        <img
-                                                            src={`http://localhost:8000/storage/${m.image}`}
-                                                            alt={m.name}
-                                                            className="w-12 h-12 object-cover rounded"
-                                                            onError={(e) => {
-                                                                e.target.src = 'https://via.placeholder.com/64?text=No+Image';
-                                                            }}
-                                                        />
-                                                    ) : (
-                                                        <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center">
-                                                            <ImageIcon size={20} className="text-gray-400" />
-                                                        </div>
-                                                    )}
-                                                </td>
-                                                <td className="px-4 py-3 text-gray-800 font-medium">{m.name}</td>
-                                                <td className="px-4 py-3 text-gray-600">Rp {Number(m.price).toLocaleString('id-ID')}</td>
-                                                <td className="px-4 py-3 text-gray-600">{m.stock}</td>
-                                                <td className="px-4 py-3 text-gray-600">
-                                                    {m.sizes && m.sizes.length > 0 ? (
-                                                        <div className="flex flex-wrap gap-1">
-                                                            {m.sizes.map((size, i) => (
-                                                                <span key={i} className="bg-gray-200 px-2 py-1 rounded text-xs">
-                                                                    {size}
-                                                                </span>
-                                                            ))}
-                                                        </div>
-                                                    ) : "-"}
-                                                </td>
-                                                <td className="px-4 py-3 text-gray-600">
-                                                    {m.colors && m.colors.length > 0 ? (
-                                                        <div className="flex flex-wrap gap-1">
-                                                            {m.colors.map((color, i) => (
-                                                                <span key={i} className="bg-gray-200 px-2 py-1 rounded text-xs">
-                                                                    {color}
-                                                                </span>
-                                                            ))}
-                                                        </div>
-                                                    ) : "-"}
-                                                </td>
-                                                <td className="px-4 py-3 text-center">
-                                                    <div className="flex justify-center gap-2">
-                                                        <button
-                                                            onClick={() => handleEditMerchandise(m)}
-                                                            className={`flex items-center gap-1 px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 ${isEditing
-                                                                    ? "bg-green-200 text-green-800 hover:bg-green-300"
-                                                                    : "bg-yellow-100 hover:bg-yellow-200 text-yellow-700"
-                                                                }`}
-                                                            disabled={isSaving}
-                                                        >
-                                                            <Edit3 size={14} />
-                                                            {isEditing ? "Sedang Diedit" : "Edit"}
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleDeleteMerchandise(m.id)}
-                                                            className="flex items-center gap-1 px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded-md text-sm font-medium transition-colors duration-200"
-                                                            disabled={isSaving}
-                                                        >
-                                                            <Trash2 size={14} />
-                                                            Hapus
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })
+<div className="overflow-x-auto">
+    <table className="w-full rounded-lg overflow-hidden">
+        <thead className="bg-gray-100">
+            <tr>
+                <th className="px-4 py-3 text-left font-medium text-gray-700">Gambar</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-700">Nama</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-700">Harga</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-700">Stok</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-700">Ukuran</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-700">Warna</th>
+                <th className="px-4 py-3 text-center font-medium text-gray-700">Aksi</th>
+            </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+            {filteredMerchandises.length > 0 ? (
+                filteredMerchandises.map((m) => {
+                    const isEditing = formMerchandise.id === m.id;
+                    return (
+                        <tr 
+                            key={m.id} 
+                            className={`transition-colors duration-200 ${
+                                isEditing 
+                                    ? "bg-green-50 border-l-4 border-green-500"
+                                    : "hover:bg-gray-50"
+                            }`}
+                        >
+                            <td className="px-4 py-3">
+                                {m.image ? (
+                                    <img
+                                        src={`http://localhost:8000/storage/${m.image}`}
+                                        alt={m.name}
+                                        className="w-12 h-12 object-cover rounded"
+                                        onError={(e) => {
+                                            e.target.src = 'https://via.placeholder.com/64?text=No+Image';
+                                        }}
+                                    />
                                 ) : (
-                                    <tr>
-                                        <td colSpan="7" className="px-4 py-6 text-center text-gray-500">
-                                            Belum ada merchandise untuk kategori ini
-                                        </td>
-                                    </tr>
+                                    <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center">
+                                        <ImageIcon size={20} className="text-gray-400" />
+                                    </div>
                                 )}
-                            </tbody>
-                        </table>
-                    </div>
+                            </td>
+                            <td className="px-4 py-3 text-gray-800 font-medium">{m.name}</td>
+                            <td className="px-4 py-3 text-gray-600">Rp {Number(m.price).toLocaleString('id-ID')}</td>
+                            <td className="px-4 py-3 text-gray-600">{m.stock}</td>
+                            <td className="px-4 py-3 text-gray-600">
+                                {m.sizes && m.sizes.length > 0 ? (
+                                    <div className="flex flex-col gap-1">
+                                        {m.sizes.map((size, i) => (
+                                            <span key={i} className="bg-gray-200 px-2 py-1 rounded text-xs">
+                                                {size}
+                                            </span>
+                                        ))}
+                                    </div>
+                                ) : "-"}
+                            </td>
+                            <td className="px-4 py-3 text-gray-600">
+                                {m.colors && m.colors.length > 0 ? (
+                                    <div className="flex flex-col gap-1">
+                                        {m.colors.map((color, i) => (
+                                            <span key={i} className="bg-gray-200 px-2 py-1 rounded text-xs">
+                                                {color}
+                                            </span>
+                                        ))}
+                                    </div>
+                                ) : "-"}
+                            </td>
+                            <td className="px-4 py-3 text-center">
+                                <div className="flex justify-center gap-2">
+                                    <button
+                                        onClick={() => handleEditMerchandise(m)}
+                                        className={`flex items-center gap-1 px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 ${
+                                            isEditing
+                                                ? "bg-green-200 text-green-800 hover:bg-green-300"
+                                                : "bg-yellow-100 hover:bg-yellow-200 text-yellow-700"
+                                        }`}
+                                        disabled={isSaving}
+                                    >
+                                        <Edit3 size={14} />
+                                        {isEditing ? "Sedang Diedit" : "Edit"}
+                                    </button>
+                                    <button
+                                        onClick={() => handleDeleteMerchandise(m.id)}
+                                        className="flex items-center gap-1 px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded-md text-sm font-medium transition-colors duration-200"
+                                        disabled={isSaving}
+                                    >
+                                        <Trash2 size={14} />
+                                        Hapus
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    );
+                })
+            ) : (
+                <tr>
+                    <td colSpan="7" className="px-4 py-6 text-center text-gray-500">
+                        Belum ada merchandise untuk kategori ini
+                    </td>
+                </tr>
+            )}
+        </tbody>
+    </table>
+</div>
                 </div>
             )}
 
