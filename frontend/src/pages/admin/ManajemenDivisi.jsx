@@ -1,14 +1,14 @@
 // File: src/pages/admin/ManajemenDivisi.jsx
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
-import { 
-    Plus, 
-    Edit3, 
-    Trash2, 
-    Check, 
-    X, 
-    Calendar, 
-    Users, 
+import {
+    Plus,
+    Edit3,
+    Trash2,
+    Check,
+    X,
+    Calendar,
+    Users,
     Filter,
     AlertTriangle,
     CheckCircle,
@@ -50,7 +50,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, type = 
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div 
+            <div
                 className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
                 onClick={onClose}
             />
@@ -115,7 +115,7 @@ function ManajemenDivisi() {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deleteTarget, setDeleteTarget] = useState({ type: '', id: null, name: '' });
     const [isDeleting, setIsDeleting] = useState(false);
-    
+
     // State untuk loading
     const [isSaving, setIsSaving] = useState(false);
 
@@ -330,9 +330,30 @@ function ManajemenDivisi() {
         }
     };
 
-    // Fungsi untuk memotong teks panjang
+    // Fungsi untuk memotong teks panjang dan menangani newlines
     const truncateText = (text, maxLength) => {
         if (!text) return '-';
+
+        // Jika teks mengandung newlines, tampilkan dengan line breaks
+        if (text.includes('\n')) {
+            const lines = text.split('\n');
+            const truncatedLines = lines.map(line =>
+                line.length > maxLength ? line.substring(0, maxLength) + '...' : line
+            );
+
+            return (
+                <div className="whitespace-pre-line">
+                    {truncatedLines.map((line, index) => (
+                        <div key={index}>
+                            {line}
+                            {index < truncatedLines.length - 1 && <br />}
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+
+        // Jika tidak ada newlines, potong seperti biasa
         if (text.length <= maxLength) return text;
         return text.substring(0, maxLength) + '...';
     };
@@ -376,8 +397,8 @@ function ManajemenDivisi() {
                         autoFocus={formPeriode.id ? true : false}
                     />
                     <div className="flex gap-2">
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors duration-200"
                             disabled={isSaving}
                         >
@@ -428,26 +449,24 @@ function ManajemenDivisi() {
                                     const isSelected = String(selectedPeriodeRow) === String(p.id);
                                     const isEditing = formPeriode.id === p.id;
                                     return (
-                                        <tr 
-                                            key={p.id} 
-                                            className={`transition-colors duration-200 ${
-                                                isEditing 
-                                                    ? "bg-green-50 border-l-4 border-green-500"
-                                                    : isSelected
-                                                    ? "bg-blue-50 border-l-4 border-blue-500" 
+                                        <tr
+                                            key={p.id}
+                                            className={`transition-colors duration-200 ${isEditing
+                                                ? "bg-green-50 border-l-4 border-green-500"
+                                                : isSelected
+                                                    ? "bg-blue-50 border-l-4 border-blue-500"
                                                     : "hover:bg-gray-50"
-                                            }`}
+                                                }`}
                                         >
                                             <td className="px-4 py-3 text-gray-800 font-medium">{p.nama_periode}</td>
                                             <td className="px-4 py-3 text-center">
                                                 <div className="flex justify-center gap-2 flex-wrap">
                                                     <button
                                                         onClick={() => handleEditPeriode(p)}
-                                                        className={`flex items-center gap-1 px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 ${
-                                                            isEditing
-                                                                ? "bg-green-200 text-green-800 hover:bg-green-300"
-                                                                : "bg-yellow-100 hover:bg-yellow-200 text-yellow-700"
-                                                        }`}
+                                                        className={`flex items-center gap-1 px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 ${isEditing
+                                                            ? "bg-green-200 text-green-800 hover:bg-green-300"
+                                                            : "bg-yellow-100 hover:bg-yellow-200 text-yellow-700"
+                                                            }`}
                                                         disabled={isSaving}
                                                     >
                                                         <Edit3 size={14} />
@@ -463,11 +482,10 @@ function ManajemenDivisi() {
                                                     </button>
                                                     <button
                                                         onClick={() => handleSelectPeriode(p.id)}
-                                                        className={`flex items-center gap-1 px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 ${
-                                                            isSelected
-                                                                ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
-                                                                : "bg-blue-50 text-blue-600 hover:bg-blue-100"
-                                                        }`}
+                                                        className={`flex items-center gap-1 px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 ${isSelected
+                                                            ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                                                            : "bg-blue-50 text-blue-600 hover:bg-blue-100"
+                                                            }`}
                                                         disabled={isSaving}
                                                     >
                                                         <Check size={14} />
@@ -559,8 +577,8 @@ function ManajemenDivisi() {
                         ></textarea>
 
                         <div className="md:col-span-2 flex gap-3">
-                            <button 
-                                type="submit" 
+                            <button
+                                type="submit"
                                 className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200"
                                 disabled={isSaving}
                             >
@@ -614,13 +632,12 @@ function ManajemenDivisi() {
                                     filteredDivisis.map((d) => {
                                         const isEditing = formDivisi.id === d.id;
                                         return (
-                                            <tr 
-                                                key={d.id} 
-                                                className={`transition-colors duration-200 ${
-                                                    isEditing 
+                                            <tr
+                                                key={d.id}
+                                                className={`transition-colors duration-200 ${isEditing
                                                         ? "bg-green-50 border-l-4 border-green-500"
                                                         : "hover:bg-gray-50"
-                                                }`}
+                                                    }`}
                                             >
                                                 <td className="px-4 py-3 text-gray-800 font-medium">
                                                     <div className="max-w-[150px]">
@@ -638,7 +655,7 @@ function ManajemenDivisi() {
                                                 </td>
                                                 <td className="px-4 py-3 text-gray-600">
                                                     <div className="max-w-[200px]">
-                                                        <div title={d.pengertian}>
+                                                        <div title={d.pengertian} className="whitespace-pre-line">
                                                             {truncateText(d.pengertian, 50)}
                                                         </div>
                                                     </div>
@@ -652,7 +669,7 @@ function ManajemenDivisi() {
                                                 </td>
                                                 <td className="px-4 py-3 text-gray-600">
                                                     <div className="max-w-[200px]">
-                                                        <div title={d.deskripsi}>
+                                                        <div title={d.deskripsi} className="whitespace-pre-line">
                                                             {truncateText(d.deskripsi, 50)}
                                                         </div>
                                                     </div>
@@ -661,11 +678,10 @@ function ManajemenDivisi() {
                                                     <div className="flex justify-center gap-2">
                                                         <button
                                                             onClick={() => handleEditDivisi(d)}
-                                                            className={`flex items-center gap-1 px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 ${
-                                                                isEditing
+                                                            className={`flex items-center gap-1 px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 ${isEditing
                                                                     ? "bg-green-200 text-green-800 hover:bg-green-300"
                                                                     : "bg-yellow-100 hover:bg-yellow-200 text-yellow-700"
-                                                            }`}
+                                                                }`}
                                                             disabled={isSaving}
                                                         >
                                                             <Edit3 size={14} />

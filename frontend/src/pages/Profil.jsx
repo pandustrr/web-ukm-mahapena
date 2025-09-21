@@ -378,7 +378,7 @@ const Profil = () => {
                 </div>
             </section>
 
-{/* Modal detail divisi */}
+            {/* Modal detail divisi */}
             {selectedDivisi && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-300">
                     <div
@@ -434,7 +434,7 @@ const Profil = () => {
                                                 Pengertian
                                             </h4>
                                             <div className="prose max-w-none dark:prose-invert">
-                                                <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm font-light">
+                                                <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm font-light whitespace-pre-line">
                                                     {selectedDivisi.pengertian}
                                                 </p>
                                             </div>
@@ -462,7 +462,7 @@ const Profil = () => {
                                     <div className="absolute -top-4 left-0 w-10 h-0.5 bg-gradient-to-r from-[#3674B5] to-[#A1E3F9] rounded-full"></div>
                                     <div className="pt-3">
                                         <div className="prose max-w-none dark:prose-invert">
-                                            <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm font-light">
+                                            <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm font-light whitespace-pre-line">
                                                 {selectedDivisi.deskripsi}
                                             </p>
                                         </div>
@@ -473,8 +473,8 @@ const Profil = () => {
                     </div>
                 </div>
             )}
-
-{/* Pengurus & Alumni Section */}
+            
+            {/* Pengurus & Alumni Section */}
             <section className="py-16 bg-gradient-to-br from-slate-50 via-white to-blue-50/20 dark:from-slate-900 dark:via-slate-800 dark:to-slate-800 relative overflow-hidden">
                 {/* Background Elements */}
                 <div className="absolute inset-0">
@@ -616,7 +616,7 @@ const Profil = () => {
 
                                                     {/* Overlay gradient */}
                                                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                                                    
+
                                                     {/* Nama & Prodi overlay */}
                                                     <div className="absolute bottom-0 left-0 right-0 p-2 lg:p-4">
                                                         <h5 className="font-bold text-sm lg:text-lg text-white drop-shadow-lg">{p.nama}</h5>

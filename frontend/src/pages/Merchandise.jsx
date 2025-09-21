@@ -574,8 +574,8 @@ const Merchandise = () => {
                                     <button
                                         onClick={() => setActiveTab("detail")}
                                         className={`flex-1 py-1.5 px-2 rounded-md text-xs font-medium transition-all duration-200 ${activeTab === "detail"
-                                                ? "bg-white dark:bg-slate-600 text-gray-900 dark:text-white shadow-sm"
-                                                : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+                                            ? "bg-white dark:bg-slate-600 text-gray-900 dark:text-white shadow-sm"
+                                            : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                                             }`}
                                     >
                                         Detail
@@ -583,8 +583,8 @@ const Merchandise = () => {
                                     <button
                                         onClick={() => setActiveTab("pemesanan")}
                                         className={`flex-1 py-1.5 px-2 rounded-md text-xs font-medium transition-all duration-200 ${activeTab === "pemesanan"
-                                                ? "bg-white dark:bg-slate-600 text-gray-900 dark:text-white shadow-sm"
-                                                : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+                                            ? "bg-white dark:bg-slate-600 text-gray-900 dark:text-white shadow-sm"
+                                            : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                                             }`}
                                     >
                                         Pemesanan
@@ -645,10 +645,10 @@ const Merchandise = () => {
                                                 {selectedProduct.price}
                                             </h4>
                                             <div className={`px-2 py-1 rounded-full text-xs font-medium ${selectedProduct.stock > 10
-                                                    ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-                                                    : selectedProduct.stock > 0
-                                                        ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
-                                                        : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                                                ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                                                : selectedProduct.stock > 0
+                                                    ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
+                                                    : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
                                                 }`}>
                                                 Stok: {selectedProduct.stock}
                                             </div>
@@ -735,7 +735,7 @@ const Merchandise = () => {
                                                         <button
                                                             onClick={() => handleJumlahChange(-1)}
                                                             disabled={formData.jumlah <= 1}
-                                                            className="w-8 h-8 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-white hover:bg-gray-100 dark:hover:bg-slate-600 transition-colors text-sm"
+                                                            className="w-8 h-8 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-600 transition-colors text-sm"
                                                         >
                                                             −
                                                         </button>
@@ -745,7 +745,7 @@ const Merchandise = () => {
                                                         <button
                                                             onClick={() => handleJumlahChange(1)}
                                                             disabled={formData.jumlah >= selectedProduct.stock}
-                                                            className="w-8 h-8 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-white hover:bg-gray-100 dark:hover:bg-slate-600 transition-colors text-sm"
+                                                            className="w-8 h-8 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-600 transition-colors text-sm"
                                                         >
                                                             +
                                                         </button>
@@ -754,22 +754,22 @@ const Merchandise = () => {
                                                         Max: {selectedProduct.stock} pcs
                                                     </p>
                                                 </div>
-
+                                                
                                                 {/* Size Selection */}
                                                 {selectedProduct.sizes && selectedProduct.sizes.length > 0 && (
                                                     <div className="space-y-1">
                                                         <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
                                                             Ukuran
                                                         </label>
-                                                        <div className="grid grid-cols-2 gap-1">
+                                                        <div className="flex flex-col gap-1"> {/* Ubah dari grid-cols-2 ke flex-col */}
                                                             {selectedProduct.sizes.map((size, index) => (
                                                                 <button
                                                                     key={index}
                                                                     type="button"
                                                                     onClick={() => setFormData({ ...formData, ukuran: size })}
-                                                                    className={`py-1.5 px-2 rounded text-xs font-medium transition-colors ${formData.ukuran === size
-                                                                            ? "bg-blue-600 text-white"
-                                                                            : "bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600"
+                                                                    className={`py-1.5 px-2 rounded text-xs font-medium transition-colors text-left ${formData.ukuran === size
+                                                                        ? "bg-blue-500 text-white"
+                                                                        : "bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600"
                                                                         }`}
                                                                 >
                                                                     {size}
@@ -785,15 +785,15 @@ const Merchandise = () => {
                                                         <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
                                                             Warna
                                                         </label>
-                                                        <div className="grid grid-cols-2 gap-1">
+                                                        <div className="flex flex-col gap-1"> {/* Ubah dari grid-cols-2 ke flex-col */}
                                                             {selectedProduct.colors.map((color, index) => (
                                                                 <button
                                                                     key={index}
                                                                     type="button"
                                                                     onClick={() => setFormData({ ...formData, warna: color })}
-                                                                    className={`py-1.5 px-2 rounded text-xs font-medium transition-colors ${formData.warna === color
-                                                                            ? "bg-purple-600 text-white"
-                                                                            : "bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600"
+                                                                    className={`py-1.5 px-2 rounded text-xs font-medium transition-colors text-left ${formData.warna === color
+                                                                        ? "bg-blue-500 text-white"
+                                                                        : "bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600"
                                                                         }`}
                                                                 >
                                                                     {color}
@@ -801,8 +801,7 @@ const Merchandise = () => {
                                                             ))}
                                                         </div>
                                                     </div>
-                                                )}
-                                            </div>
+                                                )}                                            </div>
 
                                             {/* Customer Information */}
                                             <div className="space-y-2 pt-1 border-t border-gray-200 dark:border-slate-700">
