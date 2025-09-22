@@ -17,6 +17,9 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import CreateBlog from "./pages/admin/CreateBlog";
 import EditBlog from "./pages/admin/EditBlog";
 import DetailBlog from "./pages/DetailBlog";
+import ManajemenProker from "./pages/admin/ManajemenProker";
+import CreateProker from "./pages/admin/CreateProker";
+import EditProker from "./pages/admin/EditProker";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -51,6 +54,8 @@ function App() {
             {/* Halaman admin */}
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/proker/create" element={<CreateProker />} />
+            <Route path="/admin/proker/update/:id" element={<EditProker />} />
             <Route path="/admin/blogs/create" element={<CreateBlog />} />
             <Route path="/admin/blogs/update/:id" element={<EditBlog />} />
           </Routes>

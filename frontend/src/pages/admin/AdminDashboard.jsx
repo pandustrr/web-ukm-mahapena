@@ -3,6 +3,7 @@ import ManajemenBlog from "./ManajemenBlog";
 import ManajemenPengurus from "./ManajemenPengurus";
 import SidebarAdmin from "./SidebarAdmin";
 import { useLocation } from "react-router-dom";
+import ManajemenProker from "./ManajemenProker";
 
 export default function AdminDashboard() {
   const [activePage, setActivePage] = useState("dashboard");
@@ -41,6 +42,9 @@ export default function AdminDashboard() {
 
       case "pengurus":
         return <ManajemenPengurus />;
+
+      case "proker":
+        return <ManajemenProker />;
     }
   };
 

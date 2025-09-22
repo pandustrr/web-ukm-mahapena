@@ -192,14 +192,6 @@ class BlogController extends Controller
     {
         $blog = Blog::findOrFail($id);
 
-        // Authorization check
-        // if (auth()->user()->role !== 'admin' && $blog->author_id !== auth()->id()) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'Unauthorized to delete this blog'
-        //     ], 403);
-        // }
-
         try {
             // Delete featured image if exists
             if ($blog->featured_image) {

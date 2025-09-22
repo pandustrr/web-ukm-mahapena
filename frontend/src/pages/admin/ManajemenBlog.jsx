@@ -224,6 +224,9 @@ const ManajemenBlog = () => {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  No
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Judul Blog
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -260,21 +263,26 @@ const ManajemenBlog = () => {
                   </td>
                 </tr>
               ) : filteredBlogs.length > 0 ? (
-                filteredBlogs.map((blog) => (
+                filteredBlogs.map((blog, index) => (
                   <tr key={blog.id} className="border-t">
-                    <td className="px-4 py-2">{blog.title}</td>
-                    <td className="px-4 py-2">{blog.category?.name || "-"}</td>
+                    <td className="px-6 py-4">{index + 1}</td>
+                    <td className="px-6 py-4">{blog.title}</td>
+                    <td className="px-6 py-4">{blog.category?.name || "-"}</td>
                     <td
-                      className={`px-4 py-2 capitalize ${getStatusColor(
+                      className={`px-6 py-4 capitalize ${getStatusColor(
                         blog.status
                       )}`}
                     >
                       {blog.status}
                     </td>
-                    <td className="px-4 py-2">
-                      {new Date(blog.created_at).toLocaleDateString()}
+                    <td className="px-6 py-4">
+                      {new Date(blog.created_at).toLocaleDateString("id-ID", {
+                        day: "2-digit",
+                        month: "long", // <-- otomatis jadi nama bulan
+                        year: "numeric",
+                      })}
                     </td>
-                    <td className="px-4 py-2 flex gap-2">
+                    <td className="px-6 py-4 flex gap-2">
                       <Link
                         to={`/admin/blogs/update/${blog.id}`}
                         className="text-blue-600 hover:underline"

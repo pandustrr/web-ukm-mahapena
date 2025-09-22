@@ -1,4 +1,10 @@
-import { BarChart3, FileText, ShoppingBag, Users } from "lucide-react";
+import {
+  BarChart3,
+  FileText,
+  Handshake,
+  ShoppingBag,
+  Users,
+} from "lucide-react";
 import { useState } from "react";
 
 function SidebarAdmin({ activePage, setActivePage }) {
@@ -25,6 +31,11 @@ function SidebarAdmin({ activePage, setActivePage }) {
             id: "blog",
             label: "Blog",
             icon: <FileText size={20} />,
+          },
+          {
+            id: "proker",
+            label: "Proker",
+            icon: <Handshake size={20} />,
           },
         ].map((item) => (
           <li key={item.id}>

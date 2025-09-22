@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { Editor } from "@tinymce/tinymce-react";
 
-function CreateBlog() {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [categoryId, setCategoryId] = useState("");
-  const [status, setStatus] = useState("draft");
+function CreateProker() {
+  const [nama, setNama] = useState("");
+  const [deskripsi, setDeskripsi] = useState("");
+  const [tanggal, setTanggal] = useState("");
+  const [status, setStatus] = useState("");
   const [featuredImage, setFeaturedImage] = useState(null);
-  const [categories, setCategories] = useState([]);
+
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -33,28 +32,10 @@ function CreateBlog() {
     }).then((result) => {
       if (result.isConfirmed) {
         MySwal.fire("Dibatalkan!", "Perubahan tidak disimpan.", "success");
-        navigate("/admin/dashboard", { state: { page: "blog" } });
+        navigate("/admin/dashboard", { state: { page: "proker" } });
       }
     });
   };
-
-  const createExcerpt = (text, wordLimit = 20) => {
-    // hapus semua tag html
-    const cleanText = text.replace(/<[^>]+>/g, "");
-
-    const words = cleanText.split(" ").filter((w) => w.trim() !== "");
-    return (
-      words.slice(0, wordLimit).join(" ") +
-      (words.length > wordLimit ? "..." : "")
-    );
-  };
-
-  useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/api/categories")
-      .then((res) => setCategories(res.data.data || res.data))
-      .catch((err) => console.error(err));
-  }, []);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -73,35 +54,28 @@ function CreateBlog() {
 
     try {
       const formData = new FormData();
-      formData.append("title", title);
-      formData.append("content", content);
-      formData.append("excerpt", createExcerpt(content, 10));
-      formData.append("category_id", categoryId);
-      formData.append("author_id", admin_id);
-      formData.append("status", status);
+      formData.append("nama", nama);
+      formData.append("deskripsi", deskripsi);
+      formData.append("tanggal", tanggal);
       if (featuredImage) {
         formData.append("featured_image", featuredImage);
       }
-      formData.append("meta_title", title);
-      formData.append("meta_description", createExcerpt(content, 20));
 
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/blogs",
+        "http://127.0.0.1:8000/api/proker",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
 
-      setMessage("Blog berhasil ditambahkan!");
+      setMessage("Proker berhasil ditambahkan!");
       MySwal.fire("Ditambahkan!", message, "success");
-      navigate("/admin/dashboard", { state: { page: "blog" } });
+      navigate("/admin/dashboard", { state: { page: "proker" } });
 
       // reset form
       setTitle("");
       setContent("");
-      setCategoryId("");
-      setStatus("draft");
       setFeaturedImage(null);
     } catch (err) {
       console.error(err);
@@ -112,12 +86,14 @@ function CreateBlog() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-2xl">
+    <div className="max-w-4xl mx-auto mt-2 bg-white p-8 rounded-2xl">
       {/* Header */}
       <div className="border-b pb-4 mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Tambah Blog</h1>
+        <h1 className="text-3xl font-bold text-gray-800">
+          Tambah Program Kerja
+        </h1>
         <p className="text-gray-500 text-sm mt-1 capitalize">
-          Lengkapi form berikut untuk menambahkan blog baru
+          Lengkapi form berikut untuk menambahkan program kerja baru
         </p>
       </div>
 
@@ -136,69 +112,55 @@ function CreateBlog() {
           </label>
           <input
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Masukkan judul blog..."
+            value={nama}
+            onChange={(e) => setNama(e.target.value)}
+            placeholder="Masukkan nama proker..."
             className="w-full border-gray-300 rounded-lg p-3 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none placeholder:text-black"
           />
         </div>
 
+        {/* Konten */}
         <div>
-          <label className="block font-medium mb-2">Konten</label>
-          <Editor
-            apiKey="g439ip37desi0389rkv49zztfy42nk9kik6fun5x3ii2dpf6" // bisa pakai gratis, atau daftar untuk API key
-            init={{
-              height: 400,
-              menubar: false,
-              plugins: [
-                "advlist autolink lists link image charmap preview anchor",
-                "searchreplace visualblocks code fullscreen",
-                "insertdatetime media table code help wordcount",
-              ],
-              toolbar:
-                "undo redo | formatselect | bold italic backcolor | \
-                 alignleft aligncenter alignright alignjustify | \
-                 bullist numlist outdent indent | removeformat | help",
-            }}
-            value={content}
-            onEditorChange={(newContent) => setContent(newContent)}
+          <label className="block font-medium mb-2">Deskripsi</label>
+          <textarea
+            value={deskripsi}
+            onChange={(e) => setDeskripsi(e.target.value)}
+            rows="6"
+            placeholder="Tulis deskrip program kerja di sini..."
+            className="w-full border-gray-300 rounded-lg p-3 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none placeholder:text-black"
           />
         </div>
 
-        {/* Kategori & Status */}
-        <div className="grid md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Kategori
-            </label>
-            <select
-              value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value)}
-              className="w-full border-gray-300 rounded-lg p-3 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            >
-              <option value="">Pilih kategori</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-          </div>
+        {/* Tanggal */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Tanggal
+          </label>
+          <input
+            type="date"
+            value={tanggal}
+            onChange={(e) => setTanggal(e.target.value)}
+            className="w-full border-gray-300 rounded-lg p-3 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none placeholder:text-black"
+          />
+        </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Status
-            </label>
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              className="w-full border-gray-300 rounded-lg p-3 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            >
-              <option value="draft">Draft</option>
-              <option value="published">Published</option>
-              <option value="archived">Archived</option>
-            </select>
-          </div>
+        {/* Status */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Kategori
+          </label>
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="w-full border-gray-300 rounded-lg p-3 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          >
+            <option value="" disabled>
+              Pilih Status
+            </option>
+            <option value="Pending">Pending</option>
+            <option value="Berjalan">Berjalan</option>
+            <option value="Selesai">Selesai</option>
+          </select>
         </div>
 
         {/* Upload Gambar */}
@@ -249,4 +211,4 @@ function CreateBlog() {
   );
 }
 
-export default CreateBlog;
+export default CreateProker;

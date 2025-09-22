@@ -148,7 +148,7 @@ function EditBlog() {
   return (
     <div className="max-w-3xl mx-auto mt-15 bg-white p-6 rounded-xl ">
       <div className="flex ">
-        <h1 className="text-2xl font-bold mb-4">Tambah Blog</h1>
+        <h1 className="text-2xl font-bold mb-4">Edit Blog</h1>
       </div>
       {message && <p className="mb-4 text-blue-600">{message}</p>}
 
@@ -189,10 +189,11 @@ function EditBlog() {
                 "insertdatetime media table code help wordcount",
               ],
               toolbar:
-                "undo redo | formatselect | bold italic backcolor | \
+                "undo redo | blocks fontfamily fontsize | formatselect | bold italic backcolor textcolor | \
                          alignleft aligncenter alignright alignjustify | \
                          bullist numlist outdent indent | removeformat | help",
             }}
+            value={form.content}
             onEditorChange={(newContent) =>
               setForm((prev) => ({ ...prev, content: newContent }))
             }

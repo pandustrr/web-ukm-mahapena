@@ -5,25 +5,9 @@ import { Loader } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Blog = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  // const [isVisible, setIsVisible] = useState(false);
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setIsVisible(true);
-    const handleScroll = () => {
-      const elements = document.querySelectorAll(".fade-in");
-      elements.forEach((el) => {
-        const elementTop = el.getBoundingClientRect().top;
-        if (elementTop < window.innerHeight - 100) {
-          el.classList.add("visible");
-        }
-      });
-    };
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   // fetch api
   useEffect(() => {
@@ -67,9 +51,9 @@ const Blog = () => {
   }, []);
 
   return (
-    <div className="pt-24 pb-16">
+    <div className="pt-24 pb-16 bg-white dark:bg-blue-900">
       {/* Header */}
-      <section className="py-12 bg-gradient-to-r from-[#113F67] to-[#3674B5] text-white">
+      <section className="py-12 bg-gradient-to-r from-[#113F67] to-[#3674B5] dark:from-blue-100 dark:to-blue-300 text-white dark:text-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl font-bold mb-4">Blog Mahapena</h1>
           <p className="text-xl">
@@ -78,10 +62,10 @@ const Blog = () => {
         </div>
       </section>
 
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-white dark:bg-blue-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 fade-in">
-            <h2 className="text-3xl font-bold text-[#3674B5]">
+            <h2 className="text-3xl font-bold text-[#3674B5] dark:text-blue-100">
               Artikel Terbaru
             </h2>
             <div className="w-20 h-1 bg-[#A1E3F9] mx-auto mt-4"></div>
@@ -98,7 +82,7 @@ const Blog = () => {
                 .map((article, index) => (
                   <div
                     key={index}
-                    className="fade-in bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
+                    className="fade-in bg-white dark:bg-blue-900 dark:border dark:border-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
                   >
                     <img
                       src={
@@ -110,19 +94,24 @@ const Blog = () => {
                       className="w-full h-48 object-cover"
                     />
                     <div className="p-6">
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-gray-500 dark:text-gray-100">
                         {new Date(article.created_at).toLocaleDateString(
-                          "id-ID"
+                          "id-ID",
+                          {
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric",
+                          }
                         )}
                       </span>
-                      <h3 className="text-xl font-semibold text-[#3674B5] mb-3 mt-2">
+                      <h3 className="text-xl font-semibold text-[#3674B5] dark:text-blue-100 mb-3 mt-2">
                         {article.title}
                       </h3>
-                      <p className="text-gray-600 mb-4">
-                        {article.excerpt ||
-                          article.content?.substring(0, 100) + "..."}
+                      <p className="text-gray-600 dark:text-gray-100 mb-4">
+                        {article.content.replace(/<[^>]+>/g, "").slice(0, 100)}
+                        ...
                       </p>
-                      <button className="text-[#113F67] font-medium hover:text-[#3674B5] transition-colors">
+                      <button className="text-[#113F67] dark:text-[#91bbe0] font-medium hover:text-[#3674B5] transition-colors">
                         <Link to={`/blog/detail/${article.id}`}>
                           Baca Selengkapnya →
                         </Link>
@@ -135,7 +124,7 @@ const Blog = () => {
         </div>
       </section>
 
-      <style jsx>{`
+      {/* <style jsx>{`
         .fade-in {
           opacity: 0;
           transform: translateY(20px);
@@ -145,7 +134,7 @@ const Blog = () => {
           opacity: 1;
           transform: translateY(0);
         }
-      `}</style>
+      `}</style> */}
     </div>
   );
 };
