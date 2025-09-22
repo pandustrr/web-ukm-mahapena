@@ -428,47 +428,64 @@ function ManajemenAlumni() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {alumnis.length > 0 ? (
-                alumnis.map((item) => (
-                  <tr key={item.id} className="hover:bg-gray-50 transition-colors duration-200">
-                    <td className="px-4 py-3">
-                      {item.foto ? (
-                        <img
-                          src={`http://localhost:8000/storage/${item.foto}`}
-                          alt={item.nama}
-                          className="w-10 h-10 object-cover rounded-full"
-                        />
-                      ) : (
-                        <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                          <Image size={16} className="text-gray-500" />
+                alumnis.map((item) => {
+                  // Deteksi apakah baris ini sedang diedit
+                  const isEditingRow = editingId === item.id;
+                  
+                  return (
+                    <tr 
+                      key={item.id} 
+                      className={`transition-colors duration-200 ${
+                        isEditingRow 
+                          ? "bg-green-50 border-l-4 border-green-500" // Highlight baris yang sedang diedit
+                          : "hover:bg-gray-50"
+                      }`}
+                    >
+                      <td className="px-4 py-3">
+                        {item.foto ? (
+                          <img
+                            src={`http://localhost:8000/storage/${item.foto}`}
+                            alt={item.nama}
+                            className="w-10 h-10 object-cover rounded-full"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                            <Image size={16} className="text-gray-500" />
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 text-gray-800 font-medium">{item.nama}</td>
+                      <td className="px-4 py-3 text-gray-600">{item.prodi}</td>
+                      <td className="px-4 py-3 text-gray-600">{item.angkatan}</td>
+                      <td className="px-4 py-3 text-gray-600">{item.jabatan}</td>
+                      <td className="px-4 py-3 text-gray-600">{item.divisi}</td>
+                      <td className="px-4 py-3 text-gray-600">{item.periode}</td>
+                      <td className="px-4 py-3 text-center">
+                        <div className="flex justify-center gap-2">
+                          <button
+                            onClick={() => handleEdit(item)}
+                            className={`flex items-center gap-1 px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 ${
+                              isEditingRow
+                                ? "bg-green-200 text-green-800 hover:bg-green-300" // Tombol hijau saat sedang diedit
+                                : "bg-yellow-100 hover:bg-yellow-200 text-yellow-700"
+                            }`}
+                            disabled={isSaving}
+                          >
+                            <Edit3 size={14} />
+                            {isEditingRow ? "Sedang Diedit" : "Edit"} {/* Teks berubah */}
+                          </button>
+                          <button
+                            onClick={() => handleDeleteClick(item)}
+                            className="flex items-center gap-1 px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded-md text-sm font-medium transition-colors duration-200"
+                          >
+                            <Trash2 size={14} />
+                            Hapus
+                          </button>
                         </div>
-                      )}
-                    </td>
-                    <td className="px-4 py-3 text-gray-800 font-medium">{item.nama}</td>
-                    <td className="px-4 py-3 text-gray-600">{item.prodi}</td>
-                    <td className="px-4 py-3 text-gray-600">{item.angkatan}</td>
-                    <td className="px-4 py-3 text-gray-600">{item.jabatan}</td>
-                    <td className="px-4 py-3 text-gray-600">{item.divisi}</td>
-                    <td className="px-4 py-3 text-gray-600">{item.periode}</td>
-                    <td className="px-4 py-3 text-center">
-                      <div className="flex justify-center gap-2">
-                        <button
-                          onClick={() => handleEdit(item)}
-                          className="flex items-center gap-1 px-3 py-1 bg-yellow-100 hover:bg-yellow-200 text-yellow-700 rounded-md text-sm font-medium transition-colors duration-200"
-                        >
-                          <Edit3 size={14} />
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDeleteClick(item)}
-                          className="flex items-center gap-1 px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded-md text-sm font-medium transition-colors duration-200"
-                        >
-                          <Trash2 size={14} />
-                          Hapus
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
+                      </td>
+                    </tr>
+                  );
+                })
               ) : (
                 <tr>
                   <td colSpan="8" className="px-4 py-6 text-center text-gray-500">
