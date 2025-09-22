@@ -164,7 +164,7 @@ const Merchandise = () => {
             elements.forEach(el => {
                 if (!el.closest('.modal')) {
                     const elementTop = el.getBoundingClientRect().top;
-                    if (elementTop < window.innerHeight - 100) {
+                    if (elementTop < window.innerHeight - 5) {
                         el.classList.add('visible');
                     }
                 }
