@@ -1,12 +1,12 @@
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
-import { 
-    Plus, 
-    Edit3, 
-    Trash2, 
-    Check, 
-    X, 
-    Image, 
+import {
+    Plus,
+    Edit3,
+    Trash2,
+    Check,
+    X,
+    Image,
     Upload,
     AlertTriangle,
     CheckCircle,
@@ -48,7 +48,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, type = 
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div 
+            <div
                 className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
                 onClick={onClose}
             />
@@ -113,12 +113,12 @@ function ManajemenPortofolio() {
     });
     const [editingId, setEditingId] = useState(null);
     const [previewImage, setPreviewImage] = useState(null);
-    
+
     // Modal states
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deleteTarget, setDeleteTarget] = useState({ id: null, name: '' });
     const [isDeleting, setIsDeleting] = useState(false);
-    
+
     // State untuk loading
     const [isSaving, setIsSaving] = useState(false);
 
@@ -146,7 +146,7 @@ function ManajemenPortofolio() {
         if (e.target.name === "gambar") {
             const file = e.target.files[0];
             setFormData(prev => ({ ...prev, gambar: file }));
-            
+
             // Create preview URL
             if (file) {
                 const reader = new FileReader();
@@ -236,14 +236,14 @@ function ManajemenPortofolio() {
             gambar: null,
         });
         setEditingId(item.id);
-        
+
         // Set preview image dari data yang ada
         if (item.gambar) {
             setPreviewImage(`http://localhost:8000/storage/${item.gambar}`);
         } else {
             setPreviewImage(null);
         }
-        
+
         // Scroll ke form
         document.getElementById('portofolio-form')?.scrollIntoView({ behavior: 'smooth' });
     };
@@ -333,7 +333,7 @@ function ManajemenPortofolio() {
                         onChange={handleChange}
                         placeholder="Deskripsi prestasi atau portofolio"
                         rows="4"
-                        className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 resize-none"
+                        className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 resize"
                         disabled={isSaving}
                     ></textarea>
 
@@ -374,8 +374,8 @@ function ManajemenPortofolio() {
                     </div>
 
                     <div className="flex gap-3 pt-4">
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200"
                             disabled={isSaving}
                         >
@@ -435,13 +435,12 @@ function ManajemenPortofolio() {
                                 portofolios.map((item) => {
                                     const isEditing = editingId === item.id;
                                     return (
-                                        <tr 
-                                            key={item.id} 
-                                            className={`transition-colors duration-200 ${
-                                                isEditing 
+                                        <tr
+                                            key={item.id}
+                                            className={`transition-colors duration-200 ${isEditing
                                                     ? "bg-green-50 border-l-4 border-green-500"
                                                     : "hover:bg-gray-50"
-                                            }`}
+                                                }`}
                                         >
                                             <td className="px-4 py-3 text-gray-800 font-medium">
                                                 <div className="max-w-[200px]">
@@ -481,11 +480,10 @@ function ManajemenPortofolio() {
                                                 <div className="flex justify-center gap-2">
                                                     <button
                                                         onClick={() => handleEdit(item)}
-                                                        className={`flex items-center gap-1 px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 ${
-                                                            isEditing
+                                                        className={`flex items-center gap-1 px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200 ${isEditing
                                                                 ? "bg-green-200 text-green-800 hover:bg-green-300"
                                                                 : "bg-yellow-100 hover:bg-yellow-200 text-yellow-700"
-                                                        }`}
+                                                            }`}
                                                         disabled={isSaving}
                                                     >
                                                         <Edit3 size={14} />
