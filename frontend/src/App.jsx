@@ -1,6 +1,8 @@
-// File: src/App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
+
+// Komponen proteksi route
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // Halaman user biasa
 import Navbar from "./components/Navbar";
@@ -8,6 +10,8 @@ import Beranda from "./pages/Beranda";
 import Profil from "./pages/Profil";
 import Proker from "./pages/Proker";
 import Blog from "./pages/Blog";
+import Portofolio from "./pages/Portofolio";
+import PortofolioDetail from "./pages/PortofolioDetail";
 import Merchandise from "./pages/Merchandise";
 import Footer from "./components/Footer";
 
@@ -20,14 +24,25 @@ function App() {
 
     return (
         <Router>
-            <div className={`App min-h-screen flex flex-col ${isDarkMode ? "dark" : ""}`}>
-                
-                {/* Hanya tampilkan Navbar & Footer untuk halaman user biasa */}
+            <div
+                className={`App min-h-screen flex flex-col ${isDarkMode ? "dark" : ""
+                    }`}
+            >
+                {/* Navbar hanya untuk user biasa */}
                 <Routes>
                     <Route path="/admin/*" element={null} />
-                    <Route path="/*" element={<Navbar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />} />
+                    <Route
+                        path="/*"
+                        element={
+                            <Navbar
+                                isDarkMode={isDarkMode}
+                                setIsDarkMode={setIsDarkMode}
+                            />
+                        }
+                    />
                 </Routes>
 
+                {/* Main content */}
                 <main className="flex-grow">
                     <Routes>
                         {/* Halaman user biasa */}
@@ -35,15 +50,24 @@ function App() {
                         <Route path="/profil" element={<Profil />} />
                         <Route path="/proker" element={<Proker />} />
                         <Route path="/blog" element={<Blog />} />
+                        <Route path="/portofolio" element={<Portofolio />} />
+                        <Route path="/portofolio/:id" element={<PortofolioDetail />} />
                         <Route path="/merchandise" element={<Merchandise />} />
 
                         {/* Halaman admin */}
                         <Route path="/admin/login" element={<AdminLogin />} />
-                        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                        <Route
+                            path="/admin/dashboard"
+                            element={
+                                <ProtectedRoute>
+                                    <AdminDashboard />
+                                </ProtectedRoute>
+                            }
+                        />
                     </Routes>
                 </main>
 
-                {/* Footer hanya tampil untuk halaman user biasa */}
+                {/* Footer hanya untuk user biasa */}
                 <Routes>
                     <Route path="/admin/*" element={null} />
                     <Route path="/*" element={<Footer />} />
