@@ -1,8 +1,5 @@
 // File: src/pages/Blog.jsx
 import { useState, useEffect } from "react";
-import axios from "axios";
-import { Loader } from "lucide-react";
-import { Link } from "react-router-dom";
 
 const Blog = () => {
   // const [isVisible, setIsVisible] = useState(false);
@@ -123,18 +120,10 @@ const Blog = () => {
           )}
         </div>
       </section>
-
-      {/* <style jsx>{`
-        .fade-in {
-          opacity: 0;
-          transform: translateY(20px);
-          transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        .fade-in.visible {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      `}</style> */}
+      <style jsx>{`
+          .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+          .fade-in.visible { opacity: 1; transform: translateY(0); }
+      `}</style>
     </div>
   );
 };
