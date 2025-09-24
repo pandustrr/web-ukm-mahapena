@@ -5,6 +5,30 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { Editor } from "@tinymce/tinymce-react";
 
+import "tinymce/tinymce"; // core
+import "tinymce/icons/default";
+import "tinymce/themes/silver";
+import "tinymce/models/dom";
+
+// Plugins
+import "tinymce/plugins/advlist";
+import "tinymce/plugins/autolink";
+import "tinymce/plugins/lists";
+import "tinymce/plugins/link";
+import "tinymce/plugins/image";
+import "tinymce/plugins/charmap";
+import "tinymce/plugins/preview";
+import "tinymce/plugins/anchor";
+import "tinymce/plugins/searchreplace";
+import "tinymce/plugins/visualblocks";
+import "tinymce/plugins/code";
+import "tinymce/plugins/fullscreen";
+import "tinymce/plugins/insertdatetime";
+import "tinymce/plugins/media";
+import "tinymce/plugins/table";
+import "tinymce/plugins/help";
+import "tinymce/plugins/wordcount";
+
 function EditBlog() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -166,37 +190,31 @@ function EditBlog() {
         </div>
 
         {/* Konten */}
-        {/* <div>
-          <label className="block font-medium">Konten</label>
-          <textarea
-            name="content"
-            value={form.content}
-            onChange={handleChange}
-            rows="6"
-            className="w-full border p-2 rounded-md"
-          />
-        </div> */}
         <div>
           <label className="block font-medium mb-2">Konten</label>
           <Editor
-            apiKey="g439ip37desi0389rkv49zztfy42nk9kik6fun5x3ii2dpf6" // bisa pakai gratis, atau daftar untuk API key
-            init={{
-              height: 400,
-              menubar: false,
-              plugins: [
-                "advlist autolink lists link image charmap preview anchor",
-                "searchreplace visualblocks code fullscreen",
-                "insertdatetime media table code help wordcount",
-              ],
-              toolbar:
-                "undo redo | blocks fontfamily fontsize | formatselect | bold italic backcolor textcolor | \
-                         alignleft aligncenter alignright alignjustify | \
-                         bullist numlist outdent indent | removeformat | help",
-            }}
             value={form.content}
             onEditorChange={(newContent) =>
               setForm((prev) => ({ ...prev, content: newContent }))
             }
+            tinymceScriptSrc={"/tinymce/tinymce.min.js"}
+            init={{
+              license_key: "gpl",
+              height: 400,
+              base_url: "/tinymce",
+              suffix: ".min",
+              menubar: true,
+              plugins:
+                "advlist autolink lists link image charmap preview anchor " +
+                "searchreplace visualblocks code fullscreen " +
+                "insertdatetime media table help wordcount",
+              toolbar:
+                "undo redo | formatselect | bold italic backcolor | " +
+                "alignleft aligncenter alignright alignjustify | " +
+                "bullist numlist outdent indent | removeformat | help",
+              skin_url: "/tinymce/skins/ui/oxide",
+              content_css: "/tinymce/skins/content/default/content.css",
+            }}
           />
         </div>
 
@@ -257,7 +275,7 @@ function EditBlog() {
           <button
             type="submit"
             disabled={loading}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+            className="flex-1 bg-blue-600 text-white px-5 py-3 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-50"
           >
             {loading ? "Menyimpan..." : "Simpan"}
           </button>

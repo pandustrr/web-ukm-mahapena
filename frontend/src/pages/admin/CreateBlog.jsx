@@ -5,6 +5,30 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { Editor } from "@tinymce/tinymce-react";
 
+import "tinymce/tinymce"; // core
+import "tinymce/icons/default";
+import "tinymce/themes/silver";
+import "tinymce/models/dom";
+
+// Plugins
+import "tinymce/plugins/advlist";
+import "tinymce/plugins/autolink";
+import "tinymce/plugins/lists";
+import "tinymce/plugins/link";
+import "tinymce/plugins/image";
+import "tinymce/plugins/charmap";
+import "tinymce/plugins/preview";
+import "tinymce/plugins/anchor";
+import "tinymce/plugins/searchreplace";
+import "tinymce/plugins/visualblocks";
+import "tinymce/plugins/code";
+import "tinymce/plugins/fullscreen";
+import "tinymce/plugins/insertdatetime";
+import "tinymce/plugins/media";
+import "tinymce/plugins/table";
+import "tinymce/plugins/help";
+import "tinymce/plugins/wordcount";
+
 function CreateBlog() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -142,29 +166,33 @@ function CreateBlog() {
             className="w-full border-gray-300 rounded-lg p-3 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none placeholder:text-black"
           />
         </div>
-
+        {/* // apiKey="g439ip37desi0389rkv49zztfy42nk9kik6fun5x3ii2dpf6" // bisa
+        pakai gratis, atau daftar untuk API key */}
         <div>
           <label className="block font-medium mb-2">Konten</label>
           <Editor
-            apiKey="g439ip37desi0389rkv49zztfy42nk9kik6fun5x3ii2dpf6" // bisa pakai gratis, atau daftar untuk API key
-            init={{
-              height: 400,
-              menubar: false,
-              plugins: [
-                "advlist autolink lists link image charmap preview anchor",
-                "searchreplace visualblocks code fullscreen",
-                "insertdatetime media table code help wordcount",
-              ],
-              toolbar:
-                "undo redo | formatselect | bold italic backcolor | \
-                 alignleft aligncenter alignright alignjustify | \
-                 bullist numlist outdent indent | removeformat | help",
-            }}
             value={content}
             onEditorChange={(newContent) => setContent(newContent)}
+            tinymceScriptSrc={"/tinymce/tinymce.min.js"}
+            init={{
+              license_key: "gpl",
+              height: 400,
+              base_url: "/tinymce",
+              suffix: ".min",
+              menubar: true,
+              plugins:
+                "advlist autolink lists link image charmap preview anchor " +
+                "searchreplace visualblocks code fullscreen " +
+                "insertdatetime media table help wordcount",
+              toolbar:
+                "undo redo | formatselect | bold italic backcolor | " +
+                "alignleft aligncenter alignright alignjustify | " +
+                "bullist numlist outdent indent | removeformat | help",
+              skin_url: "/tinymce/skins/ui/oxide",
+              content_css: "/tinymce/skins/content/default/content.css",
+            }}
           />
         </div>
-
         {/* Kategori & Status */}
         <div className="grid md:grid-cols-2 gap-6">
           <div>
@@ -200,7 +228,6 @@ function CreateBlog() {
             </select>
           </div>
         </div>
-
         {/* Upload Gambar */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -226,7 +253,6 @@ function CreateBlog() {
             </div>
           )}
         </div>
-
         {/* Tombol Aksi */}
         <div className="flex gap-3 pt-4">
           <button
