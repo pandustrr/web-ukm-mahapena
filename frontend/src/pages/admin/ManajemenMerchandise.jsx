@@ -752,7 +752,7 @@ function ManajemenMerchandise() {
                                             &times;
                                         </button>
                                     </span>
-                                ))}
+                                ))  }
                             </div>
                         </div>
 
